@@ -1,1 +1,1 @@
-# GDGC Open Source Contributions App# gdgc-dev-platform
+# GDGC Open Source Contributions App
