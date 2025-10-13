@@ -1,1 +1,2 @@
-# GDGC Open Source Contributions App
+# GDGC Dev Platform
+A place to build digital solutions together.
