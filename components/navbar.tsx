@@ -1,12 +1,6 @@
-import Link from "next/link";
+"use client";
 
-import {
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import Link from "next/link";
 
 import {
   NavigationMenu,
@@ -15,37 +9,47 @@ import {
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 
+import Image from "next/image";
+import GDGCIcon from "@/app/assets/gdgc.png";
 import ThemeToggle from "@/components/theme-toggle";
 
+import ProfileIcon from "@/components/profile-icon";
+
+import { useAuth } from "@/components/auth-provider";
+
 export default function Navbar() {
+  const session = useAuth();
+
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        <SignedOut>
+    <div className="w-full flex justify-between items-center">
+      <Link href="/">
+        <Image className="w-[2.5rem] h-auto" src={GDGCIcon} alt="Go to home" />
+      </Link>
+      <NavigationMenu>
+        <NavigationMenuList className="justify-between">
+          {!session.user ? (
+            <>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <Link href="/sign-in">Sign In</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <Link href="/sign-up">Sign Up</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            </>
+          ) : (
+            <NavigationMenuItem>
+              <ProfileIcon username={session.user.name} />
+            </NavigationMenuItem>
+          )}
           <NavigationMenuItem>
-            <SignInButton>
-              <NavigationMenuLink asChild>
-                <Link href="/sign-in">Login</Link>
-              </NavigationMenuLink>
-            </SignInButton>
+            <ThemeToggle />
           </NavigationMenuItem>
-          <NavigationMenuItem>
-            <SignUpButton>
-              <NavigationMenuLink asChild>
-                <Link href="/sign-in/create">Register</Link>
-              </NavigationMenuLink>
-            </SignUpButton>
-          </NavigationMenuItem>
-        </SignedOut>
-        <SignedIn>
-          <NavigationMenuItem>
-            <UserButton />
-          </NavigationMenuItem>
-        </SignedIn>
-        <NavigationMenuItem>
-          <ThemeToggle />
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
+        </NavigationMenuList>
+      </NavigationMenu>
+    </div>
   );
 }
