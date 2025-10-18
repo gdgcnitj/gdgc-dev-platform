@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 
 import {
@@ -14,11 +12,13 @@ import GDGCIcon from "@/app/assets/gdgc.png";
 import ThemeToggle from "@/components/theme-toggle";
 
 import ProfileIcon from "@/components/profile-icon";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-import { useAuth } from "@/components/auth-provider";
-
-export default function Navbar() {
-  const session = useAuth();
+export default async function Navbar() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   return (
     <div className="w-full flex justify-between items-center">
@@ -27,7 +27,7 @@ export default function Navbar() {
       </Link>
       <NavigationMenu>
         <NavigationMenuList className="justify-between">
-          {!session.user ? (
+          {!session?.session ? (
             <>
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
@@ -42,7 +42,7 @@ export default function Navbar() {
             </>
           ) : (
             <NavigationMenuItem>
-              <ProfileIcon username={session.user.name} />
+              <ProfileIcon user={session.user} />
             </NavigationMenuItem>
           )}
           <NavigationMenuItem>

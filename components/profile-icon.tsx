@@ -1,31 +1,31 @@
 "use client";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { redirect } from "next/navigation";
-import { useAuth } from "@/components/auth-provider";
+import { signOutAction } from "@/app/actions/auth";
+import { type User } from "better-auth";
 
-export default function ProfileIcon({ username }: { username: string }) {
-  const { logoutUser } = useAuth();
-
+export default function ProfileIcon({ user }: { user: User }) {
   return (
     <Popover>
       <PopoverTrigger>
         <Avatar>
-          <AvatarFallback>{username[0].toUpperCase()}</AvatarFallback>
+          {user!.image && (
+            <AvatarImage src={user.image} alt={`@${user.name}`} />
+          )}
+          <AvatarFallback>{user.name[0].toUpperCase()}</AvatarFallback>
         </Avatar>
       </PopoverTrigger>
       <PopoverContent>
         <Button
           variant="destructive"
-          onClick={() => {
-            logoutUser();
-            redirect("/");
+          onClick={async () => {
+            await signOutAction();
           }}
         >
           Sign Out
