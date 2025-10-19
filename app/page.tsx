@@ -1,10 +1,10 @@
 import AngularBrackets from "@/components/ui/angular-brackets";
 import Image from "next/image";
-import instagram from "../public/instagram.svg"
-import twitter from "../public/twitter.svg"
-import youtube from "../public/youtube.svg"
-import linkedin from "../public/linkedin.svg"
-import github from "../public/github.svg"
+import instagram from "./assets/instagram.svg"
+import twitter from "./assets/twitter.svg"
+import youtube from "./assets/youtube.svg"
+import linkedin from "./assets/linkedin.svg"
+import github from "./assets/github.svg"
 import { Red_Hat_Mono, Space_Grotesk } from "next/font/google";
 
 const spaceGrotesk = Space_Grotesk({subsets:["latin"]})
@@ -62,16 +62,16 @@ export default function Home() {
                 <Image src={instagram} width={40} height={40} alt="instagram"/>
               </a>
               <a className="flex justify-center items-center hover:brightness-125 hover:bg-gray-400/10 rounded-full p-3">
-                <Image src={twitter} width={40} height={40} alt="instagram"/>
+                <Image src={twitter} width={40} height={40} alt="twitter"/>
               </a>
               <a className="flex justify-center items-center hover:brightness-125 hover:bg-gray-400/10 rounded-full p-3">
-                <Image src={linkedin} width={40} height={40} alt="instagram"/>
+                <Image src={linkedin} width={40} height={40} alt="linkedin"/>
               </a>
               <a className="flex justify-center items-center hover:brightness-125 hover:bg-gray-400/10 rounded-full p-3">
-                <Image src={youtube} width={40} height={40} alt="instagram"/>
+                <Image src={youtube} width={40} height={40} alt="youtube"/>
               </a>
               <a className="flex justify-center items-center hover:brightness-125 hover:bg-gray-400/10 rounded-full p-3">
-                <Image src={github} width={40} height={40} alt="instagram"/>
+                <Image className="brightness-95 contrast-95 invert-33 sepia-7 saturate-184 hue-rotate-169" src={github} width={40} height={40} alt="github"/>
               </a>
             </div>
           </div>
