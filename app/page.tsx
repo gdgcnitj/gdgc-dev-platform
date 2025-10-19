@@ -58,19 +58,19 @@ export default function Home() {
               We're not just another events club. At GDG NITJ, we're building a <span className="text-[#FBBC04]">community</span> where everyone is both a learner and a teacher. Our <span className="text-[#EA4335]">goal</span> is to create a dynamic environment for collective <span className="text-[#34A853]">growth</span>. We bring this <span className="text-[#6DA4FC]">vision</span> to life through high-energy flagship events like DevJams, Hackmol, and WomenTechies, along with tons of insightful workshops to keep you ahead of the curve.
             </p>
             <div className="flex gap-[36px]">
-              <a className="flex justify-center items-center hover:brightness-125 hover:bg-gray-400/10 rounded-full p-3">
+              <a href="https://www.instagram.com/gdgcnitj/" className="flex justify-center items-center hover:brightness-125 hover:bg-gray-400/10 rounded-full p-3">
                 <Image src={instagram} width={40} height={40} alt="instagram"/>
               </a>
-              <a className="flex justify-center items-center hover:brightness-125 hover:bg-gray-400/10 rounded-full p-3">
+              <a href="https://x.com/GDSCNitj" className="flex justify-center items-center hover:brightness-125 hover:bg-gray-400/10 rounded-full p-3">
                 <Image src={twitter} width={40} height={40} alt="twitter"/>
               </a>
-              <a className="flex justify-center items-center hover:brightness-125 hover:bg-gray-400/10 rounded-full p-3">
+              <a href="" className="flex justify-center items-center hover:brightness-125 hover:bg-gray-400/10 rounded-full p-3">
                 <Image src={linkedin} width={40} height={40} alt="linkedin"/>
               </a>
-              <a className="flex justify-center items-center hover:brightness-125 hover:bg-gray-400/10 rounded-full p-3">
+              <a href="https://www.youtube.com/@DSCNITJ" className="flex justify-center items-center hover:brightness-125 hover:bg-gray-400/10 rounded-full p-3">
                 <Image src={youtube} width={40} height={40} alt="youtube"/>
               </a>
-              <a className="flex justify-center items-center hover:brightness-125 hover:bg-gray-400/10 rounded-full p-3">
+              <a href="https://github.com/gdgcnitj" className="flex justify-center items-center hover:brightness-125 hover:bg-gray-400/10 rounded-full p-3">
                 <Image className="brightness-95 contrast-95 invert-33 sepia-7 saturate-184 hue-rotate-169" src={github} width={40} height={40} alt="github"/>
               </a>
             </div>
