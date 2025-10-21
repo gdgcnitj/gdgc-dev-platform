@@ -6,11 +6,40 @@ import youtube from "./assets/youtube.svg"
 import linkedin from "./assets/linkedin.svg"
 import github from "./assets/github.svg"
 import { Red_Hat_Mono, Space_Grotesk } from "next/font/google";
+import { Card } from "@/components/ui/card";
+import FameCard from "@/components/ui/fame-card";
+import hackmol from "./assets/hackmol.svg"
+import mol from "./assets/mol.svg"
+import gsc from "./assets/gsc.svg"
 
 const spaceGrotesk = Space_Grotesk({subsets:["latin"]})
 const redHatMono = Red_Hat_Mono({subsets: ["latin"]})
 
 export default function Home() {
+  const dummyData = 
+  [
+    {
+      title: "Hackmol",
+      tag: "hackathon",
+      description: "HackMOL is the flagship annual 30-hour hackathon being organized by Google Developer Student Club (GDSC) of NIT Jalandhar wherein young coders & developers from all over the country join together to build projects & solutions to the alarming problems of the region & the world.",
+      color: "#FDD568",
+      image: hackmol
+    },
+    {
+      title: "Hackmol",
+      tag: "hackathon",
+      description: "HackMOL is the flagship annual 30-hour hackathon being organized by Google Developer Student Club (GDSC) of NIT Jalandhar wherein young coders & developers from all over the country join together to build projects & solutions to the alarming problems of the region & the world.",
+      color: "#69A6FC",
+      image: hackmol
+    },
+    {
+      title: "Hackmol",
+      tag: "hackathon",
+      description: "HackMOL is the flagship annual 30-hour hackathon being organized by Google Developer Student Club (GDSC) of NIT Jalandhar wherein young coders & developers from all over the country join together to build projects & solutions to the alarming problems of the region & the world.",
+      color: "#28D781",
+      image: hackmol
+    },
+  ]
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -74,6 +103,16 @@ export default function Home() {
                 <Image className="brightness-95 contrast-95 invert-33 sepia-7 saturate-184 hue-rotate-169" src={github} width={40} height={40} alt="github"/>
               </a>
             </div>
+          </div>
+        </section>
+        <section className="my-20 flex w-full flex-col justify-center items-center">
+          <h1 className={`flex justify-center items-center font-bold ${spaceGrotesk.className} text-8xl`}>WALL OF FAME</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full mx-auto justify-center place-items-center py-21 md:flex-row">
+            {
+              dummyData.map((d,i)=>(
+                <FameCard title={d.title} color={d.color} description={d.description} tag={d.tag} image={d.image} key={i} />
+              ))
+            }
           </div>
         </section>
       </main>
