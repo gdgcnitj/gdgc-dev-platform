@@ -11,6 +11,7 @@ import FameCard from "@/components/ui/fame-card";
 import hackmol from "./assets/hackmol.svg"
 import mol from "./assets/mol.svg"
 import gsc from "./assets/gsc.svg"
+import Team from "./team/main_page"
 
 const spaceGrotesk = Space_Grotesk({subsets:["latin"]})
 const redHatMono = Red_Hat_Mono({subsets: ["latin"]})
@@ -105,7 +106,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="my-20 flex w-full flex-col justify-center items-center">
+        <section className="mt-20 flex w-full flex-col justify-center items-center">
           <h1 className={`flex justify-center items-center font-bold ${spaceGrotesk.className} text-8xl`}>WALL OF FAME</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full mx-auto justify-center place-items-center py-21 md:flex-row">
             {
@@ -114,6 +115,9 @@ export default function Home() {
               ))
             }
           </div>
+        </section>
+        <section className="flex w-full flex-col justify-center items-center">
+          <Team></Team>
         </section>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
