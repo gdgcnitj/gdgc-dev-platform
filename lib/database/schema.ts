@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, unique, boolean, foreignKey } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, unique, boolean, numeric, foreignKey } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
@@ -62,4 +62,34 @@ export const session = pgTable("session", {
 			name: "session_user_id_user_id_fk"
 		}).onDelete("cascade"),
 	unique("session_token_unique").on(table.token),
+]);
+
+export const blogPlaylist = pgTable("blog_playlist", {
+	id: text().primaryKey().notNull(),
+	name: text().notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+});
+
+export const blog = pgTable("blog", {
+	id: text().primaryKey().notNull(),
+	title: text().notNull(),
+	content: text().notNull(),
+	authorId: text("author_id").notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	playlistId: text("blog_playlist_id").notNull(),
+	imageUrl: text("image_url"),
+	description: text().notNull(),
+	likes: numeric().default(sql`0`).notNull(),
+	comments: numeric().default(sql`0`).notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.authorId],
+			foreignColumns: [user.id],
+			name: "blog_author_id_user_id_fk"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.playlistId],
+			foreignColumns: [blogPlaylist.id],
+			name: "blog_playlist_id_blog_playlist_id_fk"
+		}).onDelete("cascade"),
 ]);
