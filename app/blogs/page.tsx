@@ -25,8 +25,9 @@ export default function BlogsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [totalPages, setTotalPages] = useState(1);
+  const blogsPerPage = 6;
   useEffect(() => {
-    fetch(`/api/blogs/getBlogList?page=${currentPage}&limit=6&search=${searchTerm}`)
+    fetch(`/api/blogs/getBlogList?page=${currentPage}&limit=${blogsPerPage}&search=${searchTerm}`)
       .then((r) => r.json())
       .then((data) => {
         setBlogs(data.blogs);

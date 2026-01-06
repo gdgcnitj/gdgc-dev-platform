@@ -52,16 +52,16 @@ export default function BlogCard({
       "
     >
       <div className="flex flex-col gap-2 max-w-[75%]">
-        <p className="text-xs text-white/50">
+        <p className="text-xs font-red-hat-mono text-white/50">
           {playlist} by {" "}
           <span className="underline underline-offset-2">{author}</span>
         </p>
 
-        <h2 className="text-2xl font-semibold text-white leading-tight">
+        <h2 className="text-2xl font-space-grotesk font-bold text-white leading-tight">
           {title}
         </h2>
 
-        <p className="text-sm text-white/70">{description}</p>
+        <p className="text-sm font-red-hat-mono text-white/70">{description}</p>
 
         <div className="flex items-center gap-4 mt-2 text-xs text-white/40">
           <span>{date}</span>

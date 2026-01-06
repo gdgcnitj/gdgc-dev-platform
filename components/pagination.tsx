@@ -43,7 +43,7 @@ export default function Pagination({
   }
 
   return (
-    <div className="flex items-center justify-center gap-3 py-6 sm:py-8 md:py-10">
+    <div className="flex items-center justify-center gap-3 pb-6 sm:pb-8 md:pb-10">
       {pages.map((page, index) => {
         if (page === "...") {
           return (
@@ -89,7 +89,7 @@ export default function Pagination({
               </div>
             )}
 
-            <span className="relative z-10 text-[18px] sm:text-[20px] md:text-[24px] leading-[100%]">
+            <span className="relative z-10 text-[18px] sm:text-[20px] md:text-[24px] leading-[100%] font-red-hat-mono">
               {page}
             </span>
           </button>
