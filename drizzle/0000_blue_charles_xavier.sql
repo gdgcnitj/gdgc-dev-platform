@@ -46,5 +46,29 @@ CREATE TABLE "verification" (
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE TABLE "blog_playlist" (
+	"id" text PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+---> statement-breakpoint
+CREATE TABLE "blog" (
+	"id" text PRIMARY KEY NOT NULL,
+	"title" text NOT NULL,
+	"content" text NOT NULL,
+	"author_id" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"blog_playlist_id" text NOT NULL,
+	"image_url" text,
+	"description" text NOT NULL,
+	"likes" numeric DEFAULT 0 NOT NULL,
+	"comments" numeric DEFAULT 0 NOT NULL
+);
+--> statement-breakpoint
+ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
+--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
+--> statement-breakpoint
+ALTER TABLE "blog" ADD CONSTRAINT "blog_playlist_id_blog_playlist_id_fk" FOREIGN KEY ("blog_playlist_id") REFERENCES "public"."blog_playlist"("id") ON DELETE cascade;
+--> statement-breakpoint
+ALTER TABLE "blog" ADD CONSTRAINT "blog_author_id_user_id_fk" FOREIGN KEY ("author_id") REFERENCES "public"."user"("id") ON DELETE cascade;
