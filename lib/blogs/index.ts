@@ -2,7 +2,7 @@ import "server-only";
 
 import { db } from "@/lib/database";
 import { blog, user } from "@/lib/database/schema";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, ilike, or } from "drizzle-orm";
 
 export async function getAuthorNamebyId(authorId: string) {
   const author = await db
@@ -22,11 +22,14 @@ export async function getPlaylistNamebyId(playlistId: string) {
   return playlist[0]["title"];
 }
 
-export async function getBlogList() {
+export async function getBlogList(page : number = 1, limit : number = 6, search? : string) {
   const blogs = await db
     .select()
     .from(blog)
-    .orderBy(desc(blog.createdAt));
+    .where(search ? or(ilike(blog.title, `%${search}%`), ilike(blog.description, `%${search}%`)) : undefined)
+    .orderBy(desc(blog.createdAt))
+    .limit(limit)
+    .offset((page - 1) * limit);
   
   let blogList = await Promise.all(blogs.map(async (b) => ({
     id: b.id,
@@ -40,5 +43,18 @@ export async function getBlogList() {
     imageUrl: b.imageUrl,
   })));
 
-  return blogList;
+  const totalBlogs = await db
+    .$count(blog, search ? or(ilike(blog.title, `%${search}%`), ilike(blog.description, `%${search}%`)) : undefined);
+
+  const totalPages = Math.ceil(totalBlogs / limit);
+
+  return {
+    blogs: blogList,
+    meta: {
+      totalPages: totalPages,
+      currentPage: page,
+      totalBlogs: totalBlogs,
+    },
+  };
+
 }
