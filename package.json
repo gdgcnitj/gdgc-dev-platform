@@ -2,12 +2,26 @@
   "name": "gdgc-dev-platform",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "22.x || 24.x",
+    "npm": ">=10"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:all": "npm run mprocs",
+    "mprocs": "mprocs --config mprocs.yaml",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "next typegen && tsc --noEmit --incremental false"
+    "typecheck": "next typegen && tsc --noEmit --incremental false",
+    "check": "npm run lint && npm run typecheck",
+    "db:dev": "docker compose -f compose.dev.yaml up postgres",
+    "db:up": "docker compose -f compose.dev.yaml up -d --wait postgres",
+    "db:down": "docker compose -f compose.dev.yaml down",
+    "db:logs": "docker compose -f compose.dev.yaml logs --follow postgres",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

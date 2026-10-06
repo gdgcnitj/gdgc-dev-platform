@@ -1,0 +1,28 @@
+procs:
+  database:
+    shell: npm run db:dev
+    cwd: <CONFIG_DIR>
+    autostart: true
+    autorestart: false
+    stop: SIGINT
+
+  web:
+    shell: npm run dev
+    cwd: <CONFIG_DIR>
+    autostart: true
+    autorestart: true
+    stop: SIGTERM
+
+  database-studio:
+    shell: npm run db:studio
+    cwd: <CONFIG_DIR>
+    autostart: false
+    autorestart: false
+    stop: SIGTERM
+
+  checks:
+    shell: npm run check
+    cwd: <CONFIG_DIR>
+    autostart: false
+    autorestart: false
+    stop: SIGTERM

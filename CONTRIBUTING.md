@@ -4,14 +4,16 @@
 
 | Branch | Purpose | Receives changes from |
 | --- | --- | --- |
-| `develop` | Default branch and integration for upcoming work | Task PRs |
-| `main` | Production releases | Release PRs from `develop` |
-| `codex/<type>-<description>` | One task per agent branch | Latest `develop` |
+| `develop` | Integration branch for upcoming work | Task PRs |
+| `main` | Production | Release PRs from `develop` |
+| `feat/`, `fix/`, `chore/`, `docs/` | One task per branch | Latest `develop` |
 
-Choose a descriptive task name, such as `codex/feat-homepage-redesign`,
-`codex/fix-mobile-navigation`, or `codex/chore-update-dependencies`.
-Human contributors can use equivalent `feature/`, `fix/`, or `chore/` names.
-The legacy `development` branch is retained for history; use `develop` for new work.
+Name the branch for the task, such as `feat/landing-hero`,
+`fix/mobile-navigation`, or `chore/update-dependencies`.
+The legacy `development` branch is history. Use `develop` for new work.
+
+`main` stays behind `develop` between releases. Bring it forward only for a
+requested production release, then sync that release commit back into `develop`.
 
 ## Start a task
 
@@ -21,15 +23,15 @@ Finish or safely stash local work before switching branches.
 git fetch --all --tags
 git switch develop
 git pull --ff-only origin develop
-git switch -c codex/feat-homepage-redesign
+git switch -c feat/landing-hero
 ```
 
-Implement the task and review the diff. For application changes, run:
+Local setup is in [docs/development.md](docs/development.md).
+For application changes, run:
 
 ```sh
 npm ci
-npm run lint
-npm run typecheck
+npm run check
 npm run build
 ```
 
@@ -63,7 +65,7 @@ Bring the release commit back into `develop` through a fresh synchronization PR:
 git fetch origin
 git switch develop
 git pull --ff-only origin develop
-git switch -c codex/chore-sync-release-vX.Y.Z
+git switch -c chore/sync-release-vX.Y.Z
 git merge origin/main
 git push -u origin HEAD
 gh pr create --base develop --title "chore: sync production release into develop"
