@@ -76,7 +76,8 @@ production commit remains an ancestor of `develop`. Delete only its task branch.
 
 These settings require repository admin access:
 
-1. Set the default branch to `develop` under Settings → Branches.
+1. Set the [default branch](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-branches-in-your-repository/changing-the-default-branch)
+   to `develop` in repository Settings under **Default branch**.
 2. Protect `develop` and `main`: require PRs, require the `Branch policy` and
    `Validate` status checks, and block force pushes and branch deletion.
 3. Keep merge commits enabled for releases and release synchronization. Use
