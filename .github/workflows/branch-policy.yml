@@ -1,0 +1,31 @@
+name: Branch policy
+
+on:
+  pull_request:
+    branches: [develop, main]
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  branch-policy:
+    name: Branch policy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR branch flow
+        env:
+          BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
+          HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+          HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          if [[ "$BASE_BRANCH" == "main" ]]; then
+            if [[ "$HEAD_BRANCH" != "develop" || "$HEAD_REPOSITORY" != "$REPOSITORY" ]]; then
+              echo "::error::Production PRs must come from this repository's develop branch."
+              exit 1
+            fi
+          elif [[ "$HEAD_BRANCH" == "main" || "$HEAD_BRANCH" == "development" ]]; then
+            echo "::error::Use a fresh task branch from develop. Sync releases through a task PR."
+            exit 1
+          fi
