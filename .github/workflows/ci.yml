@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DATABASE_URL: postgresql://gdgc:gdgc_ci@localhost:5432/gdgc_ci
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: gdgc_ci
+          POSTGRES_USER: gdgc
+          POSTGRES_PASSWORD: gdgc_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U gdgc -d gdgc_ci"
+          --health-interval 2s
+          --health-timeout 5s
+          --health-retries 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install packages
+        run: npm ci
+      - name: Check local database configuration
+        run: docker compose --env-file .env.example -f compose.dev.yaml config --quiet
+      - name: Check code
+        run: npm run check
+      - name: Apply database migrations
+        run: npm run db:migrate
+      - name: Build
+        env:
+          BETTER_AUTH_URL: http://localhost:3000
+          BETTER_AUTH_SECRET: ci-only-placeholder-secret-for-build-validation
+          GITHUB_CLIENT_ID: ci-placeholder
+          GITHUB_CLIENT_SECRET: ci-placeholder
+          GOOGLE_CLIENT_ID: ci-placeholder
+          GOOGLE_CLIENT_SECRET: ci-placeholder
+        run: npm run build
