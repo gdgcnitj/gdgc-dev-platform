@@ -1,20 +1,14 @@
-## Problem
-
-<!-- State the problem that this PR solves. -->
-
 ## Change
 
-<!-- State the resulting behavior. Use short sentences and active voice. -->
+<!-- Explain the problem and the resulting behavior. -->
 
-## Checks
+## Validation
 
-<!-- List the commands and results. State which checks did not run. -->
+<!-- List checks run and their results. Include desktop/mobile screenshots for UI changes. -->
 
-## Docs
+## Branch flow
 
-<!-- Link the related docs. State the reason if no doc change is necessary. -->
+- [ ] Task PR: targets `develop` and started from the latest `develop`.
+- [ ] Release PR, if applicable: targets `main` from `develop`, with release scope documented.
 
-## Branch
-
-- [ ] This task uses a new branch from the latest `main`.
-- [ ] This PR targets `main` under the temporary setup flow.
+<!-- Check only the applicable branch-flow item. -->
