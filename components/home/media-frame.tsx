@@ -14,6 +14,7 @@ export function MediaFrame({
   sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
   priority = false,
   showLabel = true,
+  fadeOnLoad = true,
 }: {
   src?: string;
   alt: string;
@@ -23,6 +24,7 @@ export function MediaFrame({
   sizes?: string;
   priority?: boolean;
   showLabel?: boolean;
+  fadeOnLoad?: boolean;
 }) {
   const [failedSrc, setFailedSrc] = useState<string>();
   return (
@@ -36,7 +38,7 @@ export function MediaFrame({
           sizes={sizes}
           priority={priority}
           onLoad={(event) => {
-            if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            if (fadeOnLoad && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
               event.currentTarget.animate?.({ opacity: [0, 1] }, { duration: 220, easing: "ease-out" });
             }
           }}

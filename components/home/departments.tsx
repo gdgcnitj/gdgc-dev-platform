@@ -21,18 +21,18 @@ export function HomeDepartments() {
                 className="club-department-card"
                 data-tone={department.color}
                 key={department.id}
-                data-reveal
-                data-reveal-order={index % 4}
               >
-                <MediaFrame
-                  src={department.image}
-                  alt={department.lead}
-                  label="Portrait coming soon"
-                  initials={department.initials}
-                  showLabel={false}
-                  className="club-lead-photo"
-                  sizes="(max-width: 380px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                />
+                <div data-reveal="portrait" data-reveal-order={index % 4}>
+                  <MediaFrame
+                    src={department.image}
+                    alt={department.lead}
+                    label="Portrait coming soon"
+                    initials={department.initials}
+                    showLabel={false}
+                    className="club-lead-photo"
+                    sizes="(max-width: 380px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  />
+                </div>
                 <div className="club-lead-copy">
                   <h3>
                     {department.href ? (

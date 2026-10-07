@@ -5,14 +5,59 @@ import { ArrowLeft, ArrowRight, Expand, X } from "lucide-react";
 import { MediaFrame } from "@/components/home/media-frame";
 import type { GalleryMoment } from "@/lib/content/home";
 
+function ViewerPhoto({ photo }: { photo: GalleryMoment }) {
+  const [stack, setStack] = useState<GalleryMoment[]>([photo]);
+  const shown = useRef(photo.id);
+
+  useEffect(() => {
+    if (photo.id === shown.current) return;
+    const previousId = shown.current;
+    shown.current = photo.id;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setStack([photo]);
+      return;
+    }
+    setStack((current) => {
+      const outgoing = current.find((item) => item.id === previousId) ?? current[current.length - 1];
+      return outgoing ? [outgoing, photo] : [photo];
+    });
+    const timer = window.setTimeout(() => setStack([photo]), 180);
+    return () => window.clearTimeout(timer);
+  }, [photo]);
+
+  return (
+    <div className="club-viewer-stage">
+      {stack.map((item) => {
+        const incoming = item.id === photo.id;
+        return (
+          <div
+            key={`${item.id}-${incoming ? "in" : "out"}`}
+            className={incoming ? "club-viewer-layer club-viewer-layer-in" : "club-viewer-layer club-viewer-layer-out"}
+            aria-hidden={incoming ? undefined : true}
+          >
+            <MediaFrame
+              src={item.image}
+              alt={item.caption}
+              label="Community photo"
+              className="club-viewer-photo"
+              sizes="(max-width: 700px) 100vw, 90vw"
+              priority={incoming}
+              fadeOnLoad={false}
+            />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function GalleryGrid({ moments }: { moments: GalleryMoment[] }) {
-  const photos = moments.filter((moment) => moment.image);
   const [active, setActive] = useState<number | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
-  const opener = useRef<HTMLAnchorElement | null>(null);
+  const opener = useRef<HTMLElement | null>(null);
   const isOpen = active !== null;
-  const photo = active === null ? undefined : photos[active];
+  const photo = active === null ? undefined : moments[active];
 
   useEffect(() => {
     if (!isOpen || !dialog.current) return;
@@ -29,7 +74,7 @@ export function GalleryGrid({ moments }: { moments: GalleryMoment[] }) {
   }, [isOpen]);
 
   const move = (direction: number) => {
-    setActive((index) => index === null ? null : (index + direction + photos.length) % photos.length);
+    setActive((index) => index === null ? null : (index + direction + moments.length) % moments.length);
   };
 
   return (
@@ -45,6 +90,10 @@ export function GalleryGrid({ moments }: { moments: GalleryMoment[] }) {
               sizes={index < 2 ? "(max-width: 700px) 100vw, 50vw" : "(max-width: 700px) 50vw, 33vw"}
             />
           );
+          const open = (current: HTMLElement) => {
+            opener.current = current;
+            setActive(moments.findIndex((item) => item.id === moment.id));
+          };
           return (
             <figure className="club-gallery-moment" key={moment.id} data-reveal data-reveal-order={index % 3}>
               {moment.image ? (
@@ -56,20 +105,30 @@ export function GalleryGrid({ moments }: { moments: GalleryMoment[] }) {
                   onClick={(event) => {
                     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
                     event.preventDefault();
-                    opener.current = event.currentTarget;
-                    setActive(photos.findIndex((item) => item.id === moment.id));
+                    open(event.currentTarget);
                   }}
                 >
                   {frame}
                   <span className="club-gallery-expand" aria-hidden="true"><Expand size={18} /></span>
                 </a>
-              ) : frame}
+              ) : (
+                <button
+                  type="button"
+                  className="club-gallery-open"
+                  aria-label={`View photo: ${moment.caption}`}
+                  aria-haspopup="dialog"
+                  onClick={(event) => open(event.currentTarget)}
+                >
+                  {frame}
+                  <span className="club-gallery-expand" aria-hidden="true"><Expand size={18} /></span>
+                </button>
+              )}
               <figcaption>{moment.caption}</figcaption>
             </figure>
           );
         })}
       </div>
-      {photos.length > 0 && (
+      {moments.length > 0 && (
         <dialog
           ref={dialog}
           className="club-gallery-viewer"
@@ -77,7 +136,6 @@ export function GalleryGrid({ moments }: { moments: GalleryMoment[] }) {
           aria-describedby="club-viewer-caption"
           onCancel={() => setActive(null)}
           onClick={(event) => {
-            // The dialog fills the viewport. Only a click on its backdrop closes it.
             if (event.target === event.currentTarget) setActive(null);
           }}
           onKeyDown={(event) => {
@@ -87,7 +145,7 @@ export function GalleryGrid({ moments }: { moments: GalleryMoment[] }) {
               move(event.key === "ArrowLeft" ? -1 : 1);
             } else if (event.key === "Home" || event.key === "End") {
               event.preventDefault();
-              setActive(event.key === "Home" ? 0 : photos.length - 1);
+              setActive(event.key === "Home" ? 0 : moments.length - 1);
             }
           }}
         >
@@ -98,23 +156,13 @@ export function GalleryGrid({ moments }: { moments: GalleryMoment[] }) {
                 <X size={22} aria-hidden="true" />
               </button>
             </div>
-            {photo && (
-              <MediaFrame
-                key={photo.id}
-                src={photo.image}
-                alt={photo.caption}
-                label="Community photo"
-                className="club-viewer-photo"
-                sizes="(max-width: 700px) 100vw, 90vw"
-                priority
-              />
-            )}
+            {photo && <ViewerPhoto photo={photo} />}
             <div className="club-viewer-bottom">
               <div id="club-viewer-caption" aria-live="polite" aria-atomic="true">
                 <p>{photo?.caption}</p>
-                <span>{active === null ? 0 : active + 1} / {photos.length}</span>
+                <span>{active === null ? 0 : active + 1} / {moments.length}</span>
               </div>
-              {photos.length > 1 && (
+              {moments.length > 1 && (
                 <div className="club-viewer-navigation">
                   <button type="button" className="club-viewer-control" aria-label="Previous photo" onClick={() => move(-1)}>
                     <ArrowLeft size={22} aria-hidden="true" />

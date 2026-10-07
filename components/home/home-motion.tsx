@@ -21,9 +21,16 @@ export function HomeMotion({ children }: { children: ReactNode }) {
 
         const element = entry.target as HTMLElement;
         const order = Number(element.dataset.revealOrder || 0);
+        const portrait = element.dataset.reveal === "portrait";
         const animation = element.animate(
-          { opacity: [0.72, 1], transform: ["translateY(8px)", "translateY(0)"] },
-          { duration: 360, delay: Math.min(order, 3) * 40, easing: "cubic-bezier(0.2, 0, 0, 1)" },
+          portrait
+            ? { opacity: [0, 1] }
+            : { opacity: [0.72, 1], transform: ["translateY(8px)", "translateY(0)"] },
+          {
+            duration: portrait ? 420 : 360,
+            delay: Math.min(order, 3) * 40,
+            easing: "cubic-bezier(0.2, 0, 0, 1)",
+          },
         );
         animations.add(animation);
         animation.onfinish = () => animations.delete(animation);
