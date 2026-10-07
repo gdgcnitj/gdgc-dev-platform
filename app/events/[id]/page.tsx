@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, CalendarDays, Clock, MapPin } from "lucide-react";
@@ -44,10 +45,12 @@ export default async function EventPage({ params }: Props) {
             <Link href="/#events" className="club-back-link">
               <ArrowLeft size={16} aria-hidden="true" /> All events
             </Link>
-            <p className="club-eyebrow">
-              <span className="club-tone-dot" />
-              {event.category}
-            </p>
+            {event.category && (
+              <p className="club-eyebrow">
+                <span className="club-tone-dot" />
+                {event.category}
+              </p>
+            )}
             <h1 id="event-title">{event.title}</h1>
             {event.description && <p className="club-hero-description">{event.description}</p>}
             <dl className="club-event-facts">
@@ -58,14 +61,26 @@ export default async function EventPage({ params }: Props) {
                 </div>
               ))}
             </dl>
-            <MediaFrame
-              src={event.image}
-              alt={`${event.title} cover`}
-              label="Event cover"
-              className="club-event-page-photo"
-              sizes="(max-width: 900px) 100vw, 50vw"
-              priority
-            />
+            {!event.image && event.illustration ? (
+              <Image
+                src={event.illustration}
+                alt=""
+                width={1437}
+                height={968}
+                sizes="(max-width: 900px) 100vw, 50vw"
+                className="club-event-page-art"
+                priority
+              />
+            ) : (
+              <MediaFrame
+                src={event.image}
+                alt={`${event.title} cover`}
+                label="Event cover"
+                className="club-event-page-photo"
+                sizes="(max-width: 900px) 100vw, 50vw"
+                priority
+              />
+            )}
           </div>
           {event.registration && <RegistrationForm eventId={event.id} date={event.date} />}
         </div>

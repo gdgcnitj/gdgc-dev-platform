@@ -14,12 +14,14 @@ import { type BrandColor } from "@/lib/design/theme";
 export type ClubEvent = {
   id: string;
   title: string;
-  category: string;
+  category?: string;
   description?: string;
   date?: string;
   venue?: string;
   time?: string;
   image?: string;
+  /** Transparent artwork shown without a frame when there is no photo. */
+  illustration?: string;
   /** Show the registration form on the event page. */
   registration?: boolean;
   color: BrandColor;
@@ -53,9 +55,9 @@ export const upcomingEvents: ClubEvent[] = [
   {
     id: "orientation-2026",
     title: "Orientation 2026",
-    category: "On campus",
     description: "Meet the chapter, its eight departments, and the leads. Find out what we do and how to get involved this year.",
     date: "16 October 2026",
+    illustration: "/images/events/orientation-2026.webp",
     registration: true,
     color: "yellow",
   },
