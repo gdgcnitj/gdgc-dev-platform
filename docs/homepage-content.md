@@ -56,9 +56,11 @@ The current list comes from the project owner's role table.
 | Women in Tech | Rydham |
 | AI | Kartik Sirohi |
 | Competitive Programming | Kavish |
-| DevOps | Shushobit |
+| DevOps | Sushobhit |
 
 Update `lead`, `initials`, and `image` when the roster changes.
+Store portraits in `public/images/leads/` as 800 × 640 JPEGs.
+Crop to the head and shoulders, with the face about 40% from the top.
 Add a lead's profiles to `links` with the `linkedin`, `instagram`, and `website` keys.
 The card always shows all three icons; an unset link shows a gray placeholder.
 Use links that the lead confirms.

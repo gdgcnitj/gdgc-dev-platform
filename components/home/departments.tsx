@@ -1,6 +1,7 @@
+import { Users } from "lucide-react";
 import { MediaFrame } from "@/components/home/media-frame";
 import { ProfileLinks } from "@/components/home/profile-links";
-import { departments } from "@/lib/content/home";
+import { chapterLeads, departments } from "@/lib/content/home";
 
 export function HomeDepartments() {
   return (
@@ -12,8 +13,35 @@ export function HomeDepartments() {
       <div className="club-container club-section">
         <div className="club-title-card club-team-heading" data-reveal>
           <h2 id="departments-title">Departments & leads.</h2>
-          <p>Meet the student leads across our eight departments.</p>
+          <p>Meet the chapter&apos;s co-leads and the leads of our {departments.length} departments.</p>
         </div>
+        <h3 className="club-subsection-title">Chapter co-leads</h3>
+        <div className="club-department-grid club-alumni-grid">
+          {chapterLeads.map((lead, index) => (
+            <article className="club-department-card" data-tone={lead.color} key={lead.id}>
+              <div data-reveal="portrait" data-reveal-order={index}>
+                <MediaFrame
+                  src={lead.image}
+                  alt={lead.name}
+                  label="Portrait coming soon"
+                  initials={lead.initials}
+                  showLabel={false}
+                  className="club-lead-photo club-alumni-photo"
+                  sizes="(max-width: 380px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+              </div>
+              <div className="club-lead-copy">
+                <h3>{lead.name}</h3>
+                <p className="club-department-label">
+                  <Users size={17} aria-hidden="true" />
+                  <span>Chapter co-lead</span>
+                </p>
+                <ProfileLinks name={lead.name} links={lead.links} />
+              </div>
+            </article>
+          ))}
+        </div>
+        <h3 className="club-subsection-title club-past-heading">Department leads</h3>
         <div className="club-department-grid">
           {departments.map((department, index) => {
             const Icon = department.icon;

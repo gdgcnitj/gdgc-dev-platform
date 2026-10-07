@@ -78,6 +78,21 @@ export const pastEvents: ClubEvent[] = [
   },
 ];
 
+export type ChapterLead = {
+  id: string;
+  name: string;
+  initials: string;
+  image?: string;
+  links?: ProfileLinks;
+  color: BrandColor;
+};
+
+export const chapterLeads: ChapterLead[] = [
+  { id: "anshuman", name: "Anshuman Bhardwaj", initials: "AB", image: "/images/leads/anshuman.jpg", color: "blue" },
+  { id: "ayush", name: "Ayush Poddar", initials: "AP", image: "/images/leads/ayush.jpg", color: "green" },
+  { id: "prachi", name: "Prachi Goyal", initials: "PG", image: "/images/leads/prachi.jpg", color: "red" },
+];
+
 // Role and lead names reproduce the list supplied by the project owner.
 export const departments: Department[] = [
   {
@@ -104,6 +119,7 @@ export const departments: Department[] = [
     description: "Apps for mobile devices.",
     lead: "Rishi",
     initials: "R",
+    image: "/images/leads/rishi.jpg",
     icon: Smartphone,
     color: "green",
   },
@@ -122,6 +138,7 @@ export const departments: Department[] = [
     description: "Connections and support for women in tech.",
     lead: "Rydham",
     initials: "R",
+    image: "/images/leads/rydham.jpg",
     icon: HeartHandshake,
     color: "red",
   },
@@ -131,6 +148,7 @@ export const departments: Department[] = [
     description: "AI models and applications.",
     lead: "Kartik Sirohi",
     initials: "KS",
+    image: "/images/leads/kartik.jpg",
     icon: BrainCircuit,
     color: "blue",
   },
@@ -140,6 +158,7 @@ export const departments: Department[] = [
     description: "Algorithms and problem solving.",
     lead: "Kavish",
     initials: "K",
+    image: "/images/leads/kavish.jpg",
     icon: Braces,
     color: "yellow",
   },
@@ -147,8 +166,9 @@ export const departments: Department[] = [
     id: "devops",
     title: "DevOps",
     description: "Infrastructure and software delivery.",
-    lead: "Shushobit",
+    lead: "Sushobhit",
     initials: "S",
+    image: "/images/leads/sushobhit.jpg",
     icon: CloudCog,
     color: "green",
   },
