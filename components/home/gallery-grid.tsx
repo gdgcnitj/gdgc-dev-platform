@@ -7,23 +7,23 @@ import type { GalleryMoment } from "@/lib/content/home";
 
 function ViewerPhoto({ photo }: { photo: GalleryMoment }) {
   const [stack, setStack] = useState<GalleryMoment[]>([photo]);
-  const shown = useRef(photo.id);
+  const [shownId, setShownId] = useState(photo.id);
+
+  if (photo.id !== shownId) {
+    setShownId(photo.id);
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setStack((current) => {
+      if (reduce) return [photo];
+      const outgoing = current[current.length - 1];
+      return outgoing && outgoing.id !== photo.id ? [outgoing, photo] : [photo];
+    });
+  }
 
   useEffect(() => {
-    if (photo.id === shown.current) return;
-    const previousId = shown.current;
-    shown.current = photo.id;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setStack([photo]);
-      return;
-    }
-    setStack((current) => {
-      const outgoing = current.find((item) => item.id === previousId) ?? current[current.length - 1];
-      return outgoing ? [outgoing, photo] : [photo];
-    });
-    const timer = window.setTimeout(() => setStack([photo]), 180);
+    if (stack.length < 2) return;
+    const timer = window.setTimeout(() => setStack([stack[stack.length - 1]]), 180);
     return () => window.clearTimeout(timer);
-  }, [photo]);
+  }, [stack]);
 
   return (
     <div className="club-viewer-stage">
