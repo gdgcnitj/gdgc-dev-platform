@@ -658,11 +658,20 @@ html:has(.club-home) { scroll-behavior: smooth; }
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
-  gap: 56px;
+  grid-template-areas:
+    "intro form"
+    "details form";
+  column-gap: 56px;
   align-items: start;
   padding-block: 48px 88px;
 }
-.club-event-page-single { grid-template-columns: minmax(0, 760px); }
+.club-event-intro { grid-area: intro; }
+.club-event-details { grid-area: details; margin-top: 8px; }
+.club-event-page > .club-form-card { grid-area: form; }
+.club-event-page-single {
+  grid-template-columns: minmax(0, 760px);
+  grid-template-areas: "intro" "details";
+}
 .club-event-page h1 {
   margin: 20px 0;
   font-size: clamp(44px, 5.4vw, 72px);
@@ -976,7 +985,14 @@ html:has(.club-home) { scroll-behavior: smooth; }
   .club-footer-content { gap: 48px; }
 }
 @media (max-width: 900px) {
-  .club-event-page { grid-template-columns: 1fr; }
+  .club-event-page {
+    grid-template-columns: 1fr;
+    grid-template-areas: "intro" "form" "details";
+    row-gap: 28px;
+  }
+  .club-event-details { margin-top: 0; }
+  .club-event-page-art,
+  .club-event-page-photo { max-width: 420px; }
   .club-form-card { position: static; }
   .club-hero {
     grid-template-columns: 1fr;
@@ -1030,9 +1046,24 @@ html:has(.club-home) { scroll-behavior: smooth; }
   .club-mobile-nav a[aria-current] { color: var(--club-action); }
   .club-hero { padding-block: 48px 64px; gap: 36px; }
   .club-alumni-hero { padding-block: 48px 40px; }
-  .club-event-page { padding-block: 24px 56px; gap: 32px; }
-  .club-event-facts { grid-template-columns: 1fr; }
-  .club-event-facts > div + div { border-left: 0; border-top: 1px solid var(--club-line); }
+  .club-event-page { padding-block: 24px 56px; }
+  .club-event-page h1 { margin-block: 12px; font-size: clamp(36px, 10vw, 48px); }
+  .club-event-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+    border: 0;
+    background: transparent;
+  }
+  .club-event-facts > div {
+    padding: 8px 12px;
+    border: 1px solid var(--club-line);
+    border-radius: 999px;
+    background: var(--club-paper);
+  }
+  .club-event-facts > div + div { border-top: 1px solid var(--club-line); }
+  .club-event-facts dd { margin-top: 2px; font-size: 14px; }
   .club-form-card { padding: 24px 20px; border-radius: 22px; }
   .club-form-row { grid-template-columns: 1fr; }
   .club-hero h1 { font-size: clamp(52px, 12vw, 76px); }
