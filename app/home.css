@@ -776,6 +776,16 @@ html:has(.club-home) { scroll-behavior: smooth; }
 .club-form-chip:hover { background: var(--club-soft); }
 .club-form-chip:has(input:checked) { border-color: var(--club-tone); background: var(--club-tone-soft); }
 .club-form-chip:has(input:focus-visible) { outline: 3px solid var(--club-action); outline-offset: 2px; }
+.club-form-trap {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
 .club-form-alert {
   padding: 12px 14px;
   border-radius: 12px;

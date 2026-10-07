@@ -50,8 +50,10 @@ Upcoming cards link to that page. Set `registration: true` to show the sign-up f
 On a narrow screen the form follows the title, and the cover sits below the form.
 Set `time` and `venue` when confirmed; the page shows "To be announced" until then.
 The form fields and checks live in `lib/content/registration.ts`.
-`registerForEvent` in `app/events/actions.ts` validates sign-ups but does not store them yet.
-Outside development it refuses sign-ups, so connect storage before release.
+Course is B.Tech, M.Tech, M.Sc, MBA, or Ph.D. Branch names follow the 2026–27 programmes and the institute's departments.
+`registerForEvent` in `app/events/actions.ts` stores a valid sign-up in `event_registration`.
+The same email or roll number cannot register twice for one event.
+A hidden company field must stay empty, and one address can only submit a few times an hour.
 The past-event details come from [hackmol.com](https://hackmol.com/) and the chapter's [GDG community page](https://gdg.community.dev/gdg-on-campus-dr-b-r-ambedkar-national-institute-of-technology-jalandhar-india/).
 Do not invent dates, venues, or event results.
 
