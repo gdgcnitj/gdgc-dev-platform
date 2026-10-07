@@ -325,27 +325,55 @@ html:has(.club-home) { scroll-behavior: smooth; }
   margin-bottom: 32px;
 }
 .club-events-heading > p,
-.club-events-heading > div > p {
+.club-events-banner-copy > p {
   max-width: 310px;
-  margin-top: 12px;
   font-size: 16px;
   line-height: 1.6;
   color: var(--club-muted);
 }
-.club-events-heading > p { margin-top: 0; }
 .club-title-card.club-events-heading { margin-bottom: 24px; }
-.club-events-heading:has(.club-next-event) { align-items: center; }
-.club-next-event {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  max-width: 500px;
-  padding-left: 32px;
-  border-left: 1px solid var(--club-line);
+.club-title-card.club-events-banner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 12px;
 }
-.club-next-event-art { width: 200px; height: auto; flex-shrink: 0; }
-.club-next-event p { color: var(--club-muted); font-size: 14px; line-height: 1.5; }
-.club-next-event .club-text-link { margin-top: 4px; }
+.club-events-banner-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 28px 24px 28px 28px;
+}
+.club-events-banner-copy > p { margin-top: 12px; }
+.club-events-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 20px;
+  margin-top: 28px;
+}
+.club-events-status .club-text-link { margin-top: 0; }
+.club-events-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--club-line);
+  border-radius: 999px;
+  color: var(--club-ink);
+  font-size: 14px;
+  font-weight: 500;
+}
+.club-events-banner-art {
+  display: grid;
+  place-items: center;
+  padding: 28px 32px;
+  background: var(--club-tone-soft);
+  border-radius: 20px;
+}
+.club-events-banner-art img { width: 100%; max-width: 440px; height: auto; }
 .club-subsection-title {
   font-size: 20px;
   font-weight: 500;
@@ -1003,8 +1031,11 @@ html:has(.club-home) { scroll-behavior: smooth; }
   .club-home h2 { font-size: clamp(32px, 8vw, 44px); }
   .club-events-heading { display: block; margin-bottom: 28px; }
   .club-events-heading > p { margin-top: 14px; max-width: 360px; font-size: 15px; }
-  .club-next-event { margin-top: 20px; padding: 20px 0 0; border-left: 0; border-top: 1px solid var(--club-line); }
-  .club-next-event-art { width: 120px; }
+  .club-title-card.club-events-banner { grid-template-columns: 1fr; margin-bottom: 28px; padding: 10px; }
+  .club-events-banner-copy { padding: 18px 14px 14px; }
+  .club-events-banner-copy > p { max-width: 360px; font-size: 15px; }
+  .club-events-status { margin-top: 20px; }
+  .club-events-banner-art { order: -1; padding: 20px; border-radius: 16px; }
   .club-event-grid { grid-template-columns: 1fr; gap: 32px; }
   .club-event-photo { aspect-ratio: 1.4; }
   .club-event-copy { padding-top: 14px; }

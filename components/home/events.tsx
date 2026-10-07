@@ -71,30 +71,37 @@ export function HomeEvents() {
       aria-labelledby="events-title"
     >
       <div className="club-section club-container">
-        <div className="club-title-card club-events-heading" data-reveal>
-          <div>
+        {upcomingEvents.length ? (
+          <div className="club-title-card club-events-heading" data-reveal>
             <h2 id="events-title">Our events.</h2>
             <p>Workshops, hackathons, and meetups at NIT Jalandhar.</p>
           </div>
-          {!upcomingEvents.length && (
-            <div className="club-next-event">
+        ) : (
+          <div className="club-title-card club-events-banner" data-tone="yellow" data-reveal>
+            <div className="club-events-banner-copy">
+              <h2 id="events-title">Our events.</h2>
+              <p>Workshops, hackathons, and meetups at NIT Jalandhar.</p>
+              <div className="club-events-status">
+                <span className="club-events-status-pill">
+                  <span className="club-tone-dot" aria-hidden="true" />
+                  Nothing scheduled right now
+                </span>
+                <a className="club-text-link" href={socialLinks.instagram} target="_blank" rel="noreferrer">
+                  Get event updates <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+            <div className="club-events-banner-art">
               <Image
                 src="/images/illustrations/events-empty.webp"
                 alt=""
                 width={1400}
                 height={467}
-                sizes="240px"
-                className="club-next-event-art"
+                sizes="(max-width: 700px) 90vw, 480px"
               />
-              <div>
-                <p>Nothing scheduled yet. Follow the chapter for announcements.</p>
-                <a className="club-text-link" href={socialLinks.instagram} target="_blank" rel="noreferrer">
-                  Event updates <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
-                </a>
-              </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
         {upcomingEvents.length ? (
           <div className="club-upcoming-events">
             <h3 className="club-subsection-title">Coming up</h3>
