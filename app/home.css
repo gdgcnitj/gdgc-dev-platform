@@ -553,7 +553,7 @@ html:has(.club-home) { scroll-behavior: smooth; }
   padding-block: 72px 64px;
 }
 .club-alumni-art { width: 100%; height: auto; }
-.club-questions-art { display: block; width: min(100%, 400px); height: auto; margin-top: 32px; }
+.club-questions-art { display: block; width: min(100%, 340px); height: auto; margin-top: 12px; }
 .club-not-found {
   display: grid;
   justify-items: center;
@@ -799,7 +799,7 @@ html:has(.club-home) { scroll-behavior: smooth; }
 .club-questions {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
-  align-items: start;
+  align-items: center;
   gap: 80px;
 }
 .club-faq {
@@ -808,7 +808,7 @@ html:has(.club-home) { scroll-behavior: smooth; }
   border-radius: 28px;
 }
 .club-questions-heading > p { max-width: 320px; }
-.club-questions-heading .club-text-link { margin-top: 20px; }
+.club-questions-heading .club-text-link { margin-top: 12px; }
 .club-faq details { border-bottom: 1px solid var(--club-line); }
 .club-faq details:last-child { border-bottom: 0; }
 .club-faq summary {
