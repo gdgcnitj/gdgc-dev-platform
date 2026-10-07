@@ -46,8 +46,8 @@ function EventCard({
         )}
         {event.description && <p className="club-event-description">{event.description}</p>}
         {event.href && (
-          <a className="club-text-link" href={event.href}>
-            {upcoming ? "Details & registration" : "View recap"}
+          <a className="club-text-link" href={event.href} target="_blank" rel="noreferrer">
+            {upcoming ? "Details & registration" : "Event page"}
             <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
           </a>
         )}

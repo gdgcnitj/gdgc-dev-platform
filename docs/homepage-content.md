@@ -40,9 +40,8 @@ Give each event a unique `id`.
 
 The page shows a compact announcement strip when `upcomingEvents` is empty.
 Confirmed upcoming events use a featured layout before the archive.
-It shows no event-details link when `href` is absent.
-The archive names come from the old home page.
-Add descriptions when the club supplies recaps.
+It shows no event-page link when `href` is absent.
+The past-event details come from [hackmol.com](https://hackmol.com/) and the chapter's [GDG community page](https://gdg.community.dev/gdg-on-campus-dr-b-r-ambedkar-national-institute-of-technology-jalandhar-india/).
 Do not invent dates, venues, or event results.
 
 ## Departments and leads
@@ -61,6 +60,9 @@ The current list comes from the project owner's role table.
 | DevOps | Shushobit |
 
 Update `lead`, `initials`, and `image` when the roster changes.
+Add a lead's profiles to `links` with the `linkedin`, `instagram`, and `website` keys.
+The card shows an icon only for each link that is set.
+Use links that the lead confirms.
 Use the confirmed spelling of each name.
 The `icon` field uses an icon from the existing `lucide-react` package.
 Keep all leads visible in the grid.

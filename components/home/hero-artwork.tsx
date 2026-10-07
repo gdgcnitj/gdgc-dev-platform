@@ -4,7 +4,7 @@ export function HeroArtwork() {
     <svg className="club-hero-art" viewBox="0 0 520 460" fill="none" aria-hidden="true">
       <defs>
         <clipPath id="club-hero-green-clip">
-          <rect x="12" y="248" width="212" height="200" rx="20" />
+          <rect x="12" y="248" width="200" height="200" rx="20" />
         </clipPath>
       </defs>
       <g className="club-hero-shape club-hero-shape-blue">
@@ -43,38 +43,29 @@ export function HeroArtwork() {
         />
       </g>
       <g className="club-hero-shape club-hero-shape-green">
-        <rect
-          x="12"
-          y="248"
-          width="212"
-          height="200"
-          rx="20"
-          fill="#34A853"
-          stroke="#222222"
-          strokeWidth="2"
-        />
+        <rect x="12" y="248" width="200" height="200" rx="20" fill="#34A853" />
         <g clipPath="url(#club-hero-green-clip)" fill="#FFFFFF" stroke="#222222" strokeWidth="2">
-          <path className="club-loop club-tile club-tile-a" d="M12 346c0-59 48-98 106-98v98H12Z" />
-          <path className="club-loop club-tile club-tile-b" d="M118 448c0-59 48-102 106-102v102H118Z" />
+          <path className="club-loop club-tile club-tile-a" d="M12 348a100 100 0 0 1 100-100v100H12Z" />
+          <path className="club-loop club-tile club-tile-b" d="M112 448a100 100 0 0 1 100-100v100H112Z" />
         </g>
-        <path d="M118 248v200M12 346h212" stroke="#222222" strokeWidth="2" />
-        <rect x="12" y="248" width="212" height="200" rx="20" stroke="#222222" strokeWidth="2" />
+        <path d="M112 248v200M12 348h200" stroke="#222222" strokeWidth="2" />
+        <rect x="12" y="248" width="200" height="200" rx="20" stroke="#222222" strokeWidth="2" />
       </g>
       <g className="club-hero-shape club-hero-shape-yellow">
         <rect
-          x="238"
+          x="226"
           y="248"
-          width="270"
+          width="282"
           height="200"
           rx="20"
           fill="#FBBC05"
           stroke="#222222"
           strokeWidth="2"
         />
-        <circle className="club-loop club-dial" cx="373" cy="348" r="64" fill="#FFFFFF" stroke="#222222" strokeWidth="2" />
+        <circle className="club-loop club-dial" cx="367" cy="348" r="64" fill="#FFFFFF" stroke="#222222" strokeWidth="2" />
         <path
           className="club-loop club-arrow"
-          d="M350 348h46m-18-18 18 18-18 18"
+          d="M344 348h46m-18-18 18 18-18 18"
           stroke="#222222"
           strokeWidth="6"
           strokeLinecap="round"

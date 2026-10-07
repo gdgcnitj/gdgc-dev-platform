@@ -271,20 +271,38 @@ html:has(.club-home) { scroll-behavior: smooth; }
   font-size: 12px;
   color: var(--club-muted);
 }
-.club-motion-toggle {
+.club-hero-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 36px;
+}
+.club-hero-facts li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--club-line);
+  border-radius: 100px;
+  background: var(--club-paper);
+  color: var(--club-muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+.club-hero-facts strong { color: var(--club-ink); font-weight: 500; }
+.club-lead-links { display: flex; gap: 6px; margin-top: 14px; }
+.club-lead-links a {
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--club-line);
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: var(--club-paper);
+  background: var(--club-soft);
   color: var(--club-ink);
-  cursor: pointer;
-  transition: background-color 160ms ease, transform 160ms var(--club-ease);
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--club-ease);
 }
-.club-motion-toggle:hover { background: #e8f0fe; }
-.club-motion-toggle:active { transform: scale(0.94); }
+.club-lead-links a:hover { background: var(--club-tone-soft); color: var(--club-action); }
+.club-lead-links a:active { transform: scale(0.94); }
 .club-media {
   position: relative;
   overflow: hidden;
@@ -597,15 +615,7 @@ html:has(.club-home) { scroll-behavior: smooth; }
   line-height: 1.7;
 }
 .club-footer-shell { padding: 24px; background: #f1f3f4; }
-.club-footer {
-  border-radius: 28px;
-  background-color: var(--club-ink);
-  background-image:
-    linear-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(255 255 255 / 0.05) 1px, transparent 1px);
-  background-size: 48px 48px;
-  color: white;
-}
+.club-footer { border-radius: 28px; background: var(--club-ink); color: white; }
 .club-footer .club-container { width: min(calc(100% - 80px), 1152px); }
 .club-footer-invitation {
   display: grid;
@@ -1021,7 +1031,6 @@ a:focus-visible > .club-arrow-up { transform: translateY(-2px); }
   .club-dial { animation: club-dial 2.4s var(--club-ease) 600ms infinite; }
   .club-arrow { animation: club-nudge 2.4s var(--club-ease) 600ms infinite; }
   .club-strip-track { animation: club-marquee 36s linear infinite; }
-  .club-home[data-motion="paused"] .club-loop { animation-play-state: paused; }
 }
 @keyframes club-code-left { 0%, 60%, 100% { translate: 0 0; } 30% { translate: -8px 0; } }
 @keyframes club-code-right { 0%, 60%, 100% { translate: 0 0; } 30% { translate: 8px 0; } }

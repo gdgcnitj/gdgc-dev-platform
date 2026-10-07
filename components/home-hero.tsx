@@ -2,9 +2,14 @@ import Link from "next/link";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { HeroArtwork } from "@/components/home/hero-artwork";
 import { MediaFrame } from "@/components/home/media-frame";
-import { MotionToggle } from "@/components/home/motion-toggle";
 import { Button } from "@/components/ui/button";
-import { communityPhoto } from "@/lib/content/home";
+import { communityPhoto, departments } from "@/lib/content/home";
+
+const facts = [
+  { label: "HackMOL", detail: "30-hour national hackathon" },
+  { label: `${departments.length} departments`, detail: "from Web to DevOps" },
+  { label: "WinterFest", detail: "workshops and contests" },
+];
 
 export default function HomeHero() {
   return (
@@ -13,7 +18,7 @@ export default function HomeHero() {
         <div className="club-hero-copy">
           <p className="club-eyebrow">
             <span className="club-brand-dot" />
-            GDG on Campus · NIT Jalandhar
+            Google Developer Groups on Campus · NIT Jalandhar
           </p>
           <h1 id="hero-title">
             Learn. Build.
@@ -21,8 +26,8 @@ export default function HomeHero() {
             <span>Belong.</span>
           </h1>
           <p className="club-hero-description">
-            A community of students learning technology, building ideas, and growing
-            together at NIT Jalandhar.
+            NIT Jalandhar&apos;s student developer community. Pick a department, learn at
+            our workshops, and build with people who share your interests.
           </p>
           <div className="club-actions">
             <Button asChild className="club-button">
@@ -36,6 +41,14 @@ export default function HomeHero() {
               </Link>
             </Button>
           </div>
+          <ul className="club-hero-facts">
+            {facts.map((fact) => (
+              <li key={fact.label}>
+                <strong>{fact.label}</strong>
+                {fact.detail}
+              </li>
+            ))}
+          </ul>
         </div>
         <div className="club-hero-visual">
           {communityPhoto ? (
@@ -50,16 +63,15 @@ export default function HomeHero() {
           ) : (
             <HeroArtwork />
           )}
-          <div className="club-art-caption">
+          <p className="club-art-caption">
             <span className="club-brand-line" aria-hidden="true">
               <i />
               <i />
               <i />
               <i />
             </span>
-            <p>Different interests. One community.</p>
-            <MotionToggle />
-          </div>
+            Different interests. One community.
+          </p>
         </div>
       </div>
     </section>

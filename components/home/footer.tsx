@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUp, ArrowUpRight, Github, Instagram, Youtube } from "lucide-react";
+import { ArrowUp, ArrowUpRight, Github, Instagram, Linkedin, Youtube } from "lucide-react";
 import logo from "@/app/assets/navbarLogo.svg";
 import { Button } from "@/components/ui/button";
 import { socialLinks } from "@/lib/content/home";
@@ -20,6 +20,8 @@ const footerGroups = [
     links: [
       { label: "Alumni", href: "/alumni" },
       { label: "Member sign-in", href: "/sign-in" },
+      { label: "GDG chapter page", href: socialLinks.chapter },
+      { label: "dsc@nitj.ac.in", href: socialLinks.email },
     ],
   },
 ];
@@ -61,6 +63,9 @@ export function HomeFooter() {
                 <a href={socialLinks.instagram} aria-label="Instagram" target="_blank" rel="noreferrer">
                   <Instagram size={20} aria-hidden="true" />
                 </a>
+                <a href={socialLinks.linkedin} aria-label="LinkedIn" target="_blank" rel="noreferrer">
+                  <Linkedin size={20} aria-hidden="true" />
+                </a>
                 <a href={socialLinks.youtube} aria-label="YouTube" target="_blank" rel="noreferrer">
                   <Youtube size={20} aria-hidden="true" />
                 </a>
@@ -76,7 +81,13 @@ export function HomeFooter() {
                   <ul>
                     {group.links.map((link) => (
                       <li key={link.href}>
-                        <Link href={link.href}>{link.label}</Link>
+                        {link.href.startsWith("/") || link.href.startsWith("#") ? (
+                          <Link href={link.href}>{link.label}</Link>
+                        ) : (
+                          <a href={link.href} target={link.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
+                            {link.label}
+                          </a>
+                        )}
                       </li>
                     ))}
                   </ul>

@@ -1,3 +1,4 @@
+import { Globe, Instagram, Linkedin } from "lucide-react";
 import { MediaFrame } from "@/components/home/media-frame";
 import { departments } from "@/lib/content/home";
 
@@ -46,6 +47,31 @@ export function HomeDepartments() {
                     <span>{department.title}</span>
                   </p>
                   <p className="club-department-description">{department.description}</p>
+                  {department.links && (
+                    <ul className="club-lead-links" aria-label={`${department.lead} online`}>
+                      {department.links.linkedin && (
+                        <li>
+                          <a href={department.links.linkedin} target="_blank" rel="noreferrer" aria-label={`${department.lead} on LinkedIn`}>
+                            <Linkedin size={16} aria-hidden="true" />
+                          </a>
+                        </li>
+                      )}
+                      {department.links.instagram && (
+                        <li>
+                          <a href={department.links.instagram} target="_blank" rel="noreferrer" aria-label={`${department.lead} on Instagram`}>
+                            <Instagram size={16} aria-hidden="true" />
+                          </a>
+                        </li>
+                      )}
+                      {department.links.website && (
+                        <li>
+                          <a href={department.links.website} target="_blank" rel="noreferrer" aria-label={`${department.lead}'s portfolio`}>
+                            <Globe size={16} aria-hidden="true" />
+                          </a>
+                        </li>
+                      )}
+                    </ul>
+                  )}
                 </div>
               </article>
             );

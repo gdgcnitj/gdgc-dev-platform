@@ -27,7 +27,7 @@ The implementation uses original artwork and this club's content.
 | Departments and leads | Show all eight departments and their leads | Yellow grid field with a slanted top edge. Portrait first, then name, domain, and short description |
 | Gallery | Show life in the community | Green grid field with a slanted top edge. Two wide photos and three smaller photos on desktop |
 | Common questions | Answer questions about taking part | Light gray field before the footer with native disclosure controls |
-| Footer | Give visitors a next step and key links | Dark grid panel with the invitation, club identity, social channels, and grouped links |
+| Footer | Give visitors a next step and key links | Plain dark panel with the invitation, club identity, social channels, and grouped links |
 
 ## Sections and dividers
 
@@ -78,7 +78,7 @@ Keep "Join the community" and "Explore events" visible.
 Use the original flat SVG when no community photo is available.
 Each tile has one small loop: the code brackets breathe, the asterisk turns, the green tiles rotate, and the arrow nudges.
 Keep the heading readable immediately.
-The pause button under the artwork stops the loops and the department strip.
+Keep the green tile cells square so each quarter circle rotates inside its cell.
 Do not generate realistic faces or student portraits.
 
 ## Motion

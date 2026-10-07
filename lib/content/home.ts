@@ -31,37 +31,51 @@ export type Department = {
   image?: string;
   icon: LucideIcon;
   href?: string;
+  links?: { linkedin?: string; instagram?: string; website?: string };
   color: BrandColor;
 };
 export type GalleryMoment = { id: string; caption: string; image?: string };
 
 export const socialLinks = {
   instagram: "https://www.instagram.com/gdgcnitj/",
+  linkedin: "https://www.linkedin.com/company/dscnitj/",
   github: "https://github.com/gdgcnitj",
   youtube: "https://www.youtube.com/@DSCNITJ",
+  chapter: "https://gdg.community.dev/gdg-on-campus-dr-b-r-ambedkar-national-institute-of-technology-jalandhar-india/",
+  email: "mailto:dsc@nitj.ac.in",
 } as const;
 
 // Add confirmed dates and links here. An empty list shows the announcement state.
 export const upcomingEvents: ClubEvent[] = [];
 
-// Titles carried forward from the existing homepage. Photos and recaps are pending.
+// Details come from hackmol.com and the chapter's gdg.community.dev pages. Photos are pending.
 export const pastEvents: ClubEvent[] = [
   {
     id: "hackmol",
-    title: "HackMOL",
+    title: "HackMOL 7.0",
     category: "Hackathon",
+    description: "NIT Jalandhar's flagship 30-hour onsite hackathon. Teams from across India build real-world solutions.",
+    date: "28–29 March 2026",
+    venue: "NIT Jalandhar",
+    href: "https://hackmol.com/",
     color: "blue",
   },
   {
     id: "winterfest",
     title: "WinterFest",
-    category: "Community",
+    category: "Workshops & contests",
+    description: "Seminars in AI, UI/UX, full-stack development, and cybersecurity. Contest winners got direct entry to HackMOL 6.0.",
+    date: "January–February 2025",
+    venue: "WE-1, NIT Jalandhar",
+    href: "https://gdg.community.dev/events/details/google-gdg-on-campus-dr-b-r-ambedkar-national-institute-of-technology-jalandhar-india-presents-winterfest/",
     color: "green",
   },
   {
     id: "orientation",
     title: "Orientation",
     category: "On campus",
+    description: "An info session for freshers on what the chapter does, its departments, and its plans for the year.",
+    date: "September 2025",
     color: "yellow",
   },
 ];
