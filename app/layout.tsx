@@ -1,10 +1,13 @@
 import "./globals.css";
+import "./home.css";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Red_Hat_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Red_Hat_Mono } from "next/font/google";
+import localFont from "next/font/local";
 
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import siteIcon from "@/app/assets/gdgc.png";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,11 +29,20 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+const googleSans = localFont({
+  src: "./fonts/google-sans/GoogleSans-Latin.woff2",
+  variable: "--font-google-sans",
+  weight: "400 700",
+  style: "normal",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "GDGC@NITJ",
-  description: "Community Developer Platform - GDGC@NITJ",
+  title: "GDGC NITJ · Learn. Build. Belong.",
+  description:
+    "Meet the GDG on Campus community at NIT Jalandhar. Explore our events, departments, student leads, and campus moments.",
   icons: {
-    icon: "/gdgc.png",
+    icon: siteIcon.src,
   },
 };
 
@@ -42,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${redHatMono.variable} ${inter.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${redHatMono.variable} ${inter.variable} ${googleSans.variable} antialiased`}
       >
         <ThemeProvider
           attribute="class"
@@ -50,10 +62,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <header className="flex items-center">
+          <a href="#main-content" className="club-skip-link">
+            Skip to content
+          </a>
+          <header className="club-site-header">
             <Navbar />
           </header>
-          <main>{children}</main>
+          <main id="main-content">{children}</main>
           <Toaster />
         </ThemeProvider>
       </body>
