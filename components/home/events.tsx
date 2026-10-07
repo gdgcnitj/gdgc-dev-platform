@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, CalendarDays, Clock, MapPin } from "lucide-react";
 import { MediaFrame } from "@/components/home/media-frame";
@@ -70,10 +71,37 @@ export function HomeEvents() {
       aria-labelledby="events-title"
     >
       <div className="club-section club-container">
-        <div className="club-title-card club-events-heading" data-reveal>
-          <h2 id="events-title">Our events.</h2>
-          <p>Workshops, hackathons, and meetups at NIT Jalandhar.</p>
-        </div>
+        {upcomingEvents.length ? (
+          <div className="club-title-card club-events-heading" data-reveal>
+            <h2 id="events-title">Our events.</h2>
+            <p>Workshops, hackathons, and meetups at NIT Jalandhar.</p>
+          </div>
+        ) : (
+          <div className="club-title-card club-events-banner" data-tone="yellow" data-reveal>
+            <div className="club-events-banner-copy">
+              <h2 id="events-title">Our events.</h2>
+              <p>Workshops, hackathons, and meetups at NIT Jalandhar.</p>
+              <div className="club-events-status">
+                <span className="club-events-status-pill">
+                  <span className="club-tone-dot" aria-hidden="true" />
+                  Nothing scheduled right now
+                </span>
+                <a className="club-text-link" href={socialLinks.instagram} target="_blank" rel="noreferrer">
+                  Get event updates <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+            <div className="club-events-banner-art">
+              <Image
+                src="/images/illustrations/events-empty.webp"
+                alt=""
+                width={1400}
+                height={467}
+                sizes="(max-width: 700px) 90vw, 480px"
+              />
+            </div>
+          </div>
+        )}
         {upcomingEvents.length ? (
           <div className="club-upcoming-events">
             <h3 className="club-subsection-title">Coming up</h3>
@@ -83,17 +111,7 @@ export function HomeEvents() {
               ))}
             </div>
           </div>
-        ) : (
-          <div className="club-next-event">
-            <CalendarDays size={22} aria-hidden="true" />
-            <p>Follow the chapter for upcoming event announcements.</p>
-            <Button asChild variant="ghost" className="club-event-updates">
-              <a href={socialLinks.instagram} target="_blank" rel="noreferrer">
-                Event updates <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
-              </a>
-            </Button>
-          </div>
-        )}
+        ) : null}
         <h3 className="club-subsection-title club-past-heading">Past events</h3>
         <div className="club-event-grid">
           {pastEvents.map((event) => (

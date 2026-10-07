@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { Search, Users } from "lucide-react";
 import { MediaFrame } from "@/components/home/media-frame";
@@ -71,35 +72,46 @@ export function AlumniDirectory() {
     <>
       <section className="club-hero-field" aria-labelledby="alumni-title">
         <div className="club-container club-alumni-hero">
-          <p className="club-eyebrow">
-            <span className="club-brand-dot" />
-            GDGC NITJ alumni
-          </p>
-          <h1 id="alumni-title">
-            The people who <span>built this.</span>
-          </h1>
-          <p className="club-hero-description">
-            Past leads of the chapter: what they led here, and where they are now.
-          </p>
-          <div className="club-alumni-tools">
-            <label className="club-alumni-search">
-              <Search size={18} aria-hidden="true" />
-              <input
-                type="search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search by name, department, or company"
-                aria-label="Search alumni"
-              />
-            </label>
-            {groups.length > 1 && (
-              <nav className="club-alumni-batches" aria-label="Batches">
-                {groups.map(({ batch }) => (
-                  <a key={batch} href={`#class-of-${batch}`}>Class of {batch}</a>
-                ))}
-              </nav>
-            )}
+          <div className="club-alumni-copy">
+            <p className="club-eyebrow">
+              <span className="club-brand-dot" />
+              GDGC NITJ alumni
+            </p>
+            <h1 id="alumni-title">
+              The people who <span>built this.</span>
+            </h1>
+            <p className="club-hero-description">
+              Past leads of the chapter: what they led here, and where they are now.
+            </p>
+            <div className="club-alumni-tools">
+              <label className="club-alumni-search">
+                <Search size={18} aria-hidden="true" />
+                <input
+                  type="search"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Search by name, department, or company"
+                  aria-label="Search alumni"
+                />
+              </label>
+              {groups.length > 1 && (
+                <nav className="club-alumni-batches" aria-label="Batches">
+                  {groups.map(({ batch }) => (
+                    <a key={batch} href={`#class-of-${batch}`}>Class of {batch}</a>
+                  ))}
+                </nav>
+              )}
+            </div>
           </div>
+          <Image
+            src="/images/illustrations/alumni-hero.webp"
+            alt=""
+            width={1400}
+            height={1050}
+            sizes="(max-width: 900px) 80vw, 480px"
+            className="club-alumni-art"
+            priority
+          />
         </div>
       </section>
       {results.length ? (

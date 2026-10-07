@@ -324,36 +324,56 @@ html:has(.club-home) { scroll-behavior: smooth; }
   gap: 32px;
   margin-bottom: 32px;
 }
-.club-events-heading > p {
+.club-events-heading > p,
+.club-events-banner-copy > p {
   max-width: 310px;
   font-size: 16px;
   line-height: 1.6;
   color: var(--club-muted);
 }
 .club-title-card.club-events-heading { margin-bottom: 24px; }
-.club-next-event {
+.club-title-card.club-events-banner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 12px;
+}
+.club-events-banner-copy {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 28px 24px 28px 28px;
+}
+.club-events-banner-copy > p { margin-top: 12px; }
+.club-events-status {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 16px;
-  padding: 14px 20px;
-  background: var(--club-paper);
-  border-radius: 16px;
-  font-size: 14px;
-  line-height: 1.5;
+  gap: 4px 20px;
+  margin-top: 28px;
 }
-.club-next-event > svg { color: var(--club-action); flex-shrink: 0; }
-.club-next-event p { color: var(--club-muted); }
-.club-event-updates {
-  min-height: 44px;
-  margin-left: auto;
-  padding-inline: 12px;
-  flex-shrink: 0;
-  color: var(--club-action);
-  background: transparent;
-  border-radius: 8px;
+.club-events-status .club-text-link { margin-top: 0; }
+.club-events-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--club-line);
+  border-radius: 999px;
+  color: var(--club-ink);
   font-size: 14px;
+  font-weight: 500;
 }
-.club-event-updates:hover { background: #e8f0fe; color: var(--club-action); }
+.club-events-banner-art {
+  display: grid;
+  place-items: center;
+  padding: 28px 32px;
+  background: var(--club-tone-soft);
+  border-radius: 20px;
+}
+.club-events-banner-art img { width: 100%; max-width: 440px; height: auto; }
 .club-subsection-title {
   font-size: 20px;
   font-weight: 500;
@@ -524,7 +544,34 @@ html:has(.club-home) { scroll-behavior: smooth; }
   font-size: 13px;
   line-height: 1.6;
 }
-.club-alumni-hero { position: relative; padding-block: 84px 72px; }
+.club-alumni-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: center;
+  gap: 48px;
+  padding-block: 72px 64px;
+}
+.club-alumni-art { width: 100%; height: auto; }
+.club-questions-art { display: block; width: min(100%, 340px); height: auto; margin-top: 12px; }
+.club-not-found {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  min-height: calc(100svh - 72px);
+  padding-block: 56px 96px;
+  text-align: center;
+}
+.club-not-found h1 {
+  margin: 20px 0;
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+}
+.club-not-found .club-hero-description { max-width: 480px; }
+.club-not-found .club-actions { justify-content: center; }
+.club-not-found-art { width: min(70vw, 320px); height: auto; margin-bottom: 8px; }
 .club-alumni-hero h1 {
   max-width: 760px;
   margin: 24px 0;
@@ -752,7 +799,7 @@ html:has(.club-home) { scroll-behavior: smooth; }
 .club-questions {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
-  align-items: start;
+  align-items: center;
   gap: 80px;
 }
 .club-faq {
@@ -761,7 +808,7 @@ html:has(.club-home) { scroll-behavior: smooth; }
   border-radius: 28px;
 }
 .club-questions-heading > p { max-width: 320px; }
-.club-questions-heading .club-text-link { margin-top: 20px; }
+.club-questions-heading .club-text-link { margin-top: 12px; }
 .club-faq details { border-bottom: 1px solid var(--club-line); }
 .club-faq details:last-child { border-bottom: 0; }
 .club-faq summary {
@@ -932,6 +979,8 @@ html:has(.club-home) { scroll-behavior: smooth; }
   .club-questions { grid-template-columns: 1fr; gap: 32px; }
   .club-questions-heading > p { max-width: 500px; }
   .club-footer-invitation { grid-template-columns: 1fr; gap: 28px; }
+  .club-alumni-hero { grid-template-columns: 1fr; gap: 32px; }
+  .club-alumni-art { max-width: 420px; justify-self: center; }
   .club-footer-invitation-copy { padding-left: 0; border-left: 0; justify-self: start; max-width: 440px; }
   .club-footer-content { grid-template-columns: 1fr; gap: 36px; }
   .club-footer-links { max-width: 500px; }
@@ -982,9 +1031,11 @@ html:has(.club-home) { scroll-behavior: smooth; }
   .club-home h2 { font-size: clamp(32px, 8vw, 44px); }
   .club-events-heading { display: block; margin-bottom: 28px; }
   .club-events-heading > p { margin-top: 14px; max-width: 360px; font-size: 15px; }
-  .club-next-event { flex-wrap: wrap; gap: 8px 12px; padding: 16px; }
-  .club-next-event > p { flex: 1; }
-  .club-event-updates { margin-left: 26px; }
+  .club-title-card.club-events-banner { grid-template-columns: 1fr; margin-bottom: 28px; padding: 10px; }
+  .club-events-banner-copy { padding: 18px 14px 14px; }
+  .club-events-banner-copy > p { max-width: 360px; font-size: 15px; }
+  .club-events-status { margin-top: 20px; }
+  .club-events-banner-art { order: -1; padding: 20px; border-radius: 16px; }
   .club-event-grid { grid-template-columns: 1fr; gap: 32px; }
   .club-event-photo { aspect-ratio: 1.4; }
   .club-event-copy { padding-top: 14px; }
@@ -1047,7 +1098,6 @@ html:has(.club-home) { scroll-behavior: smooth; }
 /* Feedback belongs to controls. Photo placeholders do not act like links. */
 .club-button,
 .club-nav-join,
-.club-event-updates,
 .club-menu-toggle,
 .club-footer-socials a,
 .club-viewer-control {
@@ -1055,7 +1105,6 @@ html:has(.club-home) { scroll-behavior: smooth; }
 }
 .club-button:active,
 .club-nav-join:active,
-.club-event-updates:active,
 .club-menu-toggle:active,
 .club-footer-socials a:active,
 .club-viewer-control:active { transform: scale(0.97); }
