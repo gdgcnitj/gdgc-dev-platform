@@ -19,7 +19,8 @@ Git ignores `.env` and keeps `.env.example` as the shared example.
 | `GOOGLE_CLIENT_SECRET` | Google OAuth secret | Provider value |
 
 The example database password applies only to local development.
-Store deployed settings in the hosting provider's environment configuration.
+Production reads `/etc/gdgc/env` on the `gdgc-web` instance. That file stays on
+the server. See [deployment](deployment.md).
 
 ## Change the database port
 

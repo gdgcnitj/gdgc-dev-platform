@@ -1,0 +1,29 @@
+[Unit]
+Description=GDGC website
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=gdgc
+Group=gdgc
+WorkingDirectory=/var/www/gdgc/src
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=HOSTNAME=127.0.0.1
+EnvironmentFile=-/etc/gdgc/env
+ExecStart=/usr/local/bin/node /var/www/gdgc/src/node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port 3000
+Restart=on-failure
+RestartSec=5
+StartLimitIntervalSec=120
+StartLimitBurst=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/gdgc /var/lib/gdgc
+MemoryMax=800M
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target
