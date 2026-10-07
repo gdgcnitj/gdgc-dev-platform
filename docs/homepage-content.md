@@ -83,6 +83,10 @@ Store portraits in `public/images/alumni/<batch>/`.
 | `links` | Same `linkedin`, `instagram`, and `website` keys as leads |
 
 Add `nowAt` only when the person confirms it.
+A card without a role or department shows "Role coming soon".
+Entries with `pending: true` are placeholder cards; search skips them.
+Replace a placeholder with the person's details and remove `pending`.
+The search box matches names, roles, departments, companies, and batch years.
 When current leads graduate, add them to `alumni` with their batch and department.
 
 ## Gallery

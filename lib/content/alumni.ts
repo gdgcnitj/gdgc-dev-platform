@@ -17,10 +17,21 @@ export type Alumnus = {
   nowAt?: string;
   note?: string;
   links?: ProfileLinks;
+  /** Placeholder card. Search skips it. */
+  pending?: boolean;
 };
 
 // Roles and notes come from the previous alumni page. Confirm the missing departments with the club.
+// Replace each 2027 placeholder with a real entry and remove `pending`.
 export const alumni: Alumnus[] = [
+  { id: "2027-1", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
+  { id: "2027-2", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
+  { id: "2027-3", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
+  { id: "2027-4", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
+  { id: "2027-5", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
+  { id: "2027-6", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
+  { id: "2027-7", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
+  { id: "2027-8", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
   {
     id: "karandeep",
     name: "Karandeep Singh",
