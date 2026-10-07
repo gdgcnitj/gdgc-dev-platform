@@ -21,17 +21,8 @@ export type Alumnus = {
   pending?: boolean;
 };
 
-// Roles and notes come from the previous alumni page.
-// Replace each 2027 placeholder with a real entry and remove `pending`.
+// Roles and notes for 2026 come from the previous alumni page.
 export const alumni: Alumnus[] = [
-  { id: "2027-1", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
-  { id: "2027-2", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
-  { id: "2027-3", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
-  { id: "2027-4", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
-  { id: "2027-5", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
-  { id: "2027-6", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
-  { id: "2027-7", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
-  { id: "2027-8", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
   {
     id: "karandeep",
     name: "Karandeep Singh",
@@ -86,6 +77,89 @@ export const alumni: Alumnus[] = [
     image: "/images/alumni/2026/himanshu.png",
     department: "ai",
     note: "Take his MS interview tips.",
+  },
+  {
+    id: "adesh",
+    name: "Adesh Anurag",
+    initials: "AA",
+    batch: 2027,
+    image: "/images/alumni/2027/adesh.webp",
+    role: "Chapter lead",
+    links: {
+      linkedin: "https://www.linkedin.com/in/adesh-anurag/",
+      instagram: "https://www.instagram.com/adexxhh",
+    },
+  },
+  {
+    id: "jagjit",
+    name: "Jagjit Singh",
+    initials: "JS",
+    batch: 2027,
+    image: "/images/alumni/2027/jagjit.webp",
+    department: "web",
+  },
+  {
+    id: "vaibhav",
+    name: "Vaibhav Kanda",
+    initials: "VK",
+    batch: 2027,
+    image: "/images/alumni/2027/vaibhav.webp",
+    department: "creatives",
+  },
+  {
+    id: "irfan",
+    name: "Irfan Mohumand",
+    initials: "IM",
+    batch: 2027,
+    image: "/images/alumni/2027/irfan.webp",
+    department: "mobile",
+  },
+  {
+    id: "vymoika",
+    name: "Vymoika",
+    initials: "V",
+    batch: 2027,
+    image: "/images/alumni/2027/vymoika.webp",
+    department: "wit",
+  },
+  {
+    id: "vivek",
+    name: "Vivek Dhiman",
+    initials: "VD",
+    batch: 2027,
+    image: "/images/alumni/2027/vivek.webp",
+    department: "ai",
+    role: "AI/ML lead",
+    links: {
+      linkedin: "https://www.linkedin.com/in/vivek-dhiman-159a48254",
+      instagram: "https://www.instagram.com/vwv.8882",
+    },
+  },
+  {
+    id: "priyanshu",
+    name: "Priyanshu Bhardwaj",
+    initials: "PB",
+    batch: 2027,
+    image: "/images/alumni/2027/priyanshu.webp",
+    department: "cp",
+    role: "CP lead",
+    links: {
+      linkedin: "https://www.linkedin.com/in/priyanshub18",
+      instagram: "https://www.instagram.com/priyanshu.bhardwaj18",
+    },
+  },
+  {
+    id: "davinder",
+    name: "Davinder Singh",
+    initials: "DS",
+    batch: 2027,
+    image: "/images/alumni/2027/davinder.webp",
+    department: "devsecops",
+    role: "DevSecOps lead",
+    links: {
+      linkedin: "https://www.linkedin.com/in/davinder-singh-913541302",
+      instagram: "https://www.instagram.com/__davinder__sandhu",
+    },
   },
 ];
 
