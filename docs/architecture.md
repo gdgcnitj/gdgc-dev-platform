@@ -8,6 +8,7 @@ Pages use server components unless they declare `"use client"`.
 | `app/page.tsx` | Club home page |
 | `app/layout.tsx` | Shared page layout, fonts, navigation, and theme |
 | `app/alumni/` | Alumni page, grouped by graduating batch |
+| `app/events/` | Event pages and the registration server action |
 | `app/(auth)/` | Sign-in and sign-up pages |
 | `app/(dashboard)/` | Dashboard pages |
 | `app/api/auth/[...all]/route.ts` | Better Auth request handlers |

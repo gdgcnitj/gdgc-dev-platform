@@ -39,7 +39,12 @@ Give each event a unique `id`.
 
 The page shows a compact announcement strip when `upcomingEvents` is empty.
 Confirmed upcoming events use a featured layout before the archive.
-Event cards have no outbound links; event pages will live on this site.
+Event cards have no outbound links; each event has a page at `/events/<id>`.
+Upcoming cards link to that page. Set `registration: true` to show the sign-up form there.
+Set `time` and `venue` when confirmed; the page shows "To be announced" until then.
+The form fields and checks live in `lib/content/registration.ts`.
+`registerForEvent` in `app/events/actions.ts` validates sign-ups but does not store them yet.
+Outside development it refuses sign-ups, so connect storage before release.
 The past-event details come from [hackmol.com](https://hackmol.com/) and the chapter's [GDG community page](https://gdg.community.dev/gdg-on-campus-dr-b-r-ambedkar-national-institute-of-technology-jalandhar-india/).
 Do not invent dates, venues, or event results.
 
