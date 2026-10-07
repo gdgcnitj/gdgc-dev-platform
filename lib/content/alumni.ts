@@ -21,7 +21,6 @@ export type Alumnus = {
   pending?: boolean;
 };
 
-// Roles and notes for 2026 come from the previous alumni page.
 export const alumni: Alumnus[] = [
   {
     id: "karandeep",
