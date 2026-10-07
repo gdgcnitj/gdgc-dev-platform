@@ -21,12 +21,22 @@ The implementation uses original artwork and this club's content.
 
 | Section | Purpose | Design |
 | --- | --- | --- |
-| Hero | Introduce the club and its purpose | Large sans-serif heading, two actions, flat artwork |
-| Our events | Show upcoming and past events | Compact announcement state, featured confirmed events, and a photo archive |
-| Departments and leads | Show all eight departments and their leads | Portrait first, then name, domain, and short description |
-| Gallery | Show life in the community | Two wide photos and three smaller photos on desktop |
-| Common questions | Answer questions about taking part | Separate section before the footer with native disclosure controls |
-| Footer | Give visitors a next step and key links | Large blue invitation panel, club identity, social channels, and grouped links |
+| Hero | Introduce the club and its purpose | White field with a faint grid, large sans-serif heading, two actions, animated flat artwork |
+| Department strip | Divide the hero from the sections | Tilted dark band with the eight department names scrolling slowly |
+| Our events | Show upcoming and past events | Blue grid field, compact announcement state, featured confirmed events, and a photo archive |
+| Departments and leads | Show all eight departments and their leads | Yellow grid field with a slanted top edge. Portrait first, then name, domain, and short description |
+| Gallery | Show life in the community | Green grid field with a slanted top edge. Two wide photos and three smaller photos on desktop |
+| Common questions | Answer questions about taking part | Light gray field before the footer with native disclosure controls |
+| Footer | Give visitors a next step and key links | Dark grid panel with the invitation, club identity, social channels, and grouped links |
+
+## Sections and dividers
+
+Give each section one field color: blue, yellow, green, light gray, then `#222222`.
+Draw a faint white grid on each field.
+Put headings, cards, and body text on white surfaces.
+White text on brand blue or green only passes contrast at large sizes.
+On yellow, use `#222222` text.
+Divide fields with the tilted department strip and slanted top edges.
 
 Use one events section.
 Do not add a second event archive under "Wall of Fame".
@@ -66,7 +76,18 @@ The supplied board gives reference sizes. It is not the mobile type scale.
 Use a short purpose statement.
 Keep "Join the community" and "Explore events" visible.
 Use the original flat SVG when no community photo is available.
+Each tile has one small loop: the code brackets breathe, the asterisk turns, the green tiles rotate, and the arrow nudges.
+Keep the heading readable immediately.
+The pause button under the artwork stops the loops and the department strip.
 Do not generate realistic faces or student portraits.
+
+## Motion
+
+Section headings rise and cards scale in as they scroll into view.
+Browsers with scroll-driven animations use CSS `animation-timeline: view()`.
+Other browsers use the reveal fallback in `components/home/home-motion.tsx`.
+Portraits only fade, so names and domains stay still.
+Turn off all nonessential motion when the visitor prefers reduced motion.
 
 ### Events
 

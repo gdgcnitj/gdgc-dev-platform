@@ -5,11 +5,11 @@ export function HomeDepartments() {
   return (
     <section
       id="departments"
-      className="club-departments-section"
+      className="club-field club-field-yellow club-field-slant"
       aria-labelledby="departments-title"
     >
       <div className="club-container club-section">
-        <div className="club-team-heading" data-reveal>
+        <div className="club-title-card club-team-heading" data-reveal>
           <h2 id="departments-title">Departments & leads.</h2>
           <p>Meet the student leads across our eight departments.</p>
         </div>

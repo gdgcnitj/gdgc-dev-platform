@@ -19,7 +19,7 @@ function EventCard({
     <article
       className={`club-event-card${upcoming ? " club-event-upcoming" : ""}${event.href ? " club-event-linked" : ""}`}
       data-tone={event.color}
-      data-reveal
+      data-reveal="card"
     >
       <MediaFrame
         src={event.image}
@@ -60,38 +60,40 @@ export function HomeEvents() {
   return (
     <section
       id="events"
-      className="club-section club-container"
+      className="club-field club-field-blue"
       aria-labelledby="events-title"
     >
-      <div className="club-events-heading" data-reveal>
-        <h2 id="events-title">Our events.</h2>
-        <p>Workshops, hackathons, and meetups at NIT Jalandhar.</p>
-      </div>
-      {upcomingEvents.length ? (
-        <div className="club-upcoming-events">
-          <h3 className="club-subsection-title">Coming up</h3>
-          <div className="club-upcoming-grid">
-            {upcomingEvents.map((event) => (
-              <EventCard key={event.id} event={event} upcoming />
-            ))}
+      <div className="club-section club-container">
+        <div className="club-title-card club-events-heading" data-reveal>
+          <h2 id="events-title">Our events.</h2>
+          <p>Workshops, hackathons, and meetups at NIT Jalandhar.</p>
+        </div>
+        {upcomingEvents.length ? (
+          <div className="club-upcoming-events">
+            <h3 className="club-subsection-title">Coming up</h3>
+            <div className="club-upcoming-grid">
+              {upcomingEvents.map((event) => (
+                <EventCard key={event.id} event={event} upcoming />
+              ))}
+            </div>
           </div>
+        ) : (
+          <div className="club-next-event">
+            <CalendarDays size={22} aria-hidden="true" />
+            <p>Follow the chapter for upcoming event announcements.</p>
+            <Button asChild variant="ghost" className="club-event-updates">
+              <a href={socialLinks.instagram} target="_blank" rel="noreferrer">
+                Event updates <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
+              </a>
+            </Button>
+          </div>
+        )}
+        <h3 className="club-subsection-title club-past-heading">Past events</h3>
+        <div className="club-event-grid">
+          {pastEvents.map((event) => (
+            <EventCard key={event.id} event={event} />
+          ))}
         </div>
-      ) : (
-        <div className="club-next-event">
-          <CalendarDays size={22} aria-hidden="true" />
-          <p>Follow the chapter for upcoming event announcements.</p>
-          <Button asChild variant="ghost" className="club-event-updates">
-            <a href={socialLinks.instagram} target="_blank" rel="noreferrer">
-              Event updates <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
-            </a>
-          </Button>
-        </div>
-      )}
-      <h3 className="club-subsection-title club-past-heading">Past events</h3>
-      <div className="club-event-grid">
-        {pastEvents.map((event) => (
-          <EventCard key={event.id} event={event} />
-        ))}
       </div>
     </section>
   );

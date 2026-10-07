@@ -95,7 +95,7 @@ export function GalleryGrid({ moments }: { moments: GalleryMoment[] }) {
             setActive(moments.findIndex((item) => item.id === moment.id));
           };
           return (
-            <figure className="club-gallery-moment" key={moment.id} data-reveal data-reveal-order={index % 3}>
+            <figure className="club-gallery-moment" key={moment.id} data-reveal="card" data-reveal-order={index % 3}>
               {moment.image ? (
                 <a
                   href={moment.image}

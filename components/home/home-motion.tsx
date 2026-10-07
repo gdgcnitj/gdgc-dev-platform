@@ -8,6 +8,8 @@ export function HomeMotion({ children }: { children: ReactNode }) {
   useEffect(() => {
     const elements = root.current?.querySelectorAll<HTMLElement>("[data-reveal]");
     if (!elements || !window.IntersectionObserver || !Element.prototype.animate) return;
+    // Browsers with scroll-driven animations reveal sections in CSS.
+    if (CSS.supports("animation-timeline: view()")) return;
 
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const seen = new Set<Element>();
@@ -22,10 +24,13 @@ export function HomeMotion({ children }: { children: ReactNode }) {
         const element = entry.target as HTMLElement;
         const order = Number(element.dataset.revealOrder || 0);
         const portrait = element.dataset.reveal === "portrait";
+        const card = element.dataset.reveal === "card";
         const animation = element.animate(
           portrait
             ? { opacity: [0, 1] }
-            : { opacity: [0.72, 1], transform: ["translateY(8px)", "translateY(0)"] },
+            : card
+              ? { opacity: [0.6, 1], transform: ["scale(1.04)", "scale(1)"] }
+              : { opacity: [0.72, 1], transform: ["translateY(8px)", "translateY(0)"] },
           {
             duration: portrait ? 420 : 360,
             delay: Math.min(order, 3) * 40,
