@@ -20,6 +20,11 @@ The frame keeps its shape when a photo is added.
 For the hero, set `communityPhoto` to an image path.
 If it is absent, the hero shows the flat SVG artwork.
 
+Decorative illustrations live in `public/images/illustrations/`.
+They are transparent WebP files used by the empty events state, the
+questions section, the alumni hero, and the 404 page.
+Keep the same file names when you replace one.
+
 ## Events
 
 Add confirmed upcoming events to `upcomingEvents`.

@@ -324,36 +324,28 @@ html:has(.club-home) { scroll-behavior: smooth; }
   gap: 32px;
   margin-bottom: 32px;
 }
-.club-events-heading > p {
+.club-events-heading > p,
+.club-events-heading > div > p {
   max-width: 310px;
+  margin-top: 12px;
   font-size: 16px;
   line-height: 1.6;
   color: var(--club-muted);
 }
+.club-events-heading > p { margin-top: 0; }
 .club-title-card.club-events-heading { margin-bottom: 24px; }
+.club-events-heading:has(.club-next-event) { align-items: center; }
 .club-next-event {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 14px 20px;
-  background: var(--club-paper);
-  border-radius: 16px;
-  font-size: 14px;
-  line-height: 1.5;
+  gap: 20px;
+  max-width: 500px;
+  padding-left: 32px;
+  border-left: 1px solid var(--club-line);
 }
-.club-next-event > svg { color: var(--club-action); flex-shrink: 0; }
-.club-next-event p { color: var(--club-muted); }
-.club-event-updates {
-  min-height: 44px;
-  margin-left: auto;
-  padding-inline: 12px;
-  flex-shrink: 0;
-  color: var(--club-action);
-  background: transparent;
-  border-radius: 8px;
-  font-size: 14px;
-}
-.club-event-updates:hover { background: #e8f0fe; color: var(--club-action); }
+.club-next-event-art { width: 200px; height: auto; flex-shrink: 0; }
+.club-next-event p { color: var(--club-muted); font-size: 14px; line-height: 1.5; }
+.club-next-event .club-text-link { margin-top: 4px; }
 .club-subsection-title {
   font-size: 20px;
   font-weight: 500;
@@ -524,7 +516,34 @@ html:has(.club-home) { scroll-behavior: smooth; }
   font-size: 13px;
   line-height: 1.6;
 }
-.club-alumni-hero { position: relative; padding-block: 84px 72px; }
+.club-alumni-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: center;
+  gap: 48px;
+  padding-block: 72px 64px;
+}
+.club-alumni-art { width: 100%; height: auto; }
+.club-questions-art { display: block; width: min(100%, 400px); height: auto; margin-top: 32px; }
+.club-not-found {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  min-height: calc(100svh - 72px);
+  padding-block: 56px 96px;
+  text-align: center;
+}
+.club-not-found h1 {
+  margin: 20px 0;
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+}
+.club-not-found .club-hero-description { max-width: 480px; }
+.club-not-found .club-actions { justify-content: center; }
+.club-not-found-art { width: min(70vw, 320px); height: auto; margin-bottom: 8px; }
 .club-alumni-hero h1 {
   max-width: 760px;
   margin: 24px 0;
@@ -932,6 +951,8 @@ html:has(.club-home) { scroll-behavior: smooth; }
   .club-questions { grid-template-columns: 1fr; gap: 32px; }
   .club-questions-heading > p { max-width: 500px; }
   .club-footer-invitation { grid-template-columns: 1fr; gap: 28px; }
+  .club-alumni-hero { grid-template-columns: 1fr; gap: 32px; }
+  .club-alumni-art { max-width: 420px; justify-self: center; }
   .club-footer-invitation-copy { padding-left: 0; border-left: 0; justify-self: start; max-width: 440px; }
   .club-footer-content { grid-template-columns: 1fr; gap: 36px; }
   .club-footer-links { max-width: 500px; }
@@ -982,9 +1003,8 @@ html:has(.club-home) { scroll-behavior: smooth; }
   .club-home h2 { font-size: clamp(32px, 8vw, 44px); }
   .club-events-heading { display: block; margin-bottom: 28px; }
   .club-events-heading > p { margin-top: 14px; max-width: 360px; font-size: 15px; }
-  .club-next-event { flex-wrap: wrap; gap: 8px 12px; padding: 16px; }
-  .club-next-event > p { flex: 1; }
-  .club-event-updates { margin-left: 26px; }
+  .club-next-event { margin-top: 20px; padding: 20px 0 0; border-left: 0; border-top: 1px solid var(--club-line); }
+  .club-next-event-art { width: 120px; }
   .club-event-grid { grid-template-columns: 1fr; gap: 32px; }
   .club-event-photo { aspect-ratio: 1.4; }
   .club-event-copy { padding-top: 14px; }
@@ -1047,7 +1067,6 @@ html:has(.club-home) { scroll-behavior: smooth; }
 /* Feedback belongs to controls. Photo placeholders do not act like links. */
 .club-button,
 .club-nav-join,
-.club-event-updates,
 .club-menu-toggle,
 .club-footer-socials a,
 .club-viewer-control {
@@ -1055,7 +1074,6 @@ html:has(.club-home) { scroll-behavior: smooth; }
 }
 .club-button:active,
 .club-nav-join:active,
-.club-event-updates:active,
 .club-menu-toggle:active,
 .club-footer-socials a:active,
 .club-viewer-control:active { transform: scale(0.97); }

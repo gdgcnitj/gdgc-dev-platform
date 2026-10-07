@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ArrowUpRight, Minus, Plus } from "lucide-react";
 import { commonQuestions, socialLinks } from "@/lib/content/home";
 import { FaqAccordion } from "@/components/home/faq-accordion";
@@ -21,6 +22,14 @@ export function HomeFaq() {
           >
             Ask the team <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
           </a>
+          <Image
+            src="/images/illustrations/faq.webp"
+            alt=""
+            width={1400}
+            height={1050}
+            sizes="(max-width: 900px) 320px, 420px"
+            className="club-questions-art"
+          />
         </div>
         <FaqAccordion>
           {commonQuestions.map((item, index) => (
