@@ -1,0 +1,146 @@
+#!/bin/bash
+# Production deploy command.
+# Over SSH this only accepts: deploy <40-hex sha that is on origin/main>
+# A root shell on the instance may run: gdgc-deploy seed <sha on develop or main>
+set -euo pipefail
+umask 027
+
+REPO_URL="https://github.com/gdgcnitj/gdgc-dev-platform.git"
+APP_ROOT="/var/www/gdgc"
+REPO="${APP_ROOT}/src"
+LOCK="${APP_ROOT}/deploy.lock"
+SHA_FILE="${APP_ROOT}/current-sha"
+LOG="${APP_ROOT}/deploy.log"
+
+log() {
+  printf '%s\n' "$*" | tee -a "$LOG" >&2
+}
+
+reject() {
+  printf 'rejected\n' >&2
+  exit 1
+}
+
+if [[ "$(id -u)" -eq 0 && -z "${SSH_CONNECTION:-}" ]]; then
+  exec runuser -u gdgc -- "$0" "$@"
+fi
+
+export HOME=/var/lib/gdgc
+export GIT_TERMINAL_PROMPT=0
+export NODE_ENV=production
+export NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=768}"
+
+require_sha() {
+  [[ "${1:-}" =~ ^[0-9a-f]{40}$ ]] || reject
+}
+
+checkout_sha() {
+  local sha="$1"
+  require_sha "$sha"
+  git -C "$REPO" remote set-url origin "$REPO_URL"
+  git -C "$REPO" config core.hooksPath /dev/null
+  git -C "$REPO" config core.symlinks false
+  git -C "$REPO" -c core.hooksPath=/dev/null -c core.symlinks=false -c protocol.file.allow=never \
+    checkout --detach --force "$sha"
+}
+
+build_and_switch() {
+  local sha="$1"
+  local previous=""
+  if [[ -f "$SHA_FILE" ]]; then
+    previous="$(tr -d '[:space:]' < "$SHA_FILE")"
+  fi
+
+  checkout_sha "$sha"
+  if [[ -f /etc/gdgc/env ]]; then
+    set -a
+    # shellcheck disable=SC1091
+    source /etc/gdgc/env
+    set +a
+  fi
+  npm ci --include=dev --no-audit --no-fund
+  npm run build
+  sudo -n /usr/bin/systemctl restart gdgc-web
+
+  local attempt
+  for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
+    if curl -fsS -o /dev/null --max-time 5 http://127.0.0.1:3000/; then
+      printf '%s\n' "$sha" > "$SHA_FILE"
+      log "deployed ${sha}"
+      return 0
+    fi
+    sleep 2
+  done
+
+  log "health check failed for ${sha}"
+  if [[ "$previous" =~ ^[0-9a-f]{40}$ && "$previous" != "$sha" ]]; then
+    log "rolling back to ${previous}"
+    checkout_sha "$previous"
+    if [[ -f /etc/gdgc/env ]]; then
+      set -a
+      # shellcheck disable=SC1091
+      source /etc/gdgc/env
+      set +a
+    fi
+    npm ci --include=dev --no-audit --no-fund
+    npm run build
+    sudo -n /usr/bin/systemctl restart gdgc-web || true
+  fi
+  return 1
+}
+
+deploy_main() {
+  local sha="$1"
+  require_sha "$sha"
+  git -C "$REPO" remote set-url origin "$REPO_URL"
+  git -C "$REPO" -c protocol.file.allow=never fetch --no-tags origin main
+  git -C "$REPO" cat-file -e "${sha}^{commit}" 2>/dev/null || reject
+  git -C "$REPO" merge-base --is-ancestor "$sha" origin/main || reject
+  build_and_switch "$sha"
+}
+
+seed_commit() {
+  local sha="$1"
+  require_sha "$sha"
+  git -C "$REPO" remote set-url origin "$REPO_URL"
+  git -C "$REPO" -c protocol.file.allow=never fetch --no-tags origin develop main
+  git -C "$REPO" cat-file -e "${sha}^{commit}" 2>/dev/null || reject
+  if ! git -C "$REPO" merge-base --is-ancestor "$sha" origin/develop \
+    && ! git -C "$REPO" merge-base --is-ancestor "$sha" origin/main; then
+    reject
+  fi
+  build_and_switch "$sha"
+}
+
+mkdir -p "$APP_ROOT"
+touch "$LOG"
+
+exec 9>"$LOCK"
+if ! flock -n 9; then
+  log "deploy already running"
+  exit 1
+fi
+
+if [[ ! -d "${REPO}/.git" ]]; then
+  log "missing checkout"
+  exit 1
+fi
+
+cd "$REPO"
+
+if [[ -n "${SSH_CONNECTION:-}" ]]; then
+  read -r -a remote_argv <<< "${SSH_ORIGINAL_COMMAND:-}"
+  [[ "${#remote_argv[@]}" -eq 2 && "${remote_argv[0]}" == "deploy" ]] || reject
+  deploy_main "${remote_argv[1]}"
+  exit
+fi
+
+case "${1:-}" in
+  seed)
+    [[ "$#" -eq 2 ]] || reject
+    seed_commit "$2"
+    ;;
+  *)
+    reject
+    ;;
+esac

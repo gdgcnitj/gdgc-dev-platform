@@ -56,8 +56,10 @@ scope and validation in its description.
 Merge release PRs with **Create a merge commit** to preserve shared history.
 Do not squash or rebase releases, and do not delete `develop`. After the merge,
 fetch and fast-forward local `main`, then create the requested version tag and
-GitHub release at that production commit. Production deployment should track
-`main`; preview or staging deployments should track `develop` or task PRs.
+GitHub release at that production commit. The push to `main` starts
+[Deploy production](.github/workflows/deploy.yml), which checks that commit
+out on the production instance. Preview or staging deployments should track
+`develop` or task PRs. See [deployment](docs/deployment.md).
 
 Bring the release commit back into `develop` through a fresh synchronization PR:
 

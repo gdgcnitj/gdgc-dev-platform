@@ -46,3 +46,5 @@ Use named `GET` and `POST` exports for App Router request handlers.
 | `Makefile` | Optional command shortcuts |
 | `drizzle.config.ts` | Migration and Studio settings |
 | `.github/workflows/ci.yml` | PR and branch checks |
+| `.github/workflows/deploy.yml` | Production deploy after a merge to `main` |
+| `deploy/` | Instance bootstrap and the restricted deploy command |
