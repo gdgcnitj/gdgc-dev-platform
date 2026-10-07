@@ -20,6 +20,8 @@ The app uses Next.js, TypeScript, Tailwind CSS, PostgreSQL, Drizzle, and Better 
 - [Local setup and commands](docs/development.md)
 - [Environment settings](docs/environment.md)
 - [Code map](docs/architecture.md)
+- [Website design](docs/design.md)
+- [Home-page content and photos](docs/homepage-content.md)
 - [Branches and pull requests](CONTRIBUTING.md)
 
 ## Branch workflow

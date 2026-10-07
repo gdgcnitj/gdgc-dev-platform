@@ -1,0 +1,63 @@
+name: Deploy production
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: none
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    steps:
+      - name: Confirm this is the production branch
+        run: |
+          test "${{ github.repository }}" = "gdgcnitj/gdgc-dev-platform"
+          test "${{ github.ref }}" = "refs/heads/main"
+          test "${{ github.event_name }}" = "push"
+
+      - name: Deploy the release commit
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "unexpected commit" >&2
+            exit 1
+          fi
+          if [[ ! "$DEPLOY_HOST" =~ ^[0-9]{1,3}(\.[0-9]{1,3}){3}$ ]]; then
+            echo "unexpected host" >&2
+            exit 1
+          fi
+          if [[ -z "$DEPLOY_SSH_KEY" || -z "$DEPLOY_KNOWN_HOSTS" ]]; then
+            echo "production deploy secrets are missing" >&2
+            exit 1
+          fi
+          key="${RUNNER_TEMP}/deploy-key"
+          known="${RUNNER_TEMP}/known_hosts"
+          umask 077
+          trap 'rm -f "$key" "$known"' EXIT
+          printf '%s\n' "$DEPLOY_SSH_KEY" > "$key"
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$known"
+          chmod 600 "$key" "$known"
+          ssh -i "$key" \
+            -o IdentitiesOnly=yes \
+            -o PreferredAuthentications=publickey \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$known" \
+            -o ConnectTimeout=20 \
+            -o ServerAliveInterval=15 \
+            -o ServerAliveCountMax=40 \
+            "gdgc@${DEPLOY_HOST}" \
+            "deploy ${SHA}"

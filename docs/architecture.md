@@ -7,13 +7,20 @@ Pages use server components unless they declare `"use client"`.
 | --- | --- |
 | `app/page.tsx` | Club home page |
 | `app/layout.tsx` | Shared page layout, fonts, navigation, and theme |
-| `app/alumni/` | Alumni page |
+| `app/template.tsx` | Short fade when moving between pages. The header stays still. |
+| `app/alumni/` | Alumni page, grouped by graduating batch |
+| `app/events/` | Event pages and the registration server action |
 | `app/(auth)/` | Sign-in and sign-up pages |
 | `app/(dashboard)/` | Dashboard pages |
 | `app/api/auth/[...all]/route.ts` | Better Auth request handlers |
 | `app/actions/auth.ts` | Server actions for authentication |
 | `components/` | Website components |
 | `components/ui/` | Shared UI components |
+| `components/home-hero.tsx`, `components/home/` | Home-page sections, artwork, and photo frames |
+| `lib/content/home.ts` | Events, departments, leads, gallery items, common questions, and community links |
+| `lib/content/alumni.ts` | Alumni roster and batch grouping |
+| `app/home.css` | Home-page and navigation styles |
+| `app/fonts/google-sans/` | Local home-page font and its license |
 | `lib/auth/` | Server and client auth configuration |
 | `lib/database/` | Database connection, schema, and relations |
 | `drizzle/` | Database migrations and metadata |
@@ -39,3 +46,5 @@ Use named `GET` and `POST` exports for App Router request handlers.
 | `Makefile` | Optional command shortcuts |
 | `drizzle.config.ts` | Migration and Studio settings |
 | `.github/workflows/ci.yml` | PR and branch checks |
+| `.github/workflows/deploy.yml` | Production deploy after a merge to `main` |
+| `deploy/` | Instance bootstrap and the restricted deploy command |
