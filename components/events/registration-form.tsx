@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { departments, socialLinks } from "@/lib/content/home";
 import {
   branches,
+  courses,
   registrationSchema,
   years,
   type Registration,
@@ -49,7 +50,7 @@ export function RegistrationForm({ eventId, date }: { eventId: string; date?: st
     formState: { errors, isSubmitting },
   } = useForm<Registration>({
     resolver: zodResolver(registrationSchema),
-    defaultValues: { name: "", email: "", rollNumber: "", phone: "", interests: [] },
+    defaultValues: { name: "", email: "", rollNumber: "", phone: "", interests: [], company: "" },
   });
 
   const onSubmit = handleSubmit(async (data) => {
@@ -83,6 +84,10 @@ export function RegistrationForm({ eventId, date }: { eventId: string; date?: st
   return (
     <form className="club-form-card" onSubmit={onSubmit} noValidate aria-labelledby="register-title">
       <h2 id="register-title">Register</h2>
+      <div className="club-form-trap" aria-hidden="true">
+        <label htmlFor="company">Company</label>
+        <input id="company" tabIndex={-1} autoComplete="off" {...register("company")} />
+      </div>
       <p className="club-form-intro">Takes a minute. All fields are required.</p>
 
       <FormField id="name" label="Full name" error={errors.name?.message}>
@@ -102,6 +107,12 @@ export function RegistrationForm({ eventId, date }: { eventId: string; date?: st
           </select>
         </FormField>
       </div>
+      <FormField id="course" label="Course" error={errors.course?.message}>
+        <select id="course" defaultValue="" {...describe("course")} {...register("course")}>
+          <option value="" disabled>Select your course</option>
+          {courses.map((course) => <option key={course}>{course}</option>)}
+        </select>
+      </FormField>
       <FormField id="branch" label="Branch" error={errors.branch?.message}>
         <select id="branch" defaultValue="" {...describe("branch")} {...register("branch")}>
           <option value="" disabled>Select your branch</option>

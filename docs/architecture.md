@@ -30,7 +30,9 @@ Pages use server components unless they declare `"use client"`.
 
 Auth forms call server actions or the Better Auth client.
 Better Auth uses the Drizzle adapter to access PostgreSQL.
+Event registration uses the same database and stores one row per sign-up.
 The app reads `DATABASE_URL` when it creates the database connection pool.
+A remote database also uses the CA certificate at `DATABASE_CA_PATH`.
 
 Keep database code and server auth helpers in server components, server actions, or request handlers.
 Use named `GET` and `POST` exports for App Router request handlers.
