@@ -422,6 +422,9 @@ html:has(.club-home) { scroll-behavior: smooth; }
   background: var(--club-tone-soft);
 }
 .club-event-copy { padding: 16px 2px 0; }
+.club-event-art,
+.club-event-page-art { display: block; width: 100%; height: auto; }
+.club-event-page-art { max-width: 520px; margin-top: 24px; }
 .club-event-category {
   display: flex;
   align-items: center;
@@ -477,6 +480,14 @@ html:has(.club-home) { scroll-behavior: smooth; }
 }
 .club-event-upcoming .club-event-copy { padding: 0; }
 .club-event-upcoming .club-event-copy h4 { font-size: 36px; }
+.club-event-upcoming:has(.club-event-art) {
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 48px;
+  padding: 32px 40px;
+}
+.club-event-upcoming .club-event-art { max-width: 320px; justify-self: center; }
+.club-event-upcoming:has(.club-event-art) .club-event-copy h4 { font-size: 40px; }
+.club-event-upcoming:has(.club-event-art) .club-event-description { max-width: 440px; }
 .club-text-link {
   display: inline-flex;
   align-items: center;
@@ -1039,7 +1050,10 @@ html:has(.club-home) { scroll-behavior: smooth; }
   .club-event-grid { grid-template-columns: 1fr; gap: 32px; }
   .club-event-photo { aspect-ratio: 1.4; }
   .club-event-copy { padding-top: 14px; }
-  .club-event-upcoming { grid-template-columns: 1fr; padding: 16px; gap: 20px; }
+  .club-event-upcoming,
+  .club-event-upcoming:has(.club-event-art) { grid-template-columns: 1fr; padding: 20px; gap: 20px; }
+  .club-event-upcoming .club-event-art { max-width: 260px; }
+  .club-event-upcoming:has(.club-event-art) .club-event-copy h4 { font-size: 28px; }
   .club-event-upcoming .club-event-copy h4 { font-size: 28px; }
   .club-team-heading { text-align: left; margin-bottom: 28px; }
   .club-team-heading p,

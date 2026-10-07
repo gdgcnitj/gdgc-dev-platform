@@ -23,18 +23,31 @@ function EventCard({
       data-tone={event.color}
       data-reveal="card"
     >
-      <MediaFrame
-        src={event.image}
-        alt={`${event.title} event`}
-        label="Event photo"
-        className="club-event-photo"
-        sizes={upcoming ? "(max-width: 700px) 100vw, 45vw" : "(max-width: 700px) 100vw, 33vw"}
-      />
+      {!event.image && event.illustration ? (
+        <Image
+          src={event.illustration}
+          alt=""
+          width={1437}
+          height={968}
+          sizes={upcoming ? "(max-width: 700px) 100vw, 45vw" : "(max-width: 700px) 100vw, 33vw"}
+          className="club-event-art"
+        />
+      ) : (
+        <MediaFrame
+          src={event.image}
+          alt={`${event.title} event`}
+          label="Event photo"
+          className="club-event-photo"
+          sizes={upcoming ? "(max-width: 700px) 100vw, 45vw" : "(max-width: 700px) 100vw, 33vw"}
+        />
+      )}
       <div className="club-event-copy">
-        <p className="club-event-category">
-          <span className="club-tone-dot" />
-          {event.category}
-        </p>
+        {event.category && (
+          <p className="club-event-category">
+            <span className="club-tone-dot" />
+            {event.category}
+          </p>
+        )}
         <h4>{event.title}</h4>
         {(event.date || event.venue) && (
           <div className="club-event-meta">

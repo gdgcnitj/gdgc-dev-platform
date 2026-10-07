@@ -35,12 +35,13 @@ Give each event a unique `id`.
 | --- | --- |
 | `id` | Unique short name |
 | `title` | Event name |
-| `category` | Event type, such as Workshop or Hackathon |
+| `category` | Event type, such as Workshop or Hackathon; optional |
 | `description` | Confirmed description or recap; optional |
 | `color` | `blue`, `green`, `yellow`, or `red` |
 | `date` | Confirmed date as readable text; optional |
 | `venue` | Confirmed location; optional |
 | `image` | Local image path; optional |
+| `illustration` | Transparent artwork shown without a frame until `image` is set; optional |
 
 The page shows a compact announcement strip when `upcomingEvents` is empty.
 Confirmed upcoming events use a featured layout before the archive.
