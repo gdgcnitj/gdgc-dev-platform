@@ -2,6 +2,7 @@
 export function HeroArtwork() {
   return (
     <svg className="club-hero-art" viewBox="0 0 520 460" fill="none" aria-hidden="true">
+      <g className="club-hero-shape club-hero-shape-blue">
       <rect
         x="12"
         y="12"
@@ -19,6 +20,8 @@ export function HeroArtwork() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+      </g>
+      <g className="club-hero-shape club-hero-shape-red">
       <rect
         x="298"
         y="12"
@@ -34,6 +37,8 @@ export function HeroArtwork() {
         stroke="#222222"
         strokeWidth="12"
       />
+      </g>
+      <g className="club-hero-shape club-hero-shape-green">
       <rect
         x="12"
         y="248"
@@ -51,6 +56,8 @@ export function HeroArtwork() {
         strokeWidth="2"
       />
       <path d="M118 248v200M12 346h212" stroke="#222222" strokeWidth="2" />
+      </g>
+      <g className="club-hero-shape club-hero-shape-yellow">
       <rect
         x="238"
         y="248"
@@ -69,6 +76,7 @@ export function HeroArtwork() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+      </g>
     </svg>
   );
 }

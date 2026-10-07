@@ -9,18 +9,20 @@ export function HomeDepartments() {
       aria-labelledby="departments-title"
     >
       <div className="club-container club-section">
-        <div className="club-team-heading">
+        <div className="club-team-heading" data-reveal>
           <h2 id="departments-title">Departments & leads.</h2>
           <p>Meet the student leads across our eight departments.</p>
         </div>
         <div className="club-department-grid">
-          {departments.map((department) => {
+          {departments.map((department, index) => {
             const Icon = department.icon;
             return (
               <article
                 className="club-department-card"
                 data-tone={department.color}
                 key={department.id}
+                data-reveal
+                data-reveal-order={index % 4}
               >
                 <MediaFrame
                   src={department.image}
@@ -32,7 +34,13 @@ export function HomeDepartments() {
                   sizes="(max-width: 380px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 />
                 <div className="club-lead-copy">
-                  <h3>{department.lead}</h3>
+                  <h3>
+                    {department.href ? (
+                      <a className="club-lead-profile" href={department.href} aria-label={`${department.lead}, ${department.title} lead profile`}>
+                        {department.lead}
+                      </a>
+                    ) : department.lead}
+                  </h3>
                   <p className="club-department-label">
                     <Icon size={17} aria-hidden="true" />
                     <span>{department.title}</span>

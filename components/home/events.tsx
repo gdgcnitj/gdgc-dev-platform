@@ -17,8 +17,9 @@ function EventCard({
 }) {
   return (
     <article
-      className={`club-event-card${upcoming ? " club-event-upcoming" : ""}`}
+      className={`club-event-card${upcoming ? " club-event-upcoming" : ""}${event.href ? " club-event-linked" : ""}`}
       data-tone={event.color}
+      data-reveal
     >
       <MediaFrame
         src={event.image}
@@ -47,7 +48,7 @@ function EventCard({
         {event.href && (
           <a className="club-text-link" href={event.href}>
             {upcoming ? "Details & registration" : "View recap"}
-            <ArrowUpRight size={16} aria-hidden="true" />
+            <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
           </a>
         )}
       </div>
@@ -62,7 +63,7 @@ export function HomeEvents() {
       className="club-section club-container"
       aria-labelledby="events-title"
     >
-      <div className="club-events-heading">
+      <div className="club-events-heading" data-reveal>
         <h2 id="events-title">Our events.</h2>
         <p>Workshops, hackathons, and meetups at NIT Jalandhar.</p>
       </div>
@@ -81,7 +82,7 @@ export function HomeEvents() {
           <p>Follow the chapter for upcoming event announcements.</p>
           <Button asChild variant="ghost" className="club-event-updates">
             <a href={socialLinks.instagram} target="_blank" rel="noreferrer">
-              Event updates <ArrowUpRight size={16} aria-hidden="true" />
+              Event updates <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
             </a>
           </Button>
         </div>

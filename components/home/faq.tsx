@@ -1,5 +1,6 @@
 import { ArrowUpRight, Minus, Plus } from "lucide-react";
 import { commonQuestions, socialLinks } from "@/lib/content/home";
+import { FaqAccordion } from "@/components/home/faq-accordion";
 
 export function HomeFaq() {
   return (
@@ -8,7 +9,7 @@ export function HomeFaq() {
       className="club-section club-container club-questions"
       aria-labelledby="questions-title"
     >
-      <div className="club-questions-heading">
+      <div className="club-questions-heading" data-reveal>
         <h2 id="questions-title">Common questions.</h2>
         <p>Joining the chapter, choosing a department, and taking part.</p>
         <a
@@ -17,10 +18,10 @@ export function HomeFaq() {
           target="_blank"
           rel="noreferrer"
         >
-          Ask the team <ArrowUpRight size={16} aria-hidden="true" />
+          Ask the team <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
         </a>
       </div>
-      <div className="club-faq">
+      <FaqAccordion>
         {commonQuestions.map((item, index) => (
           <details key={item.question} name="club-questions" open={index === 0}>
             <summary>
@@ -33,7 +34,7 @@ export function HomeFaq() {
             <p>{item.answer}</p>
           </details>
         ))}
-      </div>
+      </FaqAccordion>
     </section>
   );
 }

@@ -4,16 +4,17 @@ import { HomeEvents } from "@/components/home/events";
 import { HomeFooter } from "@/components/home/footer";
 import { HomeGallery } from "@/components/home/gallery";
 import { HomeFaq } from "@/components/home/faq";
+import { HomeMotion } from "@/components/home/home-motion";
 
 export default function Home() {
   return (
-    <div className="club-home">
+    <HomeMotion>
       <HomeHero />
       <HomeEvents />
       <HomeDepartments />
       <HomeGallery />
       <HomeFaq />
       <HomeFooter />
-    </div>
+    </HomeMotion>
   );
 }

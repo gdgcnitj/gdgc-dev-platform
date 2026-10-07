@@ -30,6 +30,7 @@ export type Department = {
   initials: string;
   image?: string;
   icon: LucideIcon;
+  href?: string;
   color: BrandColor;
 };
 export type GalleryMoment = { id: string; caption: string; image?: string };

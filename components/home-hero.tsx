@@ -25,12 +25,12 @@ export default function HomeHero() {
         <div className="club-actions">
           <Button asChild className="club-button">
             <Link href="#join">
-              Join the community <ArrowUpRight aria-hidden="true" />
+              Join the community <ArrowUpRight className="club-action-arrow" aria-hidden="true" />
             </Link>
           </Button>
           <Button asChild variant="outline" className="club-button club-button-secondary">
             <Link href="#events">
-              Explore events <ArrowDown aria-hidden="true" />
+              Explore events <ArrowDown className="club-action-arrow club-arrow-down" aria-hidden="true" />
             </Link>
           </Button>
         </div>

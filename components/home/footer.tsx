@@ -33,6 +33,7 @@ export function HomeFooter() {
             id="join"
             className="club-footer-invitation"
             aria-labelledby="join-title"
+            data-reveal
           >
             <h2 id="join-title">
               Join the<br />community.
@@ -41,7 +42,7 @@ export function HomeFooter() {
               <p>Talk to the chapter about departments, events, and how to get involved.</p>
               <Button asChild className="club-button club-footer-button">
                 <a href={socialLinks.instagram} target="_blank" rel="noreferrer">
-                  Contact on Instagram <ArrowUpRight aria-hidden="true" />
+                  Contact on Instagram <ArrowUpRight className="club-action-arrow" aria-hidden="true" />
                 </a>
               </Button>
             </div>
@@ -86,7 +87,7 @@ export function HomeFooter() {
           <div className="club-footer-bottom">
             <p>© {new Date().getFullYear()} GDG on Campus · NIT Jalandhar</p>
             <Link href="#main-content">
-              Back to top <ArrowUp size={14} aria-hidden="true" />
+              Back to top <ArrowUp className="club-action-arrow club-arrow-up" size={14} aria-hidden="true" />
             </Link>
           </div>
         </div>
