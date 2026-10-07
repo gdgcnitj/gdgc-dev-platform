@@ -52,10 +52,13 @@ authenticate, and `gdgc` cannot get a shell.
 ## Server settings
 
 Runtime and build settings live in `/etc/gdgc/env`, mode `640`, group `gdgc`.
-Registration still answers that it opens later when `NODE_ENV` is not
-`development`. Member sign-in needs `DATABASE_URL` and the OAuth values from
-[environment settings](environment.md) in that file. The next production
-deploy rebuilds the app with that file loaded.
+Registration is stored in the private `gdgc-db` PostgreSQL instance
+(`db.t4g.micro`, encrypted, not publicly reachable). Its security group allows
+port 5432 only from the site instance. The password stays in that environment
+file. `DATABASE_URL` points at the database, and `DATABASE_CA_PATH` points at
+the RDS certificate bundle. Member sign-in still needs the OAuth values from
+[environment settings](environment.md). The next production deploy rebuilds
+the app with that file loaded.
 
 A root shell on the instance can seed a commit that is on `develop` or `main`:
 

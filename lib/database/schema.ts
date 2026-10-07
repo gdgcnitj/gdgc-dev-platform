@@ -1,7 +1,33 @@
-import { pgTable, text, timestamp, unique, boolean, foreignKey } from "drizzle-orm/pg-core"
+import { bigint, boolean, foreignKey, index, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
+
+export const eventRegistration = pgTable("event_registration", {
+	id: text().primaryKey().notNull(),
+	eventId: text("event_id").notNull(),
+	name: text().notNull(),
+	email: text().notNull(),
+	rollNumber: text("roll_number").notNull(),
+	course: text().notNull(),
+	branch: text().notNull(),
+	year: text().notNull(),
+	phone: text().notNull(),
+	interests: text().array().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+}, (table) => [
+	unique("event_registration_event_email_unique").on(table.eventId, table.email),
+	unique("event_registration_event_roll_unique").on(table.eventId, table.rollNumber),
+]);
+
+export const registrationAttempt = pgTable("registration_attempt", {
+	id: bigint({ mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
+	eventId: text("event_id").notNull(),
+	clientHash: text("client_hash").notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+}, (table) => [
+	index("registration_attempt_lookup").on(table.eventId, table.clientHash, table.createdAt),
+]);
 
 export const verification = pgTable("verification", {
 	id: text().primaryKey().notNull(),

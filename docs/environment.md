@@ -11,6 +11,7 @@ Git ignores `.env` and keeps `.env.example` as the shared example.
 | `POSTGRES_PASSWORD` | Docker database password | `gdgc_dev` |
 | `POSTGRES_PORT` | Host port for Docker PostgreSQL | `5433` |
 | `DATABASE_URL` | App and Drizzle database connection | See `.env.example` |
+| `DATABASE_CA_PATH` | CA certificate for a remote Postgres connection | `/etc/gdgc/rds-ca.pem` on the server |
 | `BETTER_AUTH_URL` | App origin for authentication | `http://localhost:3000` |
 | `BETTER_AUTH_SECRET` | Auth signing secret | Generate at least 32 characters |
 | `GITHUB_CLIENT_ID` | GitHub OAuth app identifier | Provider value |
