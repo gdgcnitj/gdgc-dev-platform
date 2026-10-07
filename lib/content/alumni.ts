@@ -21,7 +21,7 @@ export type Alumnus = {
   pending?: boolean;
 };
 
-// Roles and notes come from the previous alumni page. Confirm the missing departments with the club.
+// Roles and notes come from the previous alumni page.
 // Replace each 2027 placeholder with a real entry and remove `pending`.
 export const alumni: Alumnus[] = [
   { id: "2027-1", name: "Name coming soon", initials: "?", batch: 2027, pending: true },
@@ -66,6 +66,7 @@ export const alumni: Alumnus[] = [
     initials: "JB",
     batch: 2026,
     image: "/images/alumni/2026/joyjeet.png",
+    department: "mobile",
     note: "Talk to him about futures first.",
   },
   {
@@ -74,6 +75,7 @@ export const alumni: Alumnus[] = [
     initials: "DK",
     batch: 2026,
     image: "/images/alumni/2026/deepak.png",
+    department: "devsecops",
     note: "DevSecOps or Optum, he's the guy.",
   },
   {
@@ -82,6 +84,7 @@ export const alumni: Alumnus[] = [
     initials: "HD",
     batch: 2026,
     image: "/images/alumni/2026/himanshu.png",
+    department: "ai",
     note: "Take his MS interview tips.",
   },
 ];
