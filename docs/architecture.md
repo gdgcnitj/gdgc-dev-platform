@@ -7,6 +7,7 @@ Pages use server components unless they declare `"use client"`.
 | --- | --- |
 | `app/page.tsx` | Club home page |
 | `app/layout.tsx` | Shared page layout, fonts, navigation, and theme |
+| `app/template.tsx` | Short fade when moving between pages. The header stays still. |
 | `app/alumni/` | Alumni page, grouped by graduating batch |
 | `app/events/` | Event pages and the registration server action |
 | `app/(auth)/` | Sign-in and sign-up pages |
