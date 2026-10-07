@@ -1,0 +1,97 @@
+import { ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
+import { MediaFrame } from "@/components/home/media-frame";
+import { Button } from "@/components/ui/button";
+import {
+  pastEvents,
+  socialLinks,
+  upcomingEvents,
+  type ClubEvent,
+} from "@/lib/content/home";
+
+function EventCard({
+  event,
+  upcoming = false,
+}: {
+  event: ClubEvent;
+  upcoming?: boolean;
+}) {
+  return (
+    <article
+      className={`club-event-card${upcoming ? " club-event-upcoming" : ""}`}
+      data-tone={event.color}
+    >
+      <MediaFrame
+        src={event.image}
+        alt={`${event.title} event`}
+        label="Event photo"
+        className="club-event-photo"
+        sizes={upcoming ? "(max-width: 700px) 100vw, 45vw" : "(max-width: 700px) 100vw, 33vw"}
+      />
+      <div className="club-event-copy">
+        <p className="club-event-category">
+          <span className="club-tone-dot" />
+          {event.category}
+        </p>
+        <h4>{event.title}</h4>
+        {(event.date || event.venue) && (
+          <div className="club-event-meta">
+            {event.date && (
+              <span><CalendarDays size={16} aria-hidden="true" />{event.date}</span>
+            )}
+            {event.venue && (
+              <span><MapPin size={16} aria-hidden="true" />{event.venue}</span>
+            )}
+          </div>
+        )}
+        {event.description && <p className="club-event-description">{event.description}</p>}
+        {event.href && (
+          <a className="club-text-link" href={event.href}>
+            {upcoming ? "Details & registration" : "View recap"}
+            <ArrowUpRight size={16} aria-hidden="true" />
+          </a>
+        )}
+      </div>
+    </article>
+  );
+}
+
+export function HomeEvents() {
+  return (
+    <section
+      id="events"
+      className="club-section club-container"
+      aria-labelledby="events-title"
+    >
+      <div className="club-events-heading">
+        <h2 id="events-title">Our events.</h2>
+        <p>Workshops, hackathons, and meetups at NIT Jalandhar.</p>
+      </div>
+      {upcomingEvents.length ? (
+        <div className="club-upcoming-events">
+          <h3 className="club-subsection-title">Coming up</h3>
+          <div className="club-upcoming-grid">
+            {upcomingEvents.map((event) => (
+              <EventCard key={event.id} event={event} upcoming />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="club-next-event">
+          <CalendarDays size={22} aria-hidden="true" />
+          <p>Follow the chapter for upcoming event announcements.</p>
+          <Button asChild variant="ghost" className="club-event-updates">
+            <a href={socialLinks.instagram} target="_blank" rel="noreferrer">
+              Event updates <ArrowUpRight size={16} aria-hidden="true" />
+            </a>
+          </Button>
+        </div>
+      )}
+      <h3 className="club-subsection-title club-past-heading">Past events</h3>
+      <div className="club-event-grid">
+        {pastEvents.map((event) => (
+          <EventCard key={event.id} event={event} />
+        ))}
+      </div>
+    </section>
+  );
+}
