@@ -127,6 +127,7 @@ export const departments: Department[] = [
     description: "Design, stories, and visual content.",
     lead: "Vanshish",
     initials: "V",
+    image: "/images/leads/vanshish.jpg",
     icon: PenTool,
     color: "red",
   },
