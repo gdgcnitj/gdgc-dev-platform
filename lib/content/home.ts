@@ -180,8 +180,8 @@ export const departments: Department[] = [
     color: "yellow",
   },
   {
-    id: "devops",
-    title: "DevOps",
+    id: "devsecops",
+    title: "DevSecOps",
     description: "Infrastructure and software delivery.",
     lead: "Sushobhit",
     initials: "S",

@@ -67,7 +67,7 @@ The current list comes from the project owner's role table.
 | Women in Tech | Rydham |
 | AI | Kartik Sirohi |
 | Competitive Programming | Kavish |
-| DevOps | Sushobhit |
+| DevSecOps | Sushobhit |
 
 Update `lead`, `initials`, and `image` when the roster changes.
 Store portraits in `public/images/leads/` as 800 × 640 JPEGs.
