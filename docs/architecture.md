@@ -14,6 +14,10 @@ Pages use server components unless they declare `"use client"`.
 | `app/actions/auth.ts` | Server actions for authentication |
 | `components/` | Website components |
 | `components/ui/` | Shared UI components |
+| `components/home-hero.tsx`, `components/home/` | Home-page sections, artwork, and photo frames |
+| `lib/content/home.ts` | Events, departments, leads, gallery items, common questions, and community links |
+| `app/home.css` | Home-page and navigation styles |
+| `app/fonts/google-sans/` | Local home-page font and its license |
 | `lib/auth/` | Server and client auth configuration |
 | `lib/database/` | Database connection, schema, and relations |
 | `drizzle/` | Database migrations and metadata |
