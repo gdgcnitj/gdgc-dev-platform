@@ -18,7 +18,10 @@ export type ClubEvent = {
   description?: string;
   date?: string;
   venue?: string;
+  time?: string;
   image?: string;
+  /** Show the registration form on the event page. */
+  registration?: boolean;
   color: BrandColor;
 };
 export type ProfileLinks = { linkedin?: string; instagram?: string; website?: string };
@@ -46,7 +49,17 @@ export const socialLinks = {
 } as const;
 
 // Add confirmed dates here. An empty list shows the announcement state.
-export const upcomingEvents: ClubEvent[] = [];
+export const upcomingEvents: ClubEvent[] = [
+  {
+    id: "orientation-2026",
+    title: "Orientation 2026",
+    category: "On campus",
+    description: "Meet the chapter, its eight departments, and the leads. Find out what we do and how to get involved this year.",
+    date: "16 October 2026",
+    registration: true,
+    color: "yellow",
+  },
+];
 
 // Details come from hackmol.com and the chapter's gdg.community.dev pages. Photos are pending.
 export const pastEvents: ClubEvent[] = [
@@ -77,6 +90,8 @@ export const pastEvents: ClubEvent[] = [
     color: "yellow",
   },
 ];
+
+export const allEvents = [...upcomingEvents, ...pastEvents];
 
 export type ChapterLead = {
   id: string;

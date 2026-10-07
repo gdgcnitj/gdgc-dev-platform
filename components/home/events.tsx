@@ -1,4 +1,5 @@
-import { ArrowUpRight, CalendarDays, MapPin } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, ArrowUpRight, CalendarDays, Clock, MapPin } from "lucide-react";
 import { MediaFrame } from "@/components/home/media-frame";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,12 +40,23 @@ function EventCard({
             {event.date && (
               <span><CalendarDays size={16} aria-hidden="true" />{event.date}</span>
             )}
+            {event.time && (
+              <span><Clock size={16} aria-hidden="true" />{event.time}</span>
+            )}
             {event.venue && (
               <span><MapPin size={16} aria-hidden="true" />{event.venue}</span>
             )}
           </div>
         )}
         {event.description && <p className="club-event-description">{event.description}</p>}
+        {upcoming && (
+          <Button asChild className="club-button club-event-register">
+            <Link href={`/events/${event.id}`}>
+              {event.registration ? "Register" : "Event details"}
+              <ArrowRight className="club-action-arrow" size={16} aria-hidden="true" />
+            </Link>
+          </Button>
+        )}
       </div>
     </article>
   );
