@@ -9,10 +9,10 @@ const footerGroups = [
   {
     title: "Explore",
     links: [
-      { label: "Events", href: "#events" },
-      { label: "Departments & leads", href: "#departments" },
-      { label: "Gallery", href: "#gallery" },
-      { label: "Common questions", href: "#questions" },
+      { label: "Events", href: "/#events" },
+      { label: "Departments & leads", href: "/#departments" },
+      { label: "Gallery", href: "/#gallery" },
+      { label: "Common questions", href: "/#questions" },
     ],
   },
   {

@@ -21,6 +21,7 @@ export type ClubEvent = {
   image?: string;
   color: BrandColor;
 };
+export type ProfileLinks = { linkedin?: string; instagram?: string; website?: string };
 export type Department = {
   id: string;
   title: string;
@@ -30,7 +31,7 @@ export type Department = {
   image?: string;
   icon: LucideIcon;
   href?: string;
-  links?: { linkedin?: string; instagram?: string; website?: string };
+  links?: ProfileLinks;
   color: BrandColor;
 };
 export type GalleryMoment = { id: string; caption: string; image?: string };

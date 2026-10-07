@@ -1,16 +1,6 @@
-import { Globe, Instagram, Linkedin } from "lucide-react";
 import { MediaFrame } from "@/components/home/media-frame";
-import { departments, type Department } from "@/lib/content/home";
-
-const leadLinks: {
-  key: keyof NonNullable<Department["links"]>;
-  label: string;
-  icon: typeof Globe;
-}[] = [
-  { key: "linkedin", label: "LinkedIn", icon: Linkedin },
-  { key: "instagram", label: "Instagram", icon: Instagram },
-  { key: "website", label: "Portfolio", icon: Globe },
-];
+import { ProfileLinks } from "@/components/home/profile-links";
+import { departments } from "@/lib/content/home";
 
 export function HomeDepartments() {
   return (
@@ -57,24 +47,7 @@ export function HomeDepartments() {
                     <span>{department.title}</span>
                   </p>
                   <p className="club-department-description">{department.description}</p>
-                  <ul className="club-lead-links" aria-label={`${department.lead} online`}>
-                    {leadLinks.map(({ key, label, icon: LinkIcon }) => {
-                      const href = department.links?.[key];
-                      return (
-                        <li key={key}>
-                          {href ? (
-                            <a href={href} target="_blank" rel="noreferrer" aria-label={`${department.lead}'s ${label}`}>
-                              <LinkIcon size={16} aria-hidden="true" />
-                            </a>
-                          ) : (
-                            <span title={`${label} coming soon`}>
-                              <LinkIcon size={16} aria-hidden="true" />
-                            </span>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
+                  <ProfileLinks name={department.lead} links={department.links} />
                 </div>
               </article>
             );

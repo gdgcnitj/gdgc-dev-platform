@@ -66,6 +66,25 @@ Use the confirmed spelling of each name.
 The `icon` field uses an icon from the existing `lucide-react` package.
 Keep all leads visible in the grid.
 
+## Alumni
+
+Edit `alumni` in `lib/content/alumni.ts`.
+The alumni page groups people by `batch`, the graduation year, with the newest batch first.
+A new batch gets its own section when you add its first person.
+Store portraits in `public/images/alumni/<batch>/`.
+
+| Field | Content |
+| --- | --- |
+| `department` | Department `id` from `departments`; sets the icon and color |
+| `role` | Role shown on the card; defaults to the department title |
+| `session` | Session the role was held, such as `2024–25` |
+| `nowAt` | Current company or program, shown as "@ Microsoft"; optional |
+| `note` | Short line from the alumni; optional |
+| `links` | Same `linkedin`, `instagram`, and `website` keys as leads |
+
+Add `nowAt` only when the person confirms it.
+When current leads graduate, add them to `alumni` with their batch and department.
+
 ## Gallery
 
 Add items to `galleryMoments`.

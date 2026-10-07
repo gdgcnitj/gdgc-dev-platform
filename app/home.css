@@ -524,6 +524,43 @@ html:has(.club-home) { scroll-behavior: smooth; }
   font-size: 13px;
   line-height: 1.6;
 }
+.club-alumni-hero { position: relative; padding-block: 84px 72px; }
+.club-alumni-hero h1 {
+  max-width: 760px;
+  margin: 24px 0;
+  font-size: clamp(48px, 6vw, 76px);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  line-height: 1.05;
+}
+.club-alumni-hero h1 > span { color: var(--club-action); }
+.club-alumni-batches { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+.club-alumni-batches a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding-inline: 16px;
+  border: 1px solid var(--club-line);
+  border-radius: 100px;
+  color: var(--club-action);
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 160ms ease;
+}
+.club-alumni-batches a:hover { background: #e8f0fe; }
+.club-alumni-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.club-alumni-photo { aspect-ratio: 1.2; }
+.club-alumni-photo > img { object-position: center top; }
+.club-alumni-session { color: var(--club-muted); font-weight: 400; }
+.club-alumni-now {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  background: var(--club-tone-soft);
+  font-size: 13px;
+  font-weight: 500;
+}
 .club-gallery-heading { margin-bottom: 32px; }
 .club-gallery-grid {
   display: grid;
@@ -707,7 +744,8 @@ html:has(.club-home) { scroll-behavior: smooth; }
 
 @media (max-width: 1024px) {
   .club-hero { gap: 36px; }
-  .club-department-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .club-department-grid,
+  .club-alumni-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .club-lead-photo { aspect-ratio: 1.8; }
   .club-event-grid { gap: 20px; }
   .club-questions { gap: 48px; }
@@ -764,6 +802,7 @@ html:has(.club-home) { scroll-behavior: smooth; }
   }
   .club-mobile-nav a[aria-current] { color: var(--club-action); }
   .club-hero { padding-block: 48px 64px; gap: 36px; }
+  .club-alumni-hero { padding-block: 48px 40px; }
   .club-hero h1 { font-size: clamp(52px, 12vw, 76px); }
   .club-hero-description { font-size: 17px; }
   .club-eyebrow { font-size: 11px; gap: 10px; }
@@ -827,7 +866,8 @@ html:has(.club-home) { scroll-behavior: smooth; }
   .club-nav-join { padding-inline: 12px; }
   .club-hero h1 { font-size: 48px; }
   .club-actions { flex-direction: column; align-items: flex-start; }
-  .club-department-grid { grid-template-columns: 1fr; }
+  .club-department-grid,
+  .club-alumni-grid { grid-template-columns: 1fr; }
   .club-lead-photo { aspect-ratio: 1.8; }
   .club-footer-links { grid-template-columns: 1fr; gap: 24px; }
 }
