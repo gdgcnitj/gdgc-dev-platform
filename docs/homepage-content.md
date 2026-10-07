@@ -36,11 +36,10 @@ Give each event a unique `id`.
 | `date` | Confirmed date as readable text; optional |
 | `venue` | Confirmed location; optional |
 | `image` | Local image path; optional |
-| `href` | Confirmed event or registration page; optional |
 
 The page shows a compact announcement strip when `upcomingEvents` is empty.
 Confirmed upcoming events use a featured layout before the archive.
-It shows no event-page link when `href` is absent.
+Event cards have no outbound links; event pages will live on this site.
 The past-event details come from [hackmol.com](https://hackmol.com/) and the chapter's [GDG community page](https://gdg.community.dev/gdg-on-campus-dr-b-r-ambedkar-national-institute-of-technology-jalandhar-india/).
 Do not invent dates, venues, or event results.
 
@@ -61,7 +60,7 @@ The current list comes from the project owner's role table.
 
 Update `lead`, `initials`, and `image` when the roster changes.
 Add a lead's profiles to `links` with the `linkedin`, `instagram`, and `website` keys.
-The card shows an icon only for each link that is set.
+The card always shows all three icons; an unset link shows a gray placeholder.
 Use links that the lead confirms.
 Use the confirmed spelling of each name.
 The `icon` field uses an icon from the existing `lucide-react` package.

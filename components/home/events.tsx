@@ -17,7 +17,7 @@ function EventCard({
 }) {
   return (
     <article
-      className={`club-event-card${upcoming ? " club-event-upcoming" : ""}${event.href ? " club-event-linked" : ""}`}
+      className={`club-event-card${upcoming ? " club-event-upcoming" : ""}`}
       data-tone={event.color}
       data-reveal="card"
     >
@@ -45,12 +45,6 @@ function EventCard({
           </div>
         )}
         {event.description && <p className="club-event-description">{event.description}</p>}
-        {event.href && (
-          <a className="club-text-link" href={event.href} target="_blank" rel="noreferrer">
-            {upcoming ? "Details & registration" : "Event page"}
-            <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
-          </a>
-        )}
       </div>
     </article>
   );

@@ -19,7 +19,6 @@ export type ClubEvent = {
   date?: string;
   venue?: string;
   image?: string;
-  href?: string;
   color: BrandColor;
 };
 export type Department = {
@@ -45,7 +44,7 @@ export const socialLinks = {
   email: "mailto:dsc@nitj.ac.in",
 } as const;
 
-// Add confirmed dates and links here. An empty list shows the announcement state.
+// Add confirmed dates here. An empty list shows the announcement state.
 export const upcomingEvents: ClubEvent[] = [];
 
 // Details come from hackmol.com and the chapter's gdg.community.dev pages. Photos are pending.
@@ -57,7 +56,6 @@ export const pastEvents: ClubEvent[] = [
     description: "NIT Jalandhar's flagship 30-hour onsite hackathon. Teams from across India build real-world solutions.",
     date: "28–29 March 2026",
     venue: "NIT Jalandhar",
-    href: "https://hackmol.com/",
     color: "blue",
   },
   {
@@ -67,7 +65,6 @@ export const pastEvents: ClubEvent[] = [
     description: "Seminars in AI, UI/UX, full-stack development, and cybersecurity. Contest winners got direct entry to HackMOL 6.0.",
     date: "January–February 2025",
     venue: "WE-1, NIT Jalandhar",
-    href: "https://gdg.community.dev/events/details/google-gdg-on-campus-dr-b-r-ambedkar-national-institute-of-technology-jalandhar-india-presents-winterfest/",
     color: "green",
   },
   {

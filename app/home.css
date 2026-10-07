@@ -271,27 +271,9 @@ html:has(.club-home) { scroll-behavior: smooth; }
   font-size: 12px;
   color: var(--club-muted);
 }
-.club-hero-facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 36px;
-}
-.club-hero-facts li {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  border: 1px solid var(--club-line);
-  border-radius: 100px;
-  background: var(--club-paper);
-  color: var(--club-muted);
-  font-size: 13px;
-  line-height: 1.4;
-}
-.club-hero-facts strong { color: var(--club-ink); font-weight: 500; }
 .club-lead-links { display: flex; gap: 6px; margin-top: 14px; }
-.club-lead-links a {
+.club-lead-links a,
+.club-lead-links span {
   display: grid;
   place-items: center;
   width: 36px;
@@ -303,6 +285,7 @@ html:has(.club-home) { scroll-behavior: smooth; }
 }
 .club-lead-links a:hover { background: var(--club-tone-soft); color: var(--club-action); }
 .club-lead-links a:active { transform: scale(0.94); }
+.club-lead-links span { color: #9aa0a6; }
 .club-media {
   position: relative;
   overflow: hidden;
@@ -414,11 +397,11 @@ html:has(.club-home) { scroll-behavior: smooth; }
 }
 .club-event-card .club-event-copy { padding-inline: 8px; }
 .club-event-photo {
-  aspect-ratio: 1.65;
+  aspect-ratio: 1.15;
   border-radius: 16px;
   background: var(--club-tone-soft);
 }
-.club-event-copy { padding: 20px 2px 0; }
+.club-event-copy { padding: 16px 2px 0; }
 .club-event-category {
   display: flex;
   align-items: center;
@@ -435,28 +418,34 @@ html:has(.club-home) { scroll-behavior: smooth; }
   flex-shrink: 0;
 }
 .club-event-copy h4 {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 500;
   letter-spacing: -0.03em;
   line-height: 1.2;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 .club-event-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px 20px;
+  gap: 6px 16px;
+  color: var(--club-muted);
+  font-size: 13px;
+  margin-top: 10px;
+}
+.club-event-meta > span { display: inline-flex; align-items: center; gap: 6px; }
+.club-event-meta svg { flex-shrink: 0; width: 14px; height: 14px; }
+.club-event-description {
+  display: -webkit-box;
+  margin-top: 8px;
+  overflow: hidden;
   color: var(--club-muted);
   font-size: 14px;
-  margin-top: 16px;
+  line-height: 1.55;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
-.club-event-meta > span { display: inline-flex; align-items: center; gap: 8px; }
-.club-event-meta svg { flex-shrink: 0; }
-.club-event-description {
-  margin-top: 12px;
-  color: var(--club-muted);
-  font-size: 15px;
-  line-height: 1.6;
-}
+.club-event-upcoming .club-event-description { display: block; }
 .club-upcoming-grid { display: grid; gap: 24px; }
 .club-event-upcoming {
   display: grid;
@@ -786,8 +775,8 @@ html:has(.club-home) { scroll-behavior: smooth; }
   .club-next-event > p { flex: 1; }
   .club-event-updates { margin-left: 26px; }
   .club-event-grid { grid-template-columns: 1fr; gap: 32px; }
-  .club-event-photo { aspect-ratio: 1.8; }
-  .club-event-copy { padding-top: 16px; }
+  .club-event-photo { aspect-ratio: 1.4; }
+  .club-event-copy { padding-top: 14px; }
   .club-event-upcoming { grid-template-columns: 1fr; padding: 16px; gap: 20px; }
   .club-event-upcoming .club-event-copy h4 { font-size: 28px; }
   .club-team-heading { text-align: left; margin-bottom: 28px; }
@@ -970,8 +959,6 @@ a:focus-visible > .club-arrow-up { transform: translateY(-2px); }
   a:hover > .club-arrow-up { transform: translateY(-2px); }
   .club-event-card:hover .club-event-photo > img,
   .club-event-card:hover .club-event-photo > .club-media-placeholder,
-  .club-event-linked:focus-within .club-event-photo > img,
-  .club-event-linked:focus-within .club-event-photo > .club-media-placeholder,
   .club-gallery-open:hover .club-gallery-photo > img,
   .club-gallery-open:hover .club-gallery-photo > .club-media-placeholder,
   .club-gallery-open:focus-visible .club-gallery-photo > img,
@@ -1078,8 +1065,6 @@ a:focus-visible > .club-arrow-up { transform: translateY(-2px); }
   .club-home .club-media-placeholder,
   .club-home .club-event-card:hover .club-event-photo > img,
   .club-home .club-event-card:hover .club-event-photo > .club-media-placeholder,
-  .club-home .club-event-linked:focus-within .club-event-photo > img,
-  .club-home .club-event-linked:focus-within .club-event-photo > .club-media-placeholder,
   .club-home .club-gallery-open:hover .club-gallery-photo > img,
   .club-home .club-gallery-open:hover .club-gallery-photo > .club-media-placeholder,
   .club-home .club-gallery-open:focus-visible .club-gallery-photo > img,

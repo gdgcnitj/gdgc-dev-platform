@@ -93,11 +93,12 @@ Turn off all nonessential motion when the visitor prefers reduced motion.
 
 Show confirmed upcoming events before "Past events".
 If no confirmed upcoming event exists, show a compact announcement strip.
-Add a date, venue, and registration link only after they are confirmed.
+Add a date and venue only after they are confirmed.
+Give the photo most of the card; clamp past-event descriptions to two lines.
 Use photo placeholders until the club supplies images.
 Keep the existing archive titles: HackMOL, WinterFest, and Orientation.
 Their dates, photos, and recaps still require club content.
-Hide absent descriptions and recap links.
+Hide absent descriptions.
 Do not use a draft event description as a record of what happened.
 
 ### Departments and leads
