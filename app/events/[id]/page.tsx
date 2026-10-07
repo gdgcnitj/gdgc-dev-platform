@@ -41,7 +41,7 @@ export default async function EventPage({ params }: Props) {
           className={`club-container club-event-page${event.registration ? "" : " club-event-page-single"}`}
           data-tone={event.color}
         >
-          <div className="club-event-page-copy">
+          <div className="club-event-intro">
             <Link href="/#events" className="club-back-link">
               <ArrowLeft size={16} aria-hidden="true" /> All events
             </Link>
@@ -61,6 +61,9 @@ export default async function EventPage({ params }: Props) {
                 </div>
               ))}
             </dl>
+          </div>
+          {event.registration && <RegistrationForm eventId={event.id} date={event.date} />}
+          <div className="club-event-details">
             {!event.image && event.illustration ? (
               <Image
                 src={event.illustration}
@@ -69,7 +72,6 @@ export default async function EventPage({ params }: Props) {
                 height={968}
                 sizes="(max-width: 900px) 100vw, 50vw"
                 className="club-event-page-art"
-                priority
               />
             ) : (
               <MediaFrame
@@ -78,11 +80,9 @@ export default async function EventPage({ params }: Props) {
                 label="Event cover"
                 className="club-event-page-photo"
                 sizes="(max-width: 900px) 100vw, 50vw"
-                priority
               />
             )}
           </div>
-          {event.registration && <RegistrationForm eventId={event.id} date={event.date} />}
         </div>
       </section>
       <HomeFooter />
