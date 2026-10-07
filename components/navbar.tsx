@@ -1,76 +1,74 @@
-import Link from "next/link";
+"use client";
 
-import {
-  NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuItem,
-  NavigationMenuLink,
-} from "@/components/ui/navigation-menu";
-
+import { useRef, useState } from "react";
 import Image from "next/image";
-import GDGCIcon from "@/app/assets/navbarLogo.svg";
-import ThemeToggle from "@/components/theme-toggle";
+import Link from "next/link";
+import { ArrowUpRight, Menu, X } from "lucide-react";
+import logo from "@/app/assets/navbarLogo.svg";
+import { Button } from "@/components/ui/button";
 
-import ProfileIcon from "@/components/profile-icon";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { Poppins } from "next/font/google";
+const links = [
+  { href: "/#events", label: "Events" },
+  { href: "/#departments", label: "Departments" },
+  { href: "/#gallery", label: "Gallery" },
+  { href: "/alumni", label: "Alumni" },
+];
 
-const poppinsBold = Poppins({ weight: "700", subsets: ["latin"] });
-const poppinsMed = Poppins({ weight: "500", subsets: ["latin"] });
-
-export default async function Navbar() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
+export default function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
   return (
-    <div className="w-full px-1 py-1 flex relative">
-      <div className="w-full h-full absolute top-0 left-0 bg-linear-[90deg,#FF6A66,#FDD568,#28D781,#69A6FC]">
-      </div>
-      <div className="w-full bg-[#242526] relative z-10 flex justify-between items-center py-[max(1%,8px)] px-[max(2%,8px)]">
-        <Link
-          href="/"
-          className="flex flex-row justify-center items-center gap-1"
-        >
-          <Image
-            className="w-[2.5rem] h-auto"
-            src={GDGCIcon}
-            alt="Go to home"
-          />
-          <h1 className={`${poppinsBold.className} sm:text-lg md:text-xl lg:text-2xl`}>GDGC NITJ</h1>
+    <nav
+      className="club-navbar"
+      aria-label="Main navigation"
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          setMenuOpen(false);
+          menuButton.current?.focus();
+        }
+      }}
+    >
+      <div className="club-nav-inner">
+        <Link href="/" className="club-brand" onClick={() => setMenuOpen(false)}>
+          <Image src={logo} alt="" width={38} height={30} priority />
+          <span>GDGC NITJ</span>
         </Link>
-        <div className="justify-center items-center gap-[25%] md:flex hidden">
-          <Link href={"/"} className={`${poppinsMed.className} hover:opacity-80 transition-opacity`}>
-            Home
-          </Link>
-          <Link href={"/bounties"} className={`${poppinsMed.className} hover:opacity-80 transition-opacity`}>
-            Build
-          </Link>
-          <Link href={"/blogs"} className={`${poppinsMed.className} hover:opacity-80 transition-opacity`}>
-            Blogs
-          </Link>
-          <Link href={"/team"} className={`${poppinsMed.className} hover:opacity-80 transition-opacity`}>
-            Team
-          </Link>
-          <Link href={"/alumni"} className={`${poppinsMed.className} hover:opacity-80 transition-opacity`}>
-            Alumni
-          </Link>
-        </div>
-        <div className="relative cursor-pointer group">
-          <div
-            className={`bg-white group-hover:scale-95 transition-all text-black px-1.5 py-2 rounded-[7px] z-10 relative ${poppinsMed.className}`}
-          >
-            <Link href={"/dashboard"}>
-            Join Us
+        <div className="club-nav-links">
+          {links.map((link) => (
+            <Link href={link.href} key={link.label}>
+              {link.label}
             </Link>
-          </div>
-          <div
-            className={`bg-linear-[45deg,#28D781,#FABE4C,#0456FB,#EA4335] group-hover:scale-105 group-hover:-translate-0 transition-transform duration-300 absolute top-0 left-0 translate-1 w-full h-full text-black px-1.5 py-2 rounded-[7px] ${poppinsMed.className}`}
+          ))}
+        </div>
+        <div className="club-nav-actions">
+          <Button asChild className="club-nav-join">
+            <Link href="/#join" onClick={() => setMenuOpen(false)}>
+              Join us <ArrowUpRight aria-hidden="true" />
+            </Link>
+          </Button>
+          <Button
+            ref={menuButton}
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="club-menu-toggle"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+            aria-label={menuOpen ? "Close navigation" : "Open navigation"}
           >
-          </div>
+            {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+          </Button>
         </div>
       </div>
-    </div>
+      <div id="mobile-navigation" className="club-mobile-nav" hidden={!menuOpen}>
+        {links.map((link) => (
+          <Link href={link.href} key={link.label} onClick={() => setMenuOpen(false)}>
+            {link.label}
+            <ArrowUpRight size={16} aria-hidden="true" />
+          </Link>
+        ))}
+      </div>
+    </nav>
   );
 }
