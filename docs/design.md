@@ -25,6 +25,7 @@ The implementation uses original artwork and this club's content.
 | Department strip | Divide the hero from the sections | Tilted dark band with the eight department names scrolling slowly |
 | Our events | Show upcoming and past events | Blue grid field, compact announcement state, featured confirmed events, and a photo archive |
 | Departments and leads | Show all eight departments and their leads | Yellow grid field with a slanted top edge. Portrait first, then name, domain, and short description |
+| Faculty coordinators | Show the faculty who coordinate the chapter | Light gray field after the student leads. Two centered cards: portrait, name, title, and email |
 | Gallery | Show life in the community | Green grid field with a slanted top edge. Two wide photos and three smaller photos on desktop |
 | Common questions | Answer questions about taking part | Light gray field before the footer with native disclosure controls |
 | Footer | Give visitors a next step and key links | Plain dark panel with the invitation, club identity, social channels, and grouped links |
@@ -110,6 +111,14 @@ Do not put leads in an automatic carousel.
 Use line icons for departments and initials until portraits are available.
 Keep each portrait beside its name in the reading order.
 Show the domain and a short description below the name.
+
+### Faculty coordinators
+
+Place this section after Departments and leads, on its own light gray field.
+Keep the cards plain: a square portrait, the name, the academic title, and the email.
+The name links to the institute faculty profile.
+Say the department once in the section introduction.
+Keep two narrow columns centered on every screen size.
 
 ### Gallery
 

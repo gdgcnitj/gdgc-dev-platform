@@ -104,10 +104,68 @@ export type ChapterLead = {
   color: BrandColor;
 };
 
+export type FacultyCoordinator = {
+  id: string;
+  name: string;
+  initials: string;
+  image: string;
+  title: string;
+  email: string;
+  profile: string;
+  color: BrandColor;
+};
+
+// Names, titles, photos, emails, and profile links come from the CSE faculty directory:
+// https://departments.nitj.ac.in/dept/cse/Faculty
+// The directory lists Dr. Gopendra Vikram Singh as "Dr Gopendra". His publications there use the full name.
+export const facultyCoordinators: FacultyCoordinator[] = [
+  {
+    id: "gopendra-vikram-singh",
+    name: "Dr. Gopendra Vikram Singh",
+    initials: "GS",
+    image: "/images/faculty/gopendra-vikram-singh.jpg",
+    title: "Assistant Professor",
+    email: "gopendra@nitj.ac.in",
+    profile: "https://departments.nitj.ac.in/dept/cse/Faculty/68cb9882f82446e66598e762",
+    color: "blue",
+  },
+  {
+    id: "prashant-shukla",
+    name: "Dr. Prashant Shukla",
+    initials: "PS",
+    image: "/images/faculty/prashant-shukla.jpg",
+    title: "Assistant Professor",
+    email: "shuklap@nitj.ac.in",
+    profile: "https://departments.nitj.ac.in/dept/cse/Faculty/68be8541f6d5734224e60b0a",
+    color: "green",
+  },
+];
+
 export const chapterLeads: ChapterLead[] = [
-  { id: "anshuman", name: "Anshuman Bhardwaj", initials: "AB", image: "/images/leads/anshuman.jpg", color: "blue" },
+  {
+    id: "anshuman",
+    name: "Anshuman Bhardwaj",
+    initials: "AB",
+    image: "/images/leads/anshuman.jpg",
+    links: {
+      linkedin: "https://www.linkedin.com/in/anshuman-bhardwaj-89476b23b/",
+      instagram: "https://www.instagram.com/ansh_who_man/",
+      website: "https://anshuport.netlify.app/",
+    },
+    color: "blue",
+  },
   { id: "ayush", name: "Ayush Poddar", initials: "AP", image: "/images/leads/ayush.jpg", color: "green" },
-  { id: "prachi", name: "Prachi Goyal", initials: "PG", image: "/images/leads/prachi.jpg", color: "red" },
+  {
+    id: "prachi",
+    name: "Prachi Goyal",
+    initials: "PG",
+    image: "/images/leads/prachi.jpg",
+    links: {
+      linkedin: "https://www.linkedin.com/in/prachi-goyal-226313325/",
+      instagram: "https://www.instagram.com/prachigoyal_.26/",
+    },
+    color: "red",
+  },
 ];
 
 // Role and lead names reproduce the list supplied by the project owner.
@@ -128,6 +186,10 @@ export const departments: Department[] = [
     lead: "Vanshish",
     initials: "V",
     image: "/images/leads/vanshish.jpg",
+    links: {
+      linkedin: "https://www.linkedin.com/in/vanshishchaturvedi/",
+      instagram: "https://www.instagram.com/vanshish_chaturvedi/",
+    },
     icon: PenTool,
     color: "red",
   },
@@ -138,6 +200,11 @@ export const departments: Department[] = [
     lead: "Rishi",
     initials: "R",
     image: "/images/leads/rishi.jpg",
+    links: {
+      linkedin: "https://www.linkedin.com/in/rishi2220/",
+      instagram: "https://www.instagram.com/rishia2220/",
+      website: "https://rishia.in/",
+    },
     icon: Smartphone,
     color: "green",
   },
@@ -147,6 +214,7 @@ export const departments: Department[] = [
     description: "Interface design and user experience.",
     lead: "Kaushik",
     initials: "K",
+    image: "/images/leads/kaushik.jpg",
     icon: PanelsTopLeft,
     color: "yellow",
   },
@@ -157,6 +225,10 @@ export const departments: Department[] = [
     lead: "Rydham",
     initials: "R",
     image: "/images/leads/rydham.jpg",
+    links: {
+      linkedin: "https://www.linkedin.com/in/rydham-rydham-932094376/",
+      instagram: "https://www.instagram.com/rydham._.77/",
+    },
     icon: HeartHandshake,
     color: "red",
   },
@@ -167,6 +239,11 @@ export const departments: Department[] = [
     lead: "Kartik Sirohi",
     initials: "KS",
     image: "/images/leads/kartik.jpg",
+    links: {
+      linkedin: "https://www.linkedin.com/in/kartik-sirohi-b81625325/",
+      instagram: "https://www.instagram.com/kartiksirohi12/",
+      website: "https://sirohikartik.github.io/",
+    },
     icon: BrainCircuit,
     color: "blue",
   },
@@ -177,6 +254,10 @@ export const departments: Department[] = [
     lead: "Kavish",
     initials: "K",
     image: "/images/leads/kavish.jpg",
+    links: {
+      linkedin: "https://www.linkedin.com/in/kavish0024/",
+      instagram: "https://www.instagram.com/kavish_0024/",
+    },
     icon: Braces,
     color: "yellow",
   },
@@ -187,6 +268,10 @@ export const departments: Department[] = [
     lead: "Sushobhit",
     initials: "S",
     image: "/images/leads/sushobhit.jpg",
+    links: {
+      linkedin: "https://www.linkedin.com/in/sushobhit-goyal-xdxd/",
+      instagram: "https://www.instagram.com/sushobhitxd/",
+    },
     icon: CloudCog,
     color: "green",
   },
