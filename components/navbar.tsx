@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 const links = [
   { href: "/#events", label: "Events" },
   { href: "/#departments", label: "Departments" },
+  { href: "/#faculty", label: "Faculty" },
   { href: "/#gallery", label: "Gallery" },
   { href: "/alumni", label: "Alumni" },
 ];
@@ -24,7 +25,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (pathname !== "/") return;
-    const sections = ["events", "departments", "gallery", "questions", "join"]
+    const sections = ["events", "departments", "faculty", "gallery", "questions", "join"]
       .map((id) => document.getElementById(id))
       .filter((element): element is HTMLElement => Boolean(element));
     let frame = 0;

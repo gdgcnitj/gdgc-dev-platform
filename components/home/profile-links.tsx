@@ -12,6 +12,7 @@ export function ProfileLinks({ name, links }: { name: string; links?: Links }) {
     <ul className="club-lead-links" aria-label={`${name} online`}>
       {profiles.map(({ key, label, icon: Icon }) => {
         const href = links?.[key];
+        if (key === "website" && !href) return null;
         return (
           <li key={key}>
             {href ? (
