@@ -57,6 +57,18 @@ A hidden company field must stay empty, and one address can only submit a few ti
 The past-event details come from [hackmol.com](https://hackmol.com/) and the chapter's [GDG community page](https://gdg.community.dev/gdg-on-campus-dr-b-r-ambedkar-national-institute-of-technology-jalandhar-india/).
 Do not invent dates, venues, or event results.
 
+## Faculty coordinators
+
+Edit `facultyCoordinators` in `lib/content/home.ts`.
+The current names, titles, emails, and profile links come from the
+[CSE faculty directory](https://departments.nitj.ac.in/dept/cse/Faculty).
+The directory lists Dr. Gopendra Vikram Singh as "Dr Gopendra". His publications on that profile use the full name.
+
+The section states the department once. Each card shows the name, academic title, and email.
+The name links to the person's faculty profile.
+Store portraits in `public/images/faculty/` as square JPEGs.
+Do not add a phone number, home address, or date of birth from the directory.
+
 ## Departments and leads
 
 The current list comes from the project owner's role table.
@@ -76,8 +88,11 @@ Update `lead`, `initials`, and `image` when the roster changes.
 Store portraits in `public/images/leads/` as 800 × 640 JPEGs.
 Crop to the head and shoulders, with the face about 40% from the top.
 Add a lead's profiles to `links` with the `linkedin`, `instagram`, and `website` keys.
-The card always shows all three icons; an unset link shows a gray placeholder.
-Use links that the lead confirms.
+The card always shows LinkedIn and Instagram; an unset link shows a gray placeholder.
+The portfolio icon appears only when `website` is set.
+The current links come from the leads' form responses. Kartik's links were supplied separately.
+Use the profile URL, not a bare username, and drop tracking parameters.
+Leave a portfolio unset when the response is not a real address, such as "soon".
 Use the confirmed spelling of each name.
 The `icon` field uses an icon from the existing `lucide-react` package.
 Keep all leads visible in the grid.

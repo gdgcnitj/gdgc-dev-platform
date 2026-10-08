@@ -11,6 +11,7 @@ const footerGroups = [
     links: [
       { label: "Events", href: "/#events" },
       { label: "Departments & leads", href: "/#departments" },
+      { label: "Faculty coordinators", href: "/#faculty" },
       { label: "Gallery", href: "/#gallery" },
       { label: "Common questions", href: "/#questions" },
     ],
