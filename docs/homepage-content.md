@@ -75,7 +75,7 @@ The current list comes from the project owner's role table.
 
 | Department | Lead |
 | --- | --- |
-| Web Development | Mukal |
+| Web Development | Anup |
 | Creatives | Vanshish |
 | Mobile Development | Rishi |
 | UI | Kaushik |

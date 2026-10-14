@@ -37,7 +37,7 @@ function ViewerPhoto({ photo }: { photo: GalleryMoment }) {
           >
             <MediaFrame
               src={item.image}
-              alt={item.caption}
+              alt={item.caption ?? "Community photo"}
               label="Community photo"
               className="club-viewer-photo"
               sizes="(max-width: 700px) 100vw, 90vw"
@@ -84,7 +84,7 @@ export function GalleryGrid({ moments }: { moments: GalleryMoment[] }) {
           const frame = (
             <MediaFrame
               src={moment.image}
-              alt={moment.caption}
+              alt={moment.caption ?? "Community photo"}
               label="Community photo"
               className="club-gallery-photo"
               sizes={index < 2 ? "(max-width: 700px) 100vw, 50vw" : "(max-width: 700px) 50vw, 33vw"}
@@ -100,7 +100,7 @@ export function GalleryGrid({ moments }: { moments: GalleryMoment[] }) {
                 <a
                   href={moment.image}
                   className="club-gallery-open"
-                  aria-label={`View photo: ${moment.caption}`}
+                  aria-label={moment.caption ? `View photo: ${moment.caption}` : "View photo"}
                   aria-haspopup="dialog"
                   onClick={(event) => {
                     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -115,7 +115,7 @@ export function GalleryGrid({ moments }: { moments: GalleryMoment[] }) {
                 <button
                   type="button"
                   className="club-gallery-open"
-                  aria-label={`View photo: ${moment.caption}`}
+                  aria-label={moment.caption ? `View photo: ${moment.caption}` : "View photo"}
                   aria-haspopup="dialog"
                   onClick={(event) => open(event.currentTarget)}
                 >
@@ -123,7 +123,7 @@ export function GalleryGrid({ moments }: { moments: GalleryMoment[] }) {
                   <span className="club-gallery-expand" aria-hidden="true"><Expand size={18} /></span>
                 </button>
               )}
-              <figcaption>{moment.caption}</figcaption>
+              {moment.caption ? <figcaption>{moment.caption}</figcaption> : null}
             </figure>
           );
         })}
@@ -159,7 +159,7 @@ export function GalleryGrid({ moments }: { moments: GalleryMoment[] }) {
             {photo && <ViewerPhoto photo={photo} />}
             <div className="club-viewer-bottom">
               <div id="club-viewer-caption" aria-live="polite" aria-atomic="true">
-                <p>{photo?.caption}</p>
+                {photo?.caption ? <p>{photo.caption}</p> : null}
                 <span>{active === null ? 0 : active + 1} / {moments.length}</span>
               </div>
               {moments.length > 1 && (
