@@ -39,7 +39,7 @@ export type Department = {
   links?: ProfileLinks;
   color: BrandColor;
 };
-export type GalleryMoment = { id: string; caption: string; image?: string };
+export type GalleryMoment = { id: string; caption?: string; image?: string };
 
 export const socialLinks = {
   instagram: "https://www.instagram.com/gdgcnitj/",
@@ -72,6 +72,7 @@ export const pastEvents: ClubEvent[] = [
     description: "NIT Jalandhar's flagship 30-hour onsite hackathon. Teams from across India build real-world solutions.",
     date: "28–29 March 2026",
     venue: "NIT Jalandhar",
+    image: "/images/events/hackmol7.jpg",
     color: "blue",
   },
   {
@@ -81,14 +82,15 @@ export const pastEvents: ClubEvent[] = [
     description: "Seminars in AI, UI/UX, full-stack development, and cybersecurity. Contest winners got direct entry to HackMOL 6.0.",
     date: "January–February 2025",
     venue: "WE-1, NIT Jalandhar",
+    image: "/images/events/winterfest.jpg",
     color: "green",
   },
   {
-    id: "orientation",
-    title: "Orientation",
-    category: "On campus",
-    description: "An info session for freshers on what the chapter does, its departments, and its plans for the year.",
-    date: "September 2025",
+    id: "bootcamp",
+    title: "Bootcamp",
+    category: "Learning Bootcamps",
+    description: "Fourteen lectures on building mobile applications, from your first widgets to networking, AI inference, and signed releases.",
+    image: "/images/events/bootcamp.jpg",
     color: "yellow",
   },
 ];
@@ -146,7 +148,7 @@ export const chapterLeads: ChapterLead[] = [
     id: "anshuman",
     name: "Anshuman Bhardwaj",
     initials: "AB",
-    image: "/images/leads/anshuman.jpg",
+    image: "/images/leads/anshuman.jpeg",
     links: {
       linkedin: "https://www.linkedin.com/in/anshuman-bhardwaj-89476b23b/",
       instagram: "https://www.instagram.com/ansh_who_man/",
@@ -154,7 +156,17 @@ export const chapterLeads: ChapterLead[] = [
     },
     color: "blue",
   },
-  { id: "ayush", name: "Ayush Poddar", initials: "AP", image: "/images/leads/ayush.jpg", color: "green" },
+  {
+    id: "ayush",
+    name: "Ayush Poddar",
+    initials: "AP",
+    image: "/images/leads/ayush.jpg",
+    links: {
+      linkedin: "https://www.linkedin.com/in/ayush-poddar-159041310/",
+      instagram: "https://www.instagram.com/ayush__5026/",
+    },
+    color: "green",
+  },
   {
     id: "prachi",
     name: "Prachi Goyal",
@@ -174,24 +186,60 @@ export const departments: Department[] = [
     id: "web",
     title: "Web Development",
     description: "Websites and web apps.",
-    lead: "Mukal",
-    initials: "M",
+    lead: "Anup",
+    initials: "A",
+    image: "/images/leads/anup.jpg",
+    links: {
+      linkedin: "https://www.linkedin.com/in/-anuptiwari",
+      instagram: "https://www.instagram.com/anup_tiwari17",
+      website: "https://anuptiwari.me",
+    },
     icon: Code2,
     color: "blue",
   },
   {
-    id: "creatives",
-    title: "Creatives",
-    description: "Design, stories, and visual content.",
-    lead: "Vanshish",
-    initials: "V",
-    image: "/images/leads/vanshish.jpg",
+    id: "ai",
+    title: "AI",
+    description: "AI models and applications.",
+    lead: "Kartik Sirohi",
+    initials: "KS",
+    image: "/images/leads/kartik.jpeg",
     links: {
-      linkedin: "https://www.linkedin.com/in/vanshishchaturvedi/",
-      instagram: "https://www.instagram.com/vanshish_chaturvedi/",
+      linkedin: "https://www.linkedin.com/in/kartik-sirohi-b81625325/",
+      instagram: "https://www.instagram.com/kartiksirohi12/",
+      website: "https://sirohikartik.github.io/",
     },
-    icon: PenTool,
-    color: "red",
+    icon: BrainCircuit,
+    color: "blue",
+  },
+  {
+    id: "ui",
+    title: "UI",
+    description: "Interface design and user experience.",
+    lead: "Kaushik",
+    initials: "K",
+    image: "/images/leads/kaushik.jpg",
+    links: {
+      linkedin: "https://www.linkedin.com/in/kaushik-kumar-527584399/",
+      instagram: "https://www.instagram.com/_kaushik_1701_/",
+      website: "https://tryx.framer.website/",
+    },
+    icon: PanelsTopLeft,
+    color: "yellow",
+  },
+  {
+    id: "cp",
+    title: "Competitive Programming",
+    description: "Algorithms and problem solving.",
+    lead: "Kavish",
+    initials: "K",
+    image: "/images/leads/kavish.jpg",
+    links: {
+      linkedin: "https://www.linkedin.com/in/kavish0024/",
+      instagram: "https://www.instagram.com/kavish_0024/",
+    },
+    icon: Braces,
+    color: "yellow",
   },
   {
     id: "mobile",
@@ -209,16 +257,6 @@ export const departments: Department[] = [
     color: "green",
   },
   {
-    id: "ui",
-    title: "UI",
-    description: "Interface design and user experience.",
-    lead: "Kaushik",
-    initials: "K",
-    image: "/images/leads/kaushik.jpg",
-    icon: PanelsTopLeft,
-    color: "yellow",
-  },
-  {
     id: "wit",
     title: "Women in Tech",
     description: "Connections and support for women in tech.",
@@ -231,35 +269,6 @@ export const departments: Department[] = [
     },
     icon: HeartHandshake,
     color: "red",
-  },
-  {
-    id: "ai",
-    title: "AI",
-    description: "AI models and applications.",
-    lead: "Kartik Sirohi",
-    initials: "KS",
-    image: "/images/leads/kartik.jpg",
-    links: {
-      linkedin: "https://www.linkedin.com/in/kartik-sirohi-b81625325/",
-      instagram: "https://www.instagram.com/kartiksirohi12/",
-      website: "https://sirohikartik.github.io/",
-    },
-    icon: BrainCircuit,
-    color: "blue",
-  },
-  {
-    id: "cp",
-    title: "Competitive Programming",
-    description: "Algorithms and problem solving.",
-    lead: "Kavish",
-    initials: "K",
-    image: "/images/leads/kavish.jpg",
-    links: {
-      linkedin: "https://www.linkedin.com/in/kavish0024/",
-      instagram: "https://www.instagram.com/kavish_0024/",
-    },
-    icon: Braces,
-    color: "yellow",
   },
   {
     id: "devsecops",
@@ -275,14 +284,28 @@ export const departments: Department[] = [
     icon: CloudCog,
     color: "green",
   },
+  {
+    id: "creatives",
+    title: "Creatives",
+    description: "Design, stories, and visual content.",
+    lead: "Vanshish",
+    initials: "V",
+    image: "/images/leads/vanshish.jpg",
+    links: {
+      linkedin: "https://www.linkedin.com/in/vanshishchaturvedi/",
+      instagram: "https://www.instagram.com/vanshish_chaturvedi/",
+    },
+    icon: PenTool,
+    color: "red",
+  },
 ];
 
 export const galleryMoments: GalleryMoment[] = [
-  { id: "campus", caption: "Campus community" },
-  { id: "workshops", caption: "Workshops" },
-  { id: "building", caption: "Hackathons" },
-  { id: "community", caption: "Team meetups" },
-  { id: "moments", caption: "Event moments" },
+  { id: "life1", image: "/images/life/life1.jpg" },
+  { id: "life2", image: "/images/life/life2.jpg" },
+  { id: "life3", image: "/images/life/life3.jpg" },
+  { id: "life4", image: "/images/life/life4.jpg" },
+  { id: "life5", image: "/images/life/life5.jpg" },
 ];
 
 // These answers give next steps. Confirm membership and event policies before adding them.
