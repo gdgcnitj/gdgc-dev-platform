@@ -751,7 +751,8 @@ html:has(.club-home) { scroll-behavior: smooth; }
 .club-form-field > legend { font-size: 14px; font-weight: 500; padding: 0; }
 .club-form-field > legend { margin-bottom: 8px; }
 .club-form-field input:not([type="checkbox"]),
-.club-form-field select {
+.club-form-field select,
+.club-form-field textarea {
   width: 100%;
   height: 48px;
   padding-inline: 14px;
@@ -764,14 +765,85 @@ html:has(.club-home) { scroll-behavior: smooth; }
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 .club-form-field select { appearance: auto; }
+.club-form-field textarea {
+  height: auto;
+  min-height: 140px;
+  padding-block: 12px;
+  resize: vertical;
+}
 .club-form-field input:not([type="checkbox"]):focus,
-.club-form-field select:focus {
+.club-form-field select:focus,
+.club-form-field textarea:focus {
   outline: 0;
   border-color: var(--club-action);
   box-shadow: 0 0 0 3px #e8f0fe;
 }
 .club-form-field[data-invalid] input:not([type="checkbox"]),
-.club-form-field[data-invalid] select { border-color: #d93025; }
+.club-form-field[data-invalid] select,
+.club-form-field[data-invalid] textarea { border-color: #d93025; }
+.club-prompt-page {
+  position: relative;
+  width: calc(100% - 32px);
+  padding-block: 20px 40px;
+  container-type: inline-size;
+}
+.club-prompt-copy { display: grid; gap: 12px; margin-bottom: 24px; }
+.club-prompt-lead,
+.club-prompt-copy p { margin: 0; color: var(--club-ink); font-size: 16px; line-height: 1.45; }
+.club-prompt-page h1 {
+  display: grid;
+  gap: 6px;
+  margin: 4px 0;
+  color: var(--club-ink);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+}
+.club-prompt-mark {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0.04em 0.12em 0.08em;
+  border-radius: 10px;
+  background: #fbbc05;
+  font-size: 13.2cqi;
+  line-height: 1.05;
+  white-space: nowrap;
+}
+.club-prompt-where {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+.club-prompt-note { color: var(--club-muted); }
+.club-prompt-page .club-form-card {
+  position: static;
+  gap: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.club-prompt-page .club-form-field > label { font-size: 16px; line-height: 1.45; }
+.club-prompt-page .club-form-submit { height: 48px; font-size: 16px; }
+@media (min-width: 720px) {
+  .club-prompt-page {
+    width: min(calc(100% - 64px), 720px);
+    padding-block: 56px 88px;
+  }
+  .club-prompt-mark { font-size: 68px; }
+  .club-prompt-where { font-size: 36px; }
+  .club-prompt-page .club-form-card {
+    padding: 32px;
+    border: 1px solid var(--club-line);
+    border-radius: 28px;
+    background: var(--club-paper);
+    box-shadow: 0 2px 0 rgb(34 34 34 / 0.06);
+  }
+}
 .club-form-hint,
 .club-form-error { font-size: 13px; line-height: 1.4; }
 .club-form-hint { color: var(--club-muted); }
