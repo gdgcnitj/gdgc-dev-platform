@@ -57,6 +57,8 @@ export const upcomingEvents: ClubEvent[] = [
     title: "Orientation 2026",
     description: "Meet the chapter, its eight departments, and the leads. Find out what we do and how to get involved this year.",
     date: "16 October 2026",
+    time: "5:30 pm - 8:00 pm",
+    venue: "LT 402",
     illustration: "/images/events/orientation-2026.webp",
     registration: true,
     color: "yellow",
