@@ -29,6 +29,14 @@ export const registrationAttempt = pgTable("registration_attempt", {
 	index("registration_attempt_lookup").on(table.eventId, table.clientHash, table.createdAt),
 ]);
 
+export const appDevResponse = pgTable("app_dev_response", {
+	id: text().primaryKey().notNull(),
+	name: text().notNull(),
+	branch: text().notNull(),
+	answer: text().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+});
+
 export const verification = pgTable("verification", {
 	id: text().primaryKey().notNull(),
 	identifier: text().notNull(),
