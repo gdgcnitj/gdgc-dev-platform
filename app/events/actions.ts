@@ -61,7 +61,7 @@ export async function registerForEvent(eventId: string, input: unknown): Promise
       return { ok: false, error: "Too many attempts. Please try again in a little while." };
     }
     await db.insert(registrationAttempt).values({ eventId, clientHash: hash });
-    if (parsed.data.company?.trim()) {
+    if (parsed.data.leaveBlank?.trim()) {
       return { ok: false, error: "Check the highlighted fields and try again." };
     }
 

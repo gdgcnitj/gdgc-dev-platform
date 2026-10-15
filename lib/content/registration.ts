@@ -57,7 +57,8 @@ export const registrationSchema = z.object({
     .array(z.enum(departmentIds))
     .min(1, "Choose at least one department")
     .max(departmentIds.length, "Choose a department from the list"),
-  company: z.string().max(200).optional(),
+  // Browsers autofill a field named company. This name is not a contact field.
+  leaveBlank: z.string().max(200).optional(),
 });
 
 export type Registration = z.infer<typeof registrationSchema>;

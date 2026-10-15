@@ -50,7 +50,7 @@ export function RegistrationForm({ eventId, date }: { eventId: string; date?: st
     formState: { errors, isSubmitting },
   } = useForm<Registration>({
     resolver: zodResolver(registrationSchema),
-    defaultValues: { name: "", email: "", rollNumber: "", phone: "", interests: [], company: "" },
+    defaultValues: { name: "", email: "", rollNumber: "", phone: "", interests: [], leaveBlank: "" },
   });
 
   const onSubmit = handleSubmit(async (data) => {
@@ -85,8 +85,13 @@ export function RegistrationForm({ eventId, date }: { eventId: string; date?: st
     <form className="club-form-card" onSubmit={onSubmit} noValidate aria-labelledby="register-title">
       <h2 id="register-title">Register</h2>
       <div className="club-form-trap" aria-hidden="true">
-        <label htmlFor="company">Company</label>
-        <input id="company" tabIndex={-1} autoComplete="off" {...register("company")} />
+        <input
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          {...register("leaveBlank")}
+          type="hidden"
+        />
       </div>
       <p className="club-form-intro">Takes a minute. All fields are required.</p>
 
