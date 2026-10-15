@@ -10,6 +10,7 @@ Pages use server components unless they declare `"use client"`.
 | `app/template.tsx` | Short fade when moving between pages. The header stays still. |
 | `app/alumni/` | Alumni page, grouped by graduating batch |
 | `app/events/` | Event pages and the registration server action |
+| `app/forms/mobile26/` | Unlisted app-dev response form. It is not linked from navigation or events. |
 | `app/(auth)/` | Sign-in and sign-up pages |
 | `app/(dashboard)/` | Dashboard pages |
 | `app/api/auth/[...all]/route.ts` | Better Auth request handlers |
