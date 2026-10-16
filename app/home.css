@@ -672,6 +672,21 @@ html:has(.club-home) { scroll-behavior: smooth; }
   font-weight: 500;
 }
 .club-event-register { margin-top: 20px; }
+.club-event-wrap-up {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 440px;
+  margin: 20px 0 0;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--club-tone-soft);
+  color: var(--club-ink);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+.club-event-wrap-up svg { flex: none; margin-top: 1px; color: #b06000; }
 .club-event-page {
   position: relative;
   display: grid;

@@ -47,6 +47,8 @@ The page shows a compact announcement strip when `upcomingEvents` is empty.
 Confirmed upcoming events use a featured layout before the archive.
 Event cards have no outbound links; each event has a page at `/events/<id>`.
 Upcoming cards link to that page. Set `registration: true` to show the sign-up form there.
+When a featured event ends, remove `registration` and set `wrapUp` to a short note.
+The card then shows that note instead of a link, and the heading reads "Just wrapped".
 On a narrow screen the form follows the title, and the cover sits below the form.
 Set `time` and `venue` when confirmed; the page shows "To be announced" until then.
 The form fields and checks live in `lib/content/registration.ts`.

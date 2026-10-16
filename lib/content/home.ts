@@ -24,6 +24,8 @@ export type ClubEvent = {
   illustration?: string;
   /** Show the registration form on the event page. */
   registration?: boolean;
+  /** Short note shown on a featured event after it ends, in place of its link. */
+  wrapUp?: string;
   color: BrandColor;
 };
 export type ProfileLinks = { linkedin?: string; instagram?: string; website?: string };
@@ -55,12 +57,12 @@ export const upcomingEvents: ClubEvent[] = [
   {
     id: "orientation-2026",
     title: "Orientation 2026",
-    description: "Meet the chapter, its eight departments, and the leads. Find out what we do and how to get involved this year.",
+    description: "The chapter, its eight departments, and the leads met the new batch and shared how to get involved this year.",
     date: "16 October 2026",
     time: "5:30 pm - 8:00 pm",
     venue: "LT 402",
     illustration: "/images/events/orientation-2026.webp",
-    registration: true,
+    wrapUp: "That's a wrap. Over 200 of you signed up. Thank you for the amazing response.",
     color: "yellow",
   },
 ];
