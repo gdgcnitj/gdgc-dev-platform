@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, CalendarDays, Clock, MapPin } from "lucide-react";
+import { ArrowRight, ArrowUpRight, CalendarDays, Clock, MapPin, PartyPopper } from "lucide-react";
 import { MediaFrame } from "@/components/home/media-frame";
 import { Button } from "@/components/ui/button";
 import {
@@ -63,14 +63,19 @@ function EventCard({
           </div>
         )}
         {event.description && <p className="club-event-description">{event.description}</p>}
-        {upcoming && (
+        {upcoming && event.wrapUp ? (
+          <p className="club-event-wrap-up">
+            <PartyPopper size={20} aria-hidden="true" />
+            {event.wrapUp}
+          </p>
+        ) : upcoming ? (
           <Button asChild className="club-button club-event-register">
             <Link href={`/events/${event.id}`}>
               {event.registration ? "Register" : "Event details"}
               <ArrowRight className="club-action-arrow" size={16} aria-hidden="true" />
             </Link>
           </Button>
-        )}
+        ) : null}
       </div>
     </article>
   );
@@ -117,7 +122,9 @@ export function HomeEvents() {
         )}
         {upcomingEvents.length ? (
           <div className="club-upcoming-events">
-            <h3 className="club-subsection-title">Coming up</h3>
+            <h3 className="club-subsection-title">
+              {upcomingEvents.every((event) => event.wrapUp) ? "Just wrapped" : "Coming up"}
+            </h3>
             <div className="club-upcoming-grid">
               {upcomingEvents.map((event) => (
                 <EventCard key={event.id} event={event} upcoming />
