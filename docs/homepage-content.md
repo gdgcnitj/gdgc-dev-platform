@@ -42,12 +42,17 @@ Give each event a unique `id`.
 | `venue` | Confirmed location; optional |
 | `image` | Local image path; optional |
 | `illustration` | Transparent artwork shown without a frame until `image` is set; optional |
+| `registration` | Show the internal registration form on the event page; optional |
+| `registrationUrl` | Direct external registration link (e.g. Unstop); optional |
+| `prizes` | Array of prize entries (`title`, `description`, `highlight`); optional |
+| `timeline` | Array of schedule items (`time`, `title`, `description`); optional |
+| `rules` | Array of rule strings; optional |
 
 The page shows a compact announcement strip when `upcomingEvents` is empty.
 Confirmed upcoming events use a featured layout before the archive.
-Event cards have no outbound links; each event has a page at `/events/<id>`.
-Upcoming cards link to that page. Set `registration: true` to show the sign-up form there.
-When a featured event ends, remove `registration` and set `wrapUp` to a short note.
+Each event has a dedicated page at `/events/<id>`.
+Upcoming cards link to that page, or provide a direct external registration link when `registrationUrl` is set. Set `registration: true` to show the internal sign-up form on the event page.
+When a featured event ends, remove `registration` (or `registrationUrl`) and set `wrapUp` to a short note.
 The card then shows that note instead of a link, and the heading reads "Just wrapped".
 On a narrow screen the form follows the title, and the cover sits below the form.
 Set `time` and `venue` when confirmed; the page shows "To be announced" until then.

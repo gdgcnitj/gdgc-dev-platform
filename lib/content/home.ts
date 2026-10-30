@@ -11,6 +11,18 @@ import {
 } from "lucide-react";
 import { type BrandColor } from "@/lib/design/theme";
 
+export type EventTimelineItem = {
+  time: string;
+  title: string;
+  description?: string;
+};
+
+export type EventPrize = {
+  title: string;
+  description: string;
+  highlight?: boolean;
+};
+
 export type ClubEvent = {
   id: string;
   title: string;
@@ -19,13 +31,19 @@ export type ClubEvent = {
   date?: string;
   venue?: string;
   time?: string;
+  teamSize?: string;
   image?: string;
   /** Transparent artwork shown without a frame when there is no photo. */
   illustration?: string;
-  /** Show the registration form on the event page. */
+  /** Show the internal registration form on the event page. */
   registration?: boolean;
+  /** Direct external registration URL (e.g. Unstop). */
+  registrationUrl?: string;
   /** Short note shown on a featured event after it ends, in place of its link. */
   wrapUp?: string;
+  prizes?: EventPrize[];
+  timeline?: EventTimelineItem[];
+  rules?: string[];
   color: BrandColor;
 };
 export type ProfileLinks = { linkedin?: string; instagram?: string; website?: string };
@@ -55,9 +73,92 @@ export const socialLinks = {
 // Add confirmed dates here. An empty list shows the announcement state.
 export const upcomingEvents: ClubEvent[] = [
   {
+    id: "minimol",
+    title: "MiniMol",
+    category: "Hackathon",
+    description:
+      "MiniMol will feature an intensive 8-hour development round in which participating teams will conceptualize, design, and develop a functional prototype or minimum viable product. Participants will work on the announced problem statements or themes, develop their solutions, and present their projects for evaluation.",
+    date: "1 November 2026",
+    time: "9:30 am – 6:10 pm",
+    venue: "CC 301, NIT Jalandhar",
+    teamSize: "1 – 4 Members",
+    illustration: "/images/events/minimol.webp",
+    registrationUrl:
+      "https://unstop.com/p/minimol-dr-br-ambedkar-national-institute-of-technology-nit-jalandhar-1773464",
+    color: "yellow",
+    prizes: [
+      {
+        title: "₹15,000 Prize Pool",
+        description: "₹10,000 in direct cash prizes awarded to top-performing teams.",
+        highlight: true,
+      },
+      {
+        title: "Direct Entry to HackMOL 8.0",
+        description: "Winners secure guaranteed qualification to NIT Jalandhar's flagship hackathon.",
+        highlight: true,
+      },
+      {
+        title: "15 GDGC Club Induction Spots",
+        description: "15 direct spots offered for upcoming GDGC NITJ club recruitments.",
+      },
+    ],
+    timeline: [
+      {
+        time: "09:30 AM – 10:30 AM",
+        title: "Problem Statement Release",
+        description: "Briefing, Q&A, and official release of competition problem statements.",
+      },
+      {
+        time: "10:00 AM – 01:00 PM",
+        title: "Development Begins",
+        description: "Participants commence working and coding on their chosen problem statements.",
+      },
+      {
+        time: "01:00 PM – 02:00 PM",
+        title: "Lunch Break",
+        description: "Participants will be given an optional lunch break.",
+      },
+      {
+        time: "02:00 PM – 05:00 PM",
+        title: "Development Resumes",
+        description: "Final sprint for prototyping, feature development, and testing.",
+      },
+      {
+        time: "05:00 PM – 05:30 PM",
+        title: "Submission",
+        description: "Teams submit projects on the platform; shortlisted teams selected for evaluation.",
+      },
+      {
+        time: "05:30 PM – 06:00 PM",
+        title: "Final Pitching",
+        description: "Shortlisted teams deliver their live pitch and product demonstration to judges.",
+      },
+      {
+        time: "06:00 PM – 06:10 PM",
+        title: "Closing Ceremony",
+        description: "Final winners announced and prize awards distributed.",
+      },
+    ],
+    rules: [
+      "All participants must complete their registration through the official event platform (Unstop).",
+      "Teams must follow the announced problem statements, themes, and submission requirements.",
+      "All submissions must be original. Plagiarism or misrepresentation of work may lead to disqualification.",
+      "Participants must comply with the event schedule and submit their projects before the announced deadline.",
+      "Teams must be prepared to demonstrate their solutions and explain their implementation during evaluation.",
+      "Participants must maintain professional conduct and respect fellow participants, mentors, volunteers, and judges.",
+      "The organizers reserve the right to resolve disputes and take action in cases of rule violations, subject to the published competition guidelines.",
+    ],
+  },
+];
+
+// Details come from hackmol.com and the chapter's gdg.community.dev pages. Photos are pending.
+export const pastEvents: ClubEvent[] = [
+  {
     id: "orientation-2026",
     title: "Orientation 2026",
-    description: "The chapter, its eight departments, and the leads met the new batch and shared how to get involved this year.",
+    category: "Orientation",
+    description:
+      "The chapter, its eight departments, and the leads met the new batch and shared how to get involved this year.",
     date: "16 October 2026",
     time: "5:30 pm - 8:00 pm",
     venue: "LT 402",
@@ -65,10 +166,6 @@ export const upcomingEvents: ClubEvent[] = [
     wrapUp: "That's a wrap. Over 200 of you signed up. Thank you for the amazing response.",
     color: "yellow",
   },
-];
-
-// Details come from hackmol.com and the chapter's gdg.community.dev pages. Photos are pending.
-export const pastEvents: ClubEvent[] = [
   {
     id: "hackmol",
     title: "HackMOL 7.0",

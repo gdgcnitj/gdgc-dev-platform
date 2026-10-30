@@ -63,18 +63,37 @@ function EventCard({
           </div>
         )}
         {event.description && <p className="club-event-description">{event.description}</p>}
-        {upcoming && event.wrapUp ? (
+        {event.wrapUp ? (
           <p className="club-event-wrap-up">
             <PartyPopper size={20} aria-hidden="true" />
             {event.wrapUp}
           </p>
         ) : upcoming ? (
-          <Button asChild className="club-button club-event-register">
-            <Link href={`/events/${event.id}`}>
-              {event.registration ? "Register" : "Event details"}
-              <ArrowRight className="club-action-arrow" size={16} aria-hidden="true" />
-            </Link>
-          </Button>
+          <div className="club-event-actions">
+            {event.registrationUrl ? (
+              <>
+                <Button asChild className="club-button club-event-register">
+                  <a href={event.registrationUrl} target="_blank" rel="noreferrer">
+                    Register
+                    <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
+                  </a>
+                </Button>
+                <Button asChild variant="outline" className="club-button club-event-details-btn">
+                  <Link href={`/events/${event.id}`}>
+                    Event details
+                    <ArrowRight className="club-action-arrow" size={16} aria-hidden="true" />
+                  </Link>
+                </Button>
+              </>
+            ) : (
+              <Button asChild className="club-button club-event-register">
+                <Link href={`/events/${event.id}`}>
+                  {event.registration ? "Register" : "Event details"}
+                  <ArrowRight className="club-action-arrow" size={16} aria-hidden="true" />
+                </Link>
+              </Button>
+            )}
+          </div>
         ) : null}
       </div>
     </article>
