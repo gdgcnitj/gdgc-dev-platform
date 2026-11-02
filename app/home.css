@@ -1248,8 +1248,20 @@ html:has(.club-home) { scroll-behavior: smooth; }
 }
 @media (max-width: 700px) {
   .club-event-gallery-grid {
-    grid-template-columns: minmax(0, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: 18px;
+  }
+  .club-event-moment {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    flex: 0 0 auto;
+  }
+  .club-event-moment .club-event-gallery-photo,
+  .club-event-moment figcaption {
+    width: 100%;
+    min-width: 0;
   }
   .club-event-moment:first-child {
     grid-column: auto;
