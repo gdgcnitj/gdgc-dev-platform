@@ -723,6 +723,12 @@ html:has(.club-home) { scroll-behavior: smooth; }
   column-gap: 56px;
   align-items: start;
   padding-block: 48px 88px;
+  min-width: 0;
+}
+.club-event-intro,
+.club-event-details,
+.club-event-page > .club-form-card {
+  min-width: 0;
 }
 .club-event-intro { grid-area: intro; }
 .club-event-details { grid-area: details; margin-top: 8px; }
@@ -777,6 +783,7 @@ html:has(.club-home) { scroll-behavior: smooth; }
   position: sticky;
   top: 96px;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
   padding: 32px;
   border: 1px solid var(--club-line);
@@ -865,6 +872,7 @@ html:has(.club-home) { scroll-behavior: smooth; }
   align-items: center;
   gap: 12px;
   font-size: 14px;
+  min-width: 0;
 }
 .club-stat-label {
   color: var(--club-muted);
@@ -873,12 +881,14 @@ html:has(.club-home) { scroll-behavior: smooth; }
   font-weight: 500;
   color: var(--club-ink);
   text-align: right;
+  overflow-wrap: anywhere;
 }
 .club-unstop-button {
   width: 100%;
   height: 48px;
   font-size: 15px;
   font-weight: 500;
+  white-space: normal;
 }
 .club-unstop-caption {
   margin: 0;
@@ -934,6 +944,7 @@ html:has(.club-home) { scroll-behavior: smooth; }
 .club-event-section-title {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 20px;
   font-size: 22px;
@@ -1084,6 +1095,7 @@ html:has(.club-home) { scroll-behavior: smooth; }
   background: var(--club-paper);
   padding: 24px;
   box-shadow: 0 2px 0 rgb(34 34 34 / 0.04);
+  min-width: 0;
 }
 .club-track-header {
   display: flex;
@@ -1119,6 +1131,7 @@ html:has(.club-home) { scroll-behavior: smooth; }
   border-radius: 16px;
   background: var(--club-paper);
   transition: transform 160ms ease, box-shadow 160ms ease;
+  min-width: 0;
 }
 .club-winner-row:hover {
   transform: translateY(-2px);
@@ -1165,12 +1178,16 @@ html:has(.club-home) { scroll-behavior: smooth; }
   font-size: 13px;
   font-weight: 600;
   flex-shrink: 0;
+  max-width: 100%;
+  text-align: center;
+  white-space: normal;
 }
 .club-winner-info {
   display: flex;
   flex-direction: column;
   gap: 3px;
   min-width: 0;
+  flex: 1 1 auto;
 }
 .club-winner-name {
   margin: 0;
@@ -1178,12 +1195,14 @@ html:has(.club-home) { scroll-behavior: smooth; }
   font-weight: 600;
   color: var(--club-ink);
   letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
 }
 .club-winner-prize {
   font-size: 13.5px;
   color: var(--club-muted);
   font-weight: 450;
   line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 /* Event Photo Gallery - Matching Home Page Gallery Style */
@@ -1225,10 +1244,11 @@ html:has(.club-home) { scroll-behavior: smooth; }
   font-size: 14px;
   line-height: 1.5;
   font-weight: 500;
+  overflow-wrap: anywhere;
 }
 @media (max-width: 700px) {
   .club-event-gallery-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 18px;
   }
   .club-event-moment:first-child {
@@ -1545,7 +1565,7 @@ html:has(.club-home) { scroll-behavior: smooth; }
 }
 @media (max-width: 900px) {
   .club-event-page {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "intro" "form" "details";
     row-gap: 28px;
   }
@@ -1606,6 +1626,50 @@ html:has(.club-home) { scroll-behavior: smooth; }
   .club-hero { padding-block: 48px 64px; gap: 36px; }
   .club-alumni-hero { padding-block: 48px 40px; }
   .club-event-page { padding-block: 24px 56px; }
+  .club-event-section,
+  .club-track-card,
+  .club-winner-row,
+  .club-ps-overview-card,
+  .club-prize-card {
+    min-width: 0;
+  }
+  .club-winner-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px;
+  }
+  .club-winner-rank-badge {
+    align-self: flex-start;
+    width: fit-content;
+  }
+  .club-winner-info { width: 100%; }
+  .club-event-section-title {
+    font-size: clamp(24px, 7vw, 32px);
+    line-height: 1.15;
+  }
+  .club-track-header-wrap { align-items: flex-start; }
+  .club-track-ps-btn {
+    height: auto;
+    min-height: 34px;
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+  }
+  .club-ps-overview-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .club-ps-overview-content {
+    width: 100%;
+    max-width: none;
+  }
+  .club-ps-overview-card .club-button {
+    width: 100%;
+    height: auto;
+    min-height: 48px;
+    white-space: normal;
+  }
   .club-event-page h1 { margin-block: 12px; font-size: clamp(36px, 10vw, 48px); }
   .club-event-facts {
     display: flex;
@@ -1691,8 +1755,10 @@ html:has(.club-home) { scroll-behavior: smooth; }
   .club-footer-bottom { align-items: flex-start; flex-direction: column; gap: 8px; }
 }
 @media (max-width: 380px) {
-  .club-brand { font-size: 13px; }
-  .club-nav-join { padding-inline: 12px; }
+  .club-nav-inner { gap: 4px; }
+  .club-nav-actions { gap: 4px; }
+  .club-brand { gap: 6px; font-size: 12px; }
+  .club-nav-join { padding-inline: 10px; font-size: 12px; }
   .club-hero h1 { font-size: 48px; }
   .club-actions { flex-direction: column; align-items: flex-start; }
   .club-department-grid,
@@ -1959,6 +2025,7 @@ a:focus-visible > .club-arrow-up { transform: translateY(-2px); }
   margin-inline: auto;
   padding-block: 48px 96px;
   font-size: 15px;
+  min-width: 0;
 }
 .club-ps-header {
   margin-bottom: 36px;
@@ -2042,6 +2109,7 @@ a:focus-visible > .club-arrow-up { transform: translateY(-2px); }
   transition: box-shadow 160ms ease, border-color 160ms ease;
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.03);
   overflow: hidden;
+  min-width: 0;
 }
 .club-ps-card:hover {
   border-color: var(--club-tone-border);
@@ -2065,6 +2133,7 @@ a:focus-visible > .club-arrow-up { transform: translateY(-2px); }
   user-select: none;
   background: transparent;
   transition: background 160ms ease;
+  min-width: 0;
 }
 
 .club-ps-summary-left {
@@ -2128,6 +2197,8 @@ a:focus-visible > .club-arrow-up { transform: translateY(-2px); }
   font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--club-ink);
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .club-ps-icon {
   color: var(--club-action);
@@ -2138,6 +2209,7 @@ a:focus-visible > .club-arrow-up { transform: translateY(-2px); }
   font-size: 15px;
   color: var(--club-muted);
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 .club-ps-highlights {
   display: flex;
@@ -2182,6 +2254,7 @@ a:focus-visible > .club-arrow-up { transform: translateY(-2px); }
   display: grid;
   gap: 24px;
   background: var(--club-paper);
+  min-width: 0;
 }
 .club-ps-block {
   display: grid;
@@ -2200,6 +2273,7 @@ a:focus-visible > .club-arrow-up { transform: translateY(-2px); }
   font-size: 15px;
   line-height: 1.6;
   color: var(--club-ink);
+  overflow-wrap: anywhere;
 }
 .club-ps-runtime-box {
   display: grid;
@@ -2582,6 +2656,49 @@ a:focus-visible > .club-arrow-up { transform: translateY(-2px); }
 }
 
 @media (max-width: 640px) {
+  .club-ps-page {
+    width: calc(100% - 40px);
+    padding-block: 24px 56px;
+  }
+  .club-ps-header {
+    margin-bottom: 24px;
+  }
+  .club-ps-title {
+    margin-block: 12px 10px;
+    font-size: clamp(36px, 10vw, 48px);
+  }
+  .club-ps-subtitle {
+    margin-bottom: 20px;
+    font-size: 15px;
+  }
+  .club-ps-controls {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .club-ps-tabs {
+    display: grid;
+    gap: 8px;
+  }
+  .club-ps-tab {
+    width: 100%;
+    justify-content: center;
+    min-height: 42px;
+    height: auto;
+    padding: 9px 14px;
+    text-align: center;
+    white-space: normal;
+  }
+  .club-ps-expand-all-btn {
+    align-self: flex-start;
+    padding-inline: 0;
+  }
+  .club-ps-list {
+    gap: 16px;
+  }
+  .club-ps-card {
+    border-radius: 20px;
+  }
   .club-ps-summary {
     flex-direction: column;
     padding: 20px 18px;
@@ -2593,9 +2710,37 @@ a:focus-visible > .club-arrow-up { transform: translateY(-2px); }
   .club-ps-toggle-btn {
     width: 100%;
     justify-content: center;
+    height: auto;
+    min-height: 40px;
+    white-space: normal;
   }
   .club-ps-details-content {
     padding: 20px 18px 26px;
+  }
+  .club-ps-badges {
+    align-items: flex-start;
+  }
+  .club-ps-num-badge {
+    margin-left: 0;
+  }
+  .club-ps-name {
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 22px;
+  }
+  .club-ps-runtime-box {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 16px;
+  }
+  .club-ps-flow-step {
+    overflow-wrap: anywhere;
+  }
+  .club-ps-features-grid,
+  .club-ps-rules-container {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .club-ps-bottom-action .club-back-link {
+    align-items: flex-start;
   }
   .club-ps-flow-step {
     grid-template-columns: minmax(0, 1fr);
