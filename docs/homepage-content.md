@@ -47,6 +47,8 @@ Give each event a unique `id`.
 | `prizes` | Array of prize entries (`title`, `description`, `highlight`); optional |
 | `timeline` | Array of schedule items (`time`, `title`, `description`); optional |
 | `rules` | Array of rule strings; optional |
+| `tracks` | Array of competition tracks with winners (`title`, `description`, `winners`); optional |
+| `gallery` | Array of event photos with captions (`src`, `alt`, `caption`); optional |
 
 The page shows a compact announcement strip when `upcomingEvents` is empty.
 Confirmed upcoming events use a featured layout before the archive.

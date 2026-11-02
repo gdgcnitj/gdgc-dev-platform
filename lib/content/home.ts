@@ -23,6 +23,25 @@ export type EventPrize = {
   highlight?: boolean;
 };
 
+export type EventWinner = {
+  rank?: string;
+  team: string;
+  prize?: string;
+  description?: string;
+};
+
+export type EventTrack = {
+  title: string;
+  description?: string;
+  winners: EventWinner[];
+};
+
+export type EventGalleryImage = {
+  src: string;
+  alt: string;
+  caption?: string;
+};
+
 export type ClubEvent = {
   id: string;
   title: string;
@@ -39,11 +58,13 @@ export type ClubEvent = {
   registration?: boolean;
   /** Direct external registration URL (e.g. Unstop). */
   registrationUrl?: string;
-  /** Short note shown on a featured event after it ends, in place of its link. */
+  /** Short note shown on a featured event after it ends. */
   wrapUp?: string;
   prizes?: EventPrize[];
   timeline?: EventTimelineItem[];
   rules?: string[];
+  tracks?: EventTrack[];
+  gallery?: EventGalleryImage[];
   color: BrandColor;
 };
 export type ProfileLinks = { linkedin?: string; instagram?: string; website?: string };
@@ -77,15 +98,65 @@ export const upcomingEvents: ClubEvent[] = [
     title: "MiniMol",
     category: "Hackathon",
     description:
-      "MiniMol will feature an intensive 8-hour development round in which participating teams will conceptualize, design, and develop a functional prototype or minimum viable product. Participants will work on the announced problem statements or themes, develop their solutions, and present their projects for evaluation.",
+      "MiniMol featured an intensive 8-hour development round in which participating teams conceptualized, designed, and developed functional prototypes and MVPs evaluated by mentors and judges.",
     date: "1 November 2026",
     time: "9:30 am – 6:10 pm",
     venue: "CC 301, NIT Jalandhar",
     teamSize: "1 – 4 Members",
     illustration: "/images/events/minimol.webp",
-    registrationUrl:
-      "https://unstop.com/p/minimol-dr-br-ambedkar-national-institute-of-technology-nit-jalandhar-1773464",
+    wrapUp: "That's a wrap! 8 hours of intense coding, prototyping, and pitching. Congratulations to all the winning teams!",
     color: "yellow",
+    tracks: [
+      {
+        title: "Main Track",
+        description: "Open track for all year teams building innovative solutions.",
+        winners: [
+          {
+            rank: "Winner (1st Place)",
+            team: "Team Dev Ansh Pandey",
+            prize: "₹4,000 Cash Prize · Direct Entry to HackMOL 8.0",
+          },
+          {
+            rank: "1st Runner Up (2nd Place)",
+            team: "Team Md Zayan",
+            prize: "₹2,500 Cash Prize · Club Induction Spots",
+          },
+          {
+            rank: "2nd Runner Up (3rd Place)",
+            team: "Team Day_zero",
+            prize: "₹1,500 Cash Prize · Club Induction Spots",
+          },
+        ],
+      },
+      {
+        title: "Freshers Track",
+        description: "Dedicated competitive track exclusively for first-year participants.",
+        winners: [
+          {
+            rank: "Winner",
+            team: "Team Data Crushers",
+            prize: "₹2,000 Cash Prize · Club Induction Spots",
+          },
+        ],
+      },
+    ],
+    gallery: [
+      {
+        src: "/images/events/minimol2026/image1.jpg",
+        alt: "Participants developing prototypes in CC 301 computer lab",
+        caption: "Teams immersed in the 8-hour development sprint at CC 301.",
+      },
+      {
+        src: "/images/events/minimol2026/image2.jpg",
+        alt: "Teams coding and collaborating with laptops and workstations",
+        caption: "Collaborative problem-solving and software development in full swing.",
+      },
+      {
+        src: "/images/events/minimol2026/image3.jpg",
+        alt: "Mentors and judges evaluating a team demonstration",
+        caption: "Live project evaluation and pitch demonstration with GDGC mentors.",
+      },
+    ],
     prizes: [
       {
         title: "₹15,000 Prize Pool",
@@ -111,12 +182,12 @@ export const upcomingEvents: ClubEvent[] = [
       {
         time: "10:00 AM – 01:00 PM",
         title: "Development Begins",
-        description: "Participants commence working and coding on their chosen problem statements.",
+        description: "Participants commenced working and coding on their chosen problem statements.",
       },
       {
         time: "01:00 PM – 02:00 PM",
         title: "Lunch Break",
-        description: "Participants will be given an optional lunch break.",
+        description: "Participants were given a lunch break.",
       },
       {
         time: "02:00 PM – 05:00 PM",
@@ -126,12 +197,12 @@ export const upcomingEvents: ClubEvent[] = [
       {
         time: "05:00 PM – 05:30 PM",
         title: "Submission",
-        description: "Teams submit projects on the platform; shortlisted teams selected for evaluation.",
+        description: "Teams submitted projects on the platform; shortlisted teams selected for evaluation.",
       },
       {
         time: "05:30 PM – 06:00 PM",
         title: "Final Pitching",
-        description: "Shortlisted teams deliver their live pitch and product demonstration to judges.",
+        description: "Shortlisted teams delivered their live pitch and product demonstration to judges.",
       },
       {
         time: "06:00 PM – 06:10 PM",
