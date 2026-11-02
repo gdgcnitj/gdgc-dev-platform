@@ -4,12 +4,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
+  ArrowRight,
   ArrowUpRight,
   Award,
   CalendarDays,
   Camera,
   CheckCircle2,
   Clock,
+  Code2,
   MapPin,
   Medal,
   PartyPopper,
@@ -21,6 +23,7 @@ import { HomeMotion } from "@/components/home/home-motion";
 import { MediaFrame } from "@/components/home/media-frame";
 import { Button } from "@/components/ui/button";
 import { allEvents } from "@/lib/content/home";
+import { getProblemStatements } from "@/lib/content/problem-statements";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -41,6 +44,7 @@ export default async function EventPage({ params }: Props) {
   const event = allEvents.find((item) => item.id === id);
   if (!event) notFound();
 
+  const problemData = getProblemStatements(event.id);
   const hasSidebar = Boolean(event.registration || event.registrationUrl || event.tracks);
 
   const facts = [
@@ -165,6 +169,15 @@ export default async function EventPage({ params }: Props) {
                 <Trophy size={18} className="club-callout-icon" aria-hidden="true" />
                 <p>Winners secure direct qualification to NIT Jalandhar&apos;s flagship hackathon HackMOL 8.0.</p>
               </div>
+
+              {problemData && (
+                <Button asChild size="lg" className="club-button club-unstop-button club-ps-sidebar-button">
+                  <Link href={`/events/${event.id}/problem-statements`}>
+                    Explore Problem Statements
+                    <ArrowRight className="club-action-arrow" size={18} aria-hidden="true" />
+                  </Link>
+                </Button>
+              )}
             </aside>
           )}
 
@@ -195,6 +208,74 @@ export default async function EventPage({ params }: Props) {
               </p>
             )}
 
+            {event.id === "orientation-2026" && (
+              <section className="club-event-section" aria-labelledby="orientation-story-heading">
+                <div className="club-story-card">
+                  <div className="club-story-header">
+                    <span className="club-completed-badge">
+                      <PartyPopper size={16} aria-hidden="true" />
+                      Chapter Orientation Recap
+                    </span>
+                    <h2 id="orientation-story-heading" className="club-story-title">
+                      Welcoming the Incoming Batch to GDGC NITJ
+                    </h2>
+                  </div>
+                  <div className="club-story-body">
+                    <p className="club-story-lead">
+                      We gathered in LT 402 to welcome the new batch of juniors, introduce the ethos of Google Developer Groups on Campus NIT Jalandhar, and open the floor to curious minds across campus.
+                    </p>
+                    <p>
+                      The evening was designed to give juniors a genuine look into who we are and what we build. Our chapter leads and domain mentors walked through the club&apos;s culture: a collaborative space where students learn by shipping real software, competing in hackathons, contributing to open source, and exploring emerging technology stacks.
+                    </p>
+                    <div className="club-story-columns">
+                      <div className="club-story-column">
+                        <h4>Who We Are</h4>
+                        <p>
+                          A vibrant community of passionate student developers, designers, and algorithmic problem-solvers backed by Google Developers at NIT Jalandhar.
+                        </p>
+                      </div>
+                      <div className="club-story-column">
+                        <h4>What We Do</h4>
+                        <p>
+                          We organize flagship national hackathons like HackMOL, internal sprint contests like MiniMol, technical workshops, and real-world project incubators.
+                        </p>
+                      </div>
+                      <div className="club-story-column">
+                        <h4>Eight Specialized Departments</h4>
+                        <p>
+                          Web, Mobile, AI/ML, Cloud &amp; DevSecOps, Competitive Programming, UI/UX Design, Women in Tech (WiT), and Creatives &amp; Media.
+                        </p>
+                      </div>
+                      <div className="club-story-column">
+                        <h4>How to Get Involved</h4>
+                        <p>
+                          Structured learning roadmaps, active open-source projects, study circles, and upcoming recruitment drives for freshman talent.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {event.id === "winterfest" && (
+              <section className="club-event-section" aria-labelledby="winterfest-status-heading">
+                <div className="club-archive-card">
+                  <div className="club-completed-badge">
+                    <Clock size={16} aria-hidden="true" />
+                    Archiving in Progress
+                  </div>
+                  <h2 id="winterfest-status-heading" className="club-archive-title">
+                    We&apos;re Working on Bringing This Content
+                  </h2>
+                  <p className="club-archive-desc">
+                    We are currently compiling the session slide decks, workshop resources, competition recaps, and project demos from WinterFest.
+                    The complete archive covering our AI, UI/UX, full-stack web, and cybersecurity tracks will be published here shortly.
+                  </p>
+                </div>
+              </section>
+            )}
+
             {event.tracks && event.tracks.length > 0 && (
               <section className="club-event-section" aria-labelledby="event-winners-heading">
                 <h2 id="event-winners-heading" className="club-event-section-title">
@@ -205,8 +286,26 @@ export default async function EventPage({ params }: Props) {
                   {event.tracks.map((track) => (
                     <div key={track.title} className="club-track-card">
                       <div className="club-track-header">
-                        <span className="club-tone-dot" />
-                        <h3 className="club-track-title">{track.title}</h3>
+                        <div className="club-track-header-wrap">
+                          <div className="club-track-header-title-wrap">
+                            <span className="club-tone-dot" />
+                            <h3 className="club-track-title">{track.title}</h3>
+                          </div>
+                          {problemData && (
+                            <Button asChild size="sm" variant="outline" className="club-track-ps-btn">
+                              <Link
+                                href={`/events/${event.id}/problem-statements?track=${
+                                  track.title.toLowerCase().includes("fresher") ? "freshers" : "main"
+                                }`}
+                              >
+                                {track.title.toLowerCase().includes("fresher")
+                                  ? "Explore 1 Problem Statement"
+                                  : "Explore 3 Problem Statements"}
+                                <ArrowRight size={13} aria-hidden="true" />
+                              </Link>
+                            </Button>
+                          )}
+                        </div>
                         {track.description && (
                           <p className="club-track-desc">{track.description}</p>
                         )}
@@ -250,6 +349,32 @@ export default async function EventPage({ params }: Props) {
                       </div>
                     </div>
                   ))}
+                </div>
+              </section>
+            )}
+
+            {problemData && (
+              <section className="club-event-section" aria-labelledby="event-ps-overview-heading">
+                <div className="club-ps-overview-card">
+                  <div className="club-ps-overview-content">
+                    <span className="club-completed-badge">
+                      <Code2 size={16} aria-hidden="true" />
+                      Hackathon Challenges
+                    </span>
+                    <h2 id="event-ps-overview-heading" className="club-ps-overview-title">
+                      Problem Statements Released
+                    </h2>
+                    <p className="club-ps-overview-lead">
+                      MiniMol featured 4 engineering problem statements across 2 competitive tracks:
+                      P2P Mobile Mesh Inference, HiveNet Distributed Storage, and Autonomous Intersection Control in the Main Track, plus the Reach Together Rideshare platform for Freshers.
+                    </p>
+                  </div>
+                  <Button asChild size="lg" className="club-button">
+                    <Link href={`/events/${event.id}/problem-statements`}>
+                      Explore Problem Statements
+                      <ArrowRight className="club-action-arrow" size={18} aria-hidden="true" />
+                    </Link>
+                  </Button>
                 </div>
               </section>
             )}
