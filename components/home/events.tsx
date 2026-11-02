@@ -63,7 +63,7 @@ function EventCard({
           </div>
         )}
         {event.description && <p className="club-event-description">{event.description}</p>}
-        {event.wrapUp ? (
+        {upcoming && event.wrapUp ? (
           <div className="club-event-wrap-container">
             <p className="club-event-wrap-up">
               <PartyPopper size={20} aria-hidden="true" />
@@ -102,7 +102,25 @@ function EventCard({
               </Button>
             )}
           </div>
-        ) : null}
+        ) : (
+          <div className="club-event-actions">
+            {event.externalUrl ? (
+              <Button asChild variant="outline" className="club-button club-event-details-btn">
+                <a href={event.externalUrl} target="_blank" rel="noreferrer">
+                  {event.id === "hackmol" ? "Visit HackMOL.com" : "Visit site"}
+                  <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
+                </a>
+              </Button>
+            ) : (
+              <Button asChild variant="outline" className="club-button club-event-details-btn">
+                <Link href={`/events/${event.id}`}>
+                  Event details
+                  <ArrowRight className="club-action-arrow" size={16} aria-hidden="true" />
+                </Link>
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </article>
   );

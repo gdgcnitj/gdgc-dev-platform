@@ -58,6 +58,8 @@ export type ClubEvent = {
   registration?: boolean;
   /** Direct external registration URL (e.g. Unstop). */
   registrationUrl?: string;
+  /** Dedicated website URL for external project/event domains (e.g. hackmol.com). */
+  externalUrl?: string;
   /** Short note shown on a featured event after it ends. */
   wrapUp?: string;
   prizes?: EventPrize[];
@@ -229,12 +231,11 @@ export const pastEvents: ClubEvent[] = [
     title: "Orientation 2026",
     category: "Orientation",
     description:
-      "The chapter, its eight departments, and the leads met the new batch and shared how to get involved this year.",
+      "We welcomed the incoming batch to GDG on Campus NIT Jalandhar, introducing our eight specialized departments and sharing how to build, learn, and grow with the community.",
     date: "16 October 2026",
     time: "5:30 pm - 8:00 pm",
     venue: "LT 402",
     illustration: "/images/events/orientation-2026.webp",
-    wrapUp: "That's a wrap. Over 200 of you signed up. Thank you for the amazing response.",
     color: "yellow",
   },
   {
@@ -245,6 +246,7 @@ export const pastEvents: ClubEvent[] = [
     date: "28–29 March 2026",
     venue: "NIT Jalandhar",
     image: "/images/events/hackmol7.jpg",
+    externalUrl: "https://hackmol.com",
     color: "blue",
   },
   {
