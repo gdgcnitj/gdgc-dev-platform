@@ -64,10 +64,18 @@ function EventCard({
         )}
         {event.description && <p className="club-event-description">{event.description}</p>}
         {event.wrapUp ? (
-          <p className="club-event-wrap-up">
-            <PartyPopper size={20} aria-hidden="true" />
-            {event.wrapUp}
-          </p>
+          <div className="club-event-wrap-container">
+            <p className="club-event-wrap-up">
+              <PartyPopper size={20} aria-hidden="true" />
+              {event.wrapUp}
+            </p>
+            <Button asChild variant="outline" className="club-button club-event-details-btn">
+              <Link href={`/events/${event.id}`}>
+                {event.tracks && event.tracks.length > 0 ? "View winners & recap" : "Event details"}
+                <ArrowRight className="club-action-arrow" size={16} aria-hidden="true" />
+              </Link>
+            </Button>
+          </div>
         ) : upcoming ? (
           <div className="club-event-actions">
             {event.registrationUrl ? (
