@@ -137,19 +137,19 @@ export default async function EventPage({ params }: Props) {
               <div className="club-unstop-stats">
                 <div className="club-unstop-stat">
                   <span className="club-stat-label">Main Track Winner</span>
-                  <span className="club-stat-value">Team Dev Ansh Pandey (₹4,000)</span>
+                  <span className="club-stat-value">Team Dev Ansh Pandey</span>
                 </div>
                 <div className="club-unstop-stat">
                   <span className="club-stat-label">1st Runner Up</span>
-                  <span className="club-stat-value">Team Md Zayan (₹2,500)</span>
+                  <span className="club-stat-value">Team Md Zayan</span>
                 </div>
                 <div className="club-unstop-stat">
                   <span className="club-stat-label">2nd Runner Up</span>
-                  <span className="club-stat-value">Team Day_zero (₹1,500)</span>
+                  <span className="club-stat-value">Team Day_zero</span>
                 </div>
                 <div className="club-unstop-stat">
                   <span className="club-stat-label">Freshers Track Winner</span>
-                  <span className="club-stat-value">Team Data Crushers (₹2,000)</span>
+                  <span className="club-stat-value">Team Data Crushers</span>
                 </div>
                 <div className="club-unstop-stat">
                   <span className="club-stat-label">Total Cash Prizes</span>
@@ -157,7 +157,7 @@ export default async function EventPage({ params }: Props) {
                 </div>
                 <div className="club-unstop-stat">
                   <span className="club-stat-label">HackMOL 8.0</span>
-                  <span className="club-stat-value">Direct qualification</span>
+                  <span className="club-stat-value">Direct qualification (T&C apply)</span>
                 </div>
               </div>
 
