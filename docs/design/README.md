@@ -17,3 +17,11 @@ Event photos, lead portraits, and gallery photos use placeholders.
 - [Desktop hero](previews/homepage-hero-desktop.jpg)
 - [Desktop footer](previews/homepage-footer-desktop.jpg)
 - [Phone page](previews/homepage-mobile.jpg)
+
+## Event pages
+
+These previews show the event content refactor on 8 November 2026.
+The layouts were checked at 1280px desktop and 390px phone widths.
+
+- [Challenge reader](previews/challenges-desktop.png)
+- [Event guidelines](previews/event-rules-desktop.png)

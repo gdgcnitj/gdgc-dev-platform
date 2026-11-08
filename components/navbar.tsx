@@ -9,7 +9,7 @@ import logo from "@/app/assets/navbarLogo.svg";
 import { Button } from "@/components/ui/button";
 
 const links = [
-  { href: "/#events", label: "Events" },
+  { href: "/events", label: "Events" },
   { href: "/#departments", label: "Departments" },
   { href: "/#faculty", label: "Faculty" },
   { href: "/#gallery", label: "Gallery" },
@@ -79,7 +79,7 @@ export default function Navbar() {
     if (href.startsWith("/#")) {
       return pathname === "/" && activeSection === href.slice(2) ? "location" as const : undefined;
     }
-    return pathname === href ? "page" as const : undefined;
+    return pathname === href || (href === "/events" && pathname.startsWith("/events/")) ? "page" as const : undefined;
   };
 
   return (

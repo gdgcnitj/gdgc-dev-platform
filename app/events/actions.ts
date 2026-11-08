@@ -3,7 +3,8 @@
 import { createHmac, randomUUID } from "node:crypto";
 import { and, eq, gt, lt, sql } from "drizzle-orm";
 import { headers } from "next/headers";
-import { allEvents } from "@/lib/content/home";
+import { getEventById } from "@/lib/content/events";
+import { canRegister } from "@/lib/events/helpers";
 import { registrationSchema, type RegistrationResult } from "@/lib/content/registration";
 import { db, eventRegistration, registrationAttempt } from "@/lib/database";
 
@@ -32,8 +33,10 @@ async function clientHash() {
 }
 
 export async function registerForEvent(eventId: string, input: unknown): Promise<RegistrationResult> {
-  const event = allEvents.find((item) => item.id === eventId);
-  if (!event?.registration) return { ok: false, error: "Registration is not open for this event." };
+  const event = getEventById(eventId);
+  if (!event || event.registration.mode !== "internal" || !canRegister(event)) {
+    return { ok: false, error: "Registration is not open for this event." };
+  }
 
   const parsed = registrationSchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: "Check the highlighted fields and try again." };
