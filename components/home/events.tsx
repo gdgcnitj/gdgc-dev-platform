@@ -1,132 +1,31 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, CalendarDays, Clock, MapPin, PartyPopper } from "lucide-react";
-import { MediaFrame } from "@/components/home/media-frame";
-import { Button } from "@/components/ui/button";
-import {
-  pastEvents,
-  socialLinks,
-  upcomingEvents,
-  type ClubEvent,
-} from "@/lib/content/home";
-
-function EventCard({
-  event,
-  upcoming = false,
-}: {
-  event: ClubEvent;
-  upcoming?: boolean;
-}) {
-  return (
-    <article
-      className={`club-event-card${upcoming ? " club-event-upcoming" : ""}`}
-      data-tone={event.color}
-      data-reveal="card"
-    >
-      {!event.image && event.illustration ? (
-        <Image
-          src={event.illustration}
-          alt=""
-          width={1437}
-          height={968}
-          sizes={upcoming ? "(max-width: 700px) 100vw, 45vw" : "(max-width: 700px) 100vw, 33vw"}
-          className="club-event-art"
-        />
-      ) : (
-        <MediaFrame
-          src={event.image}
-          alt={`${event.title} event`}
-          label="Event photo"
-          className="club-event-photo"
-          sizes={upcoming ? "(max-width: 700px) 100vw, 45vw" : "(max-width: 700px) 100vw, 33vw"}
-        />
-      )}
-      <div className="club-event-copy">
-        {event.category && (
-          <p className="club-event-category">
-            <span className="club-tone-dot" />
-            {event.category}
-          </p>
-        )}
-        <h4>{event.title}</h4>
-        {(event.date || event.venue) && (
-          <div className="club-event-meta">
-            {event.date && (
-              <span><CalendarDays size={16} aria-hidden="true" />{event.date}</span>
-            )}
-            {event.time && (
-              <span><Clock size={16} aria-hidden="true" />{event.time}</span>
-            )}
-            {event.venue && (
-              <span><MapPin size={16} aria-hidden="true" />{event.venue}</span>
-            )}
-          </div>
-        )}
-        {event.description && <p className="club-event-description">{event.description}</p>}
-        {upcoming && event.wrapUp ? (
-          <div className="club-event-wrap-container">
-            <p className="club-event-wrap-up">
-              <PartyPopper size={20} aria-hidden="true" />
-              {event.wrapUp}
-            </p>
-            <Button asChild variant="outline" className="club-button club-event-details-btn">
-              <Link href={`/events/${event.id}`}>
-                {event.tracks && event.tracks.length > 0 ? "View winners & recap" : "Event details"}
-                <ArrowRight className="club-action-arrow" size={16} aria-hidden="true" />
-              </Link>
-            </Button>
-          </div>
-        ) : upcoming ? (
-          <div className="club-event-actions">
-            {event.registrationUrl ? (
-              <>
-                <Button asChild className="club-button club-event-register">
-                  <a href={event.registrationUrl} target="_blank" rel="noreferrer">
-                    Register
-                    <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
-                  </a>
-                </Button>
-                <Button asChild variant="outline" className="club-button club-event-details-btn">
-                  <Link href={`/events/${event.id}`}>
-                    Event details
-                    <ArrowRight className="club-action-arrow" size={16} aria-hidden="true" />
-                  </Link>
-                </Button>
-              </>
-            ) : (
-              <Button asChild className="club-button club-event-register">
-                <Link href={`/events/${event.id}`}>
-                  {event.registration ? "Register" : "Event details"}
-                  <ArrowRight className="club-action-arrow" size={16} aria-hidden="true" />
-                </Link>
-              </Button>
-            )}
-          </div>
-        ) : (
-          <div className="club-event-actions">
-            {event.externalUrl ? (
-              <Button asChild variant="outline" className="club-button club-event-details-btn">
-                <a href={event.externalUrl} target="_blank" rel="noreferrer">
-                  {event.id === "hackmol" ? "Visit HackMOL.com" : "Visit site"}
-                  <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
-                </a>
-              </Button>
-            ) : (
-              <Button asChild variant="outline" className="club-button club-event-details-btn">
-                <Link href={`/events/${event.id}`}>
-                  Event details
-                  <ArrowRight className="club-action-arrow" size={16} aria-hidden="true" />
-                </Link>
-              </Button>
-            )}
-          </div>
-        )}
-      </div>
-    </article>
-  );
-}
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { EventCard } from "@/components/events/event-card";
+import { allEvents, getFeaturedEvents } from "@/lib/content/events";
+import { socialLinks } from "@/lib/content/home";
+import { eventStart, eventSummary } from "@/lib/events/helpers";
 
 export function HomeEvents() {
+  const featured = getFeaturedEvents();
+  const featuredIds = new Set(featured.map((event) => event.id));
+  const upcoming = allEvents.filter(
+    (event) =>
+      (event.status === "scheduled" || event.status === "live") &&
+      !featuredIds.has(event.id),
+  );
+  upcoming.sort(
+    (a, b) => (eventStart(a) || Infinity) - (eventStart(b) || Infinity),
+  );
+  const recent = allEvents
+    .filter(
+      (event) => event.status === "completed" && !featuredIds.has(event.id),
+    )
+    .slice(0, 3);
+  const hasUpcoming = allEvents.some(
+    (event) => event.status === "scheduled" || event.status === "live",
+  );
+
   return (
     <section
       id="events"
@@ -134,25 +33,63 @@ export function HomeEvents() {
       aria-labelledby="events-title"
     >
       <div className="club-section club-container">
-        {upcomingEvents.length ? (
-          <div className="club-title-card club-events-heading" data-reveal>
+        <div className="club-title-card club-events-heading" data-reveal>
+          <div>
             <h2 id="events-title">Our events.</h2>
             <p>Workshops, hackathons, and meetups at NIT Jalandhar.</p>
           </div>
-        ) : (
-          <div className="club-title-card club-events-banner" data-tone="yellow" data-reveal>
+          <Link className="club-text-link" href="/events">
+            Explore all events
+            <ArrowRight size={17} aria-hidden="true" />
+          </Link>
+        </div>
+        {featured.length > 0 && (
+          <div className="club-upcoming-events">
+            <h3 className="club-subsection-title">In the spotlight</h3>
+            <div className="club-upcoming-grid">
+              {featured.map((event) => (
+                <EventCard
+                  key={event.id}
+                  event={eventSummary(event)}
+                  headingLevel={4}
+                  featured
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        {upcoming.length > 0 && (
+          <>
+            <h3 className="club-subsection-title club-past-heading">
+              Coming up
+            </h3>
+            <div className="club-event-grid">
+              {upcoming.slice(0, 3).map((event) => (
+                <EventCard
+                  event={eventSummary(event)}
+                  headingLevel={4}
+                  key={event.id}
+                />
+              ))}
+            </div>
+          </>
+        )}
+        {!hasUpcoming && !featured.length && (
+          <div
+            className="club-title-card club-events-banner"
+            data-tone="yellow"
+          >
             <div className="club-events-banner-copy">
-              <h2 id="events-title">Our events.</h2>
-              <p>Workshops, hackathons, and meetups at NIT Jalandhar.</p>
-              <div className="club-events-status">
-                <span className="club-events-status-pill">
-                  <span className="club-tone-dot" aria-hidden="true" />
-                  Nothing scheduled right now
-                </span>
-                <a className="club-text-link" href={socialLinks.instagram} target="_blank" rel="noreferrer">
-                  Get event updates <ArrowUpRight className="club-action-arrow" size={16} aria-hidden="true" />
-                </a>
-              </div>
+              <p>Nothing scheduled right now.</p>
+              <a
+                className="club-text-link"
+                href={socialLinks.instagram}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Get event updates
+                <ArrowUpRight size={16} aria-hidden="true" />
+              </a>
             </div>
             <div className="club-events-banner-art">
               <Image
@@ -165,24 +102,22 @@ export function HomeEvents() {
             </div>
           </div>
         )}
-        {upcomingEvents.length ? (
-          <div className="club-upcoming-events">
-            <h3 className="club-subsection-title">
-              {upcomingEvents.every((event) => event.wrapUp) ? "Just wrapped" : "Coming up"}
+        {recent.length > 0 && (
+          <>
+            <h3 className="club-subsection-title club-past-heading">
+              Recent events
             </h3>
-            <div className="club-upcoming-grid">
-              {upcomingEvents.map((event) => (
-                <EventCard key={event.id} event={event} upcoming />
+            <div className="club-event-grid">
+              {recent.map((event) => (
+                <EventCard
+                  event={eventSummary(event)}
+                  headingLevel={4}
+                  key={event.id}
+                />
               ))}
             </div>
-          </div>
-        ) : null}
-        <h3 className="club-subsection-title club-past-heading">Past events</h3>
-        <div className="club-event-grid">
-          {pastEvents.map((event) => (
-            <EventCard key={event.id} event={event} />
-          ))}
-        </div>
+          </>
+        )}
       </div>
     </section>
   );

@@ -1,6 +1,6 @@
 # Home-page content
 
-Edit `lib/content/home.ts` to update the home page.
+Edit `lib/content/home.ts` for community content and `lib/content/events/` for events.
 The page uses static content. It does not read events or leads from the database.
 
 ## Photos
@@ -27,44 +27,20 @@ Keep the same file names when you replace one.
 
 ## Events
 
-Add confirmed upcoming events to `upcomingEvents`.
-Add past events to `pastEvents`.
-Give each event a unique `id`.
+Events now live in `lib/content/events/`, with one file per event.
+See [the event content guide](event-content.md) for the schema, carousel, editable
+sections, workshop example, registration settings, and publication checks.
 
-| Field | Content |
-| --- | --- |
-| `id` | Unique short name |
-| `title` | Event name |
-| `category` | Event type, such as Workshop or Hackathon; optional |
-| `description` | Confirmed description or recap; optional |
-| `color` | `blue`, `green`, `yellow`, or `red` |
-| `date` | Confirmed date as readable text; optional |
-| `venue` | Confirmed location; optional |
-| `image` | Local image path; optional |
-| `illustration` | Transparent artwork shown without a frame until `image` is set; optional |
-| `registration` | Show the internal registration form on the event page; optional |
-| `registrationUrl` | Direct external registration link (e.g. Unstop); optional |
-| `prizes` | Array of prize entries (`title`, `description`, `highlight`); optional |
-| `timeline` | Array of schedule items (`time`, `title`, `description`); optional |
-| `rules` | Array of rule strings; optional |
-| `tracks` | Array of competition tracks with winners (`title`, `description`, `winners`); optional |
-| `gallery` | Array of event photos with captions (`src`, `alt`, `caption`); optional |
+Set `homepage.featured: true` to put an event in the homepage spotlight, including
+a completed event. Optional `featuredUntil` expires the placement. Event status
+controls upcoming and completed lists independently of featuring. The homepage
+shows up to three upcoming and three recent unfeatured events; `/events` lists
+all published events with search and a type filter.
 
-The page shows a compact announcement strip when `upcomingEvents` is empty.
-Confirmed upcoming events use a featured layout before the archive.
-Each event has a dedicated page at `/events/<id>`.
-Upcoming cards link to that page, or provide a direct external registration link when `registrationUrl` is set. Set `registration: true` to show the internal sign-up form on the event page.
-When a featured event ends, remove `registration` (or `registrationUrl`) and set `wrapUp` to a short note.
-The card then shows that note instead of a link, and the heading reads "Just wrapped".
-On a narrow screen the form follows the title, and the cover sits below the form.
-Set `time` and `venue` when confirmed; the page shows "To be announced" until then.
-The form fields and checks live in `lib/content/registration.ts`.
-Course is B.Tech, M.Tech, M.Sc, MBA, or Ph.D. Branch names follow the 2026–27 programmes and the institute's departments.
-`registerForEvent` in `app/events/actions.ts` stores a valid sign-up in `event_registration`.
-The same email or roll number cannot register twice for one event.
-A `type="hidden"` field must stay empty. It is not named like a contact field, so browser autofill does not fill it. One address can only submit a few times an hour.
-The past-event details come from [hackmol.com](https://hackmol.com/) and the chapter's [GDG community page](https://gdg.community.dev/gdg-on-campus-dr-b-r-ambedkar-national-institute-of-technology-jalandhar-india/).
-Do not invent dates, venues, or event results.
+Each card always links to its local event page. A dedicated external event site
+can be shown as a separate link. Dates, descriptions, photos, problem statements,
+and winners are maintained once in the event file and reused across pages.
+Do not invent missing historical dates, venues, resources, or results.
 
 ## Faculty coordinators
 

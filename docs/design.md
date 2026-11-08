@@ -92,13 +92,24 @@ Turn off all nonessential motion when the visitor prefers reduced motion.
 
 ### Events
 
-Show confirmed upcoming events before "Past events".
-If no confirmed upcoming event exists, show a compact announcement strip.
+Show selected events in a spotlight, then confirmed upcoming and recent events.
+Feature placement is independent of whether an event is upcoming or completed.
+Link to `/events` for the full searchable archive.
+If neither a featured nor an upcoming event exists, show a compact announcement strip.
 Add a date and venue only after they are confirmed.
-Give the photo most of the card; clamp past-event descriptions to two lines.
-Use photo placeholders until the club supplies images.
-Keep the existing archive titles: HackMOL, WinterFest, and Orientation.
-Their dates, photos, and recaps still require club content.
+Give the photo most of the card; clamp archive descriptions to two lines.
+Event pages share a title and status, essential details, a prominent photo
+carousel, section navigation, and editable content sections. Workshops can show
+learning outcomes, instructors, prerequisites, schedules, and resources without
+competition sections. Completed events prioritize recaps and useful materials.
+Problem statements use a compact index and a document reading pane, with a
+statement selector on phones. Keep headings restrained and specifications in
+plain tables. Event cards share one media ratio, one local page link, and aligned
+actions; external event sites belong on the event page. Show lifecycle notices
+only when useful, such as a live, postponed, or cancelled event.
+See [the event content guide](event-content.md).
+Published events need at least one supplied poster, illustration, or photo.
+Preserve confirmed archive dates, photos, descriptions, and results.
 Hide absent descriptions.
 Do not use a draft event description as a record of what happened.
 

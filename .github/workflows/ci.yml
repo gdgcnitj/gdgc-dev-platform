@@ -47,6 +47,8 @@ jobs:
         run: docker compose --env-file .env.example -f compose.dev.yaml config --quiet
       - name: Check code
         run: npm run check
+      - name: Check event content and registration rules
+        run: node --import tsx --test lib/events/events.test.ts
       - name: Apply database migrations
         run: npm run db:migrate
       - name: Build
