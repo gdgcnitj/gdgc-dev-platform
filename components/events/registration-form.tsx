@@ -75,7 +75,7 @@ export function RegistrationForm({ eventId, date }: { eventId: string; date?: st
         <p>
           See you{date ? ` on ${date}` : ""}. Watch the chapter&apos;s{" "}
           <a href={socialLinks.instagram} target="_blank" rel="noreferrer">Instagram</a>{" "}
-          for the venue and time.
+          for event updates.
         </p>
       </div>
     );
