@@ -8,9 +8,8 @@ import { prepareInductionSubmission } from "@/lib/inductions/submission";
 import { storeInductionSubmission } from "@/lib/inductions/store";
 import type { InductionResult } from "@/lib/inductions/schema";
 
-export async function submitInductionInterest(
+export async function submitInductionApplication(
   eventId: string,
-  departmentId: string,
   input: unknown,
 ): Promise<InductionResult> {
   const event = getEventById(eventId);
@@ -21,12 +20,7 @@ export async function submitInductionInterest(
       code: "closed",
       error: "Interest forms are not open for this event.",
     };
-  const prepared = prepareInductionSubmission(
-    event,
-    cycle,
-    departmentId,
-    input,
-  );
+  const prepared = prepareInductionSubmission(event, cycle, input);
   if (!prepared.ok) return prepared;
   const secret = process.env.BETTER_AUTH_SECRET;
   if (!secret || !process.env.DATABASE_URL)
@@ -42,6 +36,7 @@ export async function submitInductionInterest(
     return await storeInductionSubmission(prepared.data, {
       address: hash(`address:${headerStore.get("x-real-ip") ?? "unknown"}`),
       email: hash(`email:${prepared.data.email}`),
+      roll: hash(`roll:${prepared.data.rollNumber}`),
     });
   } catch {
     // No contact details or free-text responses belong in application logs.

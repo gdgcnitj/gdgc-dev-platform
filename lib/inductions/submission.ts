@@ -11,7 +11,6 @@ import {
 export function prepareInductionSubmission(
   event: ClubEvent,
   cycle: InductionCycle,
-  departmentId: string,
   input: unknown,
   now = Date.now(),
 ) {
@@ -29,13 +28,6 @@ export function prepareInductionSubmission(
       code: "closed" as const,
       error: "Interest forms are not open right now.",
     };
-  const department = cycle.departments.find((item) => item.id === departmentId);
-  if (!department)
-    return {
-      ok: false as const,
-      code: "invalid" as const,
-      error: "Choose a department from this induction cycle.",
-    };
   if (
     input &&
     typeof input === "object" &&
@@ -49,42 +41,46 @@ export function prepareInductionSubmission(
       error:
         "This form has changed. Reload the page and review the current questions before submitting.",
     };
-  const parsed = submissionSchema(department).safeParse(input);
+  const parsed = submissionSchema(cycle).safeParse(input);
   if (!parsed.success || parsed.data.leaveBlank?.trim())
     return {
       ok: false as const,
       code: "invalid" as const,
       error: "Check your answers and try again.",
     };
-  const { common, answers } = parsed.data;
-  const questionSnapshot: QuestionSnapshot[] = [
-    ...Object.entries(commonQuestionLabels).map(([id, label]) => ({
-      id,
-      label,
-      type: "common",
-    })),
-    ...department.questions
-      .filter((question) => isQuestionVisible(question, answers))
-      .map((question) => ({
-        id: question.id,
-        label: question.label,
-        type: question.type,
-        ...("options" in question
-          ? { options: question.options.map((option) => ({ ...option })) }
-          : {}),
-      })),
-  ];
+  const { common, applications } = parsed.data;
+  const commonSnapshot: QuestionSnapshot[] = Object.entries(
+    commonQuestionLabels,
+  ).map(([id, label]) => ({ id, label, type: "common" }));
   return {
     ok: true as const,
     data: {
       eventId: event.id,
       cycleId: cycle.id,
-      departmentId: department.id,
+      maxDepartments: cycle.maxDepartments,
       ...common,
       phone: common.phone.replace(/\D/g, "").slice(-10),
-      answers,
+      orcidUrl: common.orcidUrl || null,
       formVersion: cycle.version,
-      questionSnapshot,
+      applications: applications.map(({ department, answers }) => ({
+        departmentId: department.id,
+        answers,
+        questionSnapshot: [
+          ...commonSnapshot,
+          ...department.questions
+            .filter((question) => isQuestionVisible(question, answers))
+            .map((question) => ({
+              id: question.id,
+              label: question.label,
+              type: question.type,
+              ...("options" in question
+                ? {
+                    options: question.options.map((option) => ({ ...option })),
+                  }
+                : {}),
+            })),
+        ],
+      })),
     },
   };
 }

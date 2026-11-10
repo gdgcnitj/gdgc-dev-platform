@@ -45,6 +45,8 @@ export const inductionCycleSchema = z
     id,
     eventId: id,
     version: z.number().int().positive(),
+    // Counted per normalized email and roll number across every submission.
+    maxDepartments: z.number().int().min(1).max(departmentIds.length).default(2),
     departments: z
       .array(
         z.object({
@@ -135,9 +137,77 @@ export function defineInductionCycle(
   return inductionCycleSchema.parse(input);
 }
 
+// Accepts pasted profile links with or without the scheme and stores one canonical URL.
+function profileLink(
+  pattern: RegExp,
+  canonical: (handle: string) => string,
+  message: string,
+) {
+  return z
+    .string()
+    .trim()
+    .max(200, message)
+    .transform((value, ctx) => {
+      const match = value
+        .replace(/^https?:\/\//i, "")
+        .replace(/^www\./i, "")
+        .match(pattern);
+      if (!match) {
+        ctx.addIssue({ code: "custom", message });
+        return z.NEVER;
+      }
+      return canonical(match[1]);
+    });
+}
+
+// ORCID iDs end in an ISO 7064 MOD 11-2 check character.
+function validOrcid(id: string) {
+  const digits = id.replaceAll("-", "");
+  let total = 0;
+  for (const digit of digits.slice(0, -1))
+    total = (total + Number(digit)) * 2;
+  const check = (12 - (total % 11)) % 11;
+  return digits.at(-1) === (check === 10 ? "X" : String(check));
+}
+
+const orcidPattern = /^(?:orcid\.org\/)?(\d{4}-\d{4}-\d{4}-\d{3}[\dX])\/?$/i;
+
 export const commonDetailsSchema = registrationSchema
   .pick({ name: true, email: true, phone: true, branch: true })
   .extend({
+    rollNumber: registrationSchema.shape.rollNumber.transform((value) =>
+      value.toUpperCase(),
+    ),
+    linkedinUrl: profileLink(
+      /^(?:[a-z]{2}\.)?linkedin\.com\/in\/([A-Za-z0-9_%-]{3,100})\/?(?:[?#].*)?$/i,
+      (handle) => `https://www.linkedin.com/in/${handle}`,
+      "Enter your LinkedIn profile link, like linkedin.com/in/your-name",
+    ),
+    githubUrl: profileLink(
+      /^github\.com\/([A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38})\/?(?:[?#].*)?$/i,
+      (handle) => `https://github.com/${handle}`,
+      "Enter your GitHub profile link, like github.com/your-username",
+    ),
+    orcidUrl: z
+      .string()
+      .trim()
+      .max(200, "Enter your ORCID iD, like 0000-0002-1825-0097")
+      .transform((value, ctx) => {
+        if (!value) return "";
+        const id = value
+          .replace(/^https?:\/\//i, "")
+          .replace(/^www\./i, "")
+          .match(orcidPattern)?.[1]
+          .toUpperCase();
+        if (!id || !validOrcid(id)) {
+          ctx.addIssue({
+            code: "custom",
+            message: "Enter your ORCID iD, like 0000-0002-1825-0097",
+          });
+          return z.NEVER;
+        }
+        return `https://orcid.org/${id}`;
+      }),
     otherClubs: z
       .string()
       .trim()
@@ -154,8 +224,12 @@ export const commonDetailsSchema = registrationSchema
 export const commonQuestionLabels = {
   name: "Full name",
   email: "Institute email",
+  rollNumber: "Roll number",
   phone: "Phone",
   branch: "Branch",
+  linkedinUrl: "LinkedIn profile",
+  githubUrl: "GitHub profile",
+  orcidUrl: "ORCID iD (optional)",
   otherClubs: "Other clubs you are part of",
   whyGdgc: "Why do you want to join GDGC?",
 } as const;
@@ -165,8 +239,12 @@ export type CommonDraft = Record<keyof CommonDetails, string>;
 export const emptyCommonDetails: CommonDraft = {
   name: "",
   email: "",
+  rollNumber: "",
   phone: "",
   branch: "",
+  linkedinUrl: "",
+  githubUrl: "",
+  orcidUrl: "",
   otherClubs: "",
   whyGdgc: "",
 };
@@ -287,21 +365,66 @@ export function formatDepartmentAnswer(
   return value ?? "";
 }
 
-export function submissionSchema(department: InductionDepartment) {
+export function submissionSchema(cycle: InductionCycle) {
   return z
     .object({
       version: z.number().int(),
       common: commonDetailsSchema,
-      answers: departmentAnswersSchema(department),
+      // Order is the applicant's preference.
+      applications: z
+        .array(
+          z.object({ departmentId: z.string(), answers: z.unknown() }).strict(),
+        )
+        .min(1, "Choose at least one department")
+        .max(
+          cycle.maxDepartments,
+          `Choose up to ${cycle.maxDepartments} departments`,
+        )
+        .transform((applications, ctx) => {
+          const parsed: {
+            department: InductionDepartment;
+            answers: DepartmentAnswers;
+          }[] = [];
+          for (const [index, application] of applications.entries()) {
+            const department = cycle.departments.find(
+              (item) => item.id === application.departmentId,
+            );
+            const answers =
+              department &&
+              departmentAnswersSchema(department).safeParse(
+                application.answers,
+              );
+            if (
+              !department ||
+              !answers?.success ||
+              parsed.some((item) => item.department.id === department.id)
+            ) {
+              ctx.addIssue({
+                code: "custom",
+                path: [index],
+                message: "Check this department's answers",
+              });
+              return z.NEVER;
+            }
+            parsed.push({ department, answers: answers.data });
+          }
+          return parsed;
+        }),
       leaveBlank: z.string().max(200).optional(),
     })
     .strict();
 }
 
 export type InductionResult =
-  | { ok: true; status: "created" | "duplicate" }
+  | {
+      ok: true;
+      status: "created" | "duplicate";
+      // Departments from this request that are now on file.
+      departments: string[];
+      remaining: number;
+    }
   | {
       ok: false;
       error: string;
-      code?: "stale" | "closed" | "invalid" | "limited";
+      code?: "stale" | "closed" | "invalid" | "limited" | "full";
     };

@@ -20,10 +20,15 @@ export function inductionCsv(
     departmentId: string;
     name: string;
     email: string;
+    rollNumber: string;
     phone: string;
     branch: string;
+    linkedinUrl: string;
+    githubUrl: string;
+    orcidUrl: string | null;
     otherClubs: string;
     whyGdgc: string;
+    preference: number;
     answers: DepartmentAnswers;
     formVersion: number;
     questionSnapshot: QuestionSnapshot[];
@@ -35,11 +40,16 @@ export function inductionCsv(
     "Event",
     "Cycle",
     "Department",
+    "Preference",
     "Submitted at",
     "Name",
     "Institute email",
+    "Roll number",
     "Phone",
     "Branch",
+    "LinkedIn",
+    "GitHub",
+    "ORCID",
     "Other clubs",
     "Why GDGC",
     "Form version",
@@ -53,11 +63,16 @@ export function inductionCsv(
         row.eventId,
         row.cycleId,
         row.departmentId,
+        row.preference,
         row.createdAt,
         row.name,
         row.email,
+        row.rollNumber,
         row.phone,
         row.branch,
+        row.linkedinUrl,
+        row.githubUrl,
+        row.orcidUrl,
         row.otherClubs,
         row.whyGdgc,
         row.formVersion,

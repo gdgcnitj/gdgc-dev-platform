@@ -20,23 +20,40 @@ import { prepareInductionSubmission } from "./submission";
 import { csvCell, inductionCsv } from "./csv";
 
 const event = getEvent("inductions-2026")!;
-const input = () => ({
+const common = () => ({
+  name: " Test Student ",
+  email: " STUDENT@NITJ.AC.IN ",
+  rollNumber: "23103045",
+  phone: "+91 98765 43210",
+  branch: "Computer Science and Engineering",
+  linkedinUrl: "linkedin.com/in/test-student/",
+  githubUrl: "https://www.github.com/test-student",
+  orcidUrl: "",
+  otherClubs: "None",
+  whyGdgc: "I want to build things with the community.",
+});
+const webAnswers = { "web-interest": "A campus library website." };
+const aiAnswers = {
+  "ai-interest": "Campus energy forecasting.",
+  "ai-motivation": "To learn and collaborate on real projects.",
+};
+const input = (
+  applications: { departmentId: string; answers: unknown }[] = [
+    { departmentId: "web", answers: webAnswers },
+  ],
+) => ({
   version: inductions2026.version,
-  common: {
-    name: " Test Student ",
-    email: " STUDENT@NITJ.AC.IN ",
-    phone: "+91 98765 43210",
-    branch: "Computer Science and Engineering",
-    otherClubs: "None",
-    whyGdgc: "I want to build things with the community.",
-  },
-  answers: { "web-interest": "A campus library website." },
+  common: common(),
+  applications,
   leaveBlank: "",
 });
 
 test("the undated induction is first in discovery without fabricated details", () => {
   assert.equal(allEvents[0].id, event.id);
-  assert.equal(getFeaturedEvents()[0].id, event.id);
+  assert.deepEqual(
+    getFeaturedEvents().map((item) => item.id),
+    [event.id],
+  );
   assert.equal(eventDate(event), undefined);
   assert.equal(event.location?.name, undefined);
   assert.ok(compareEventListing(event, getEvent("minimol")!) < 0);
@@ -92,73 +109,151 @@ test("application sections and presets cannot attach to unrelated event forms", 
 });
 
 test("common answers normalize institute email and reject lookalike domains", () => {
-  const common = input().common;
-  assert.equal(commonDetailsSchema.parse(common).email, "student@nitj.ac.in");
+  const details = common();
+  assert.equal(commonDetailsSchema.parse(details).email, "student@nitj.ac.in");
   for (const email of [
     "student@gmail.com",
     "student@nitj.ac.in.evil.com",
     "student@fake-nitj.ac.in",
   ])
     assert.equal(
-      commonDetailsSchema.safeParse({ ...common, email }).success,
+      commonDetailsSchema.safeParse({ ...details, email }).success,
+      false,
+    );
+  for (const change of [
+    { whyGdgc: "  " },
+    { otherClubs: "  " },
+    { phone: "123" },
+    { rollNumber: "" },
+    { rollNumber: "23/103" },
+  ])
+    assert.equal(
+      commonDetailsSchema.safeParse({ ...details, ...change }).success,
       false,
     );
   assert.equal(
-    commonDetailsSchema.safeParse({ ...common, whyGdgc: "  " }).success,
-    false,
-  );
-  assert.equal(
-    commonDetailsSchema.safeParse({ ...common, otherClubs: "  " }).success,
-    false,
-  );
-  assert.equal(
-    commonDetailsSchema.safeParse({ ...common, otherClubs: "None" }).success,
+    commonDetailsSchema.safeParse({ ...details, otherClubs: "None" }).success,
     true,
   );
   assert.equal(
-    commonDetailsSchema.safeParse({ ...common, phone: "123" }).success,
-    false,
+    commonDetailsSchema.parse({ ...details, rollNumber: "23bcs045" })
+      .rollNumber,
+    "23BCS045",
   );
 });
 
-test("server submissions preserve normalized common and department-specific snapshots", () => {
-  const web = prepareInductionSubmission(event, inductions2026, "web", input());
-  assert.ok(web.ok);
-  assert.equal(web.data.email, "student@nitj.ac.in");
-  assert.equal(web.data.phone, "9876543210");
-  assert.equal(web.data.name, "Test Student");
+test("LinkedIn and GitHub are required canonical profile links; ORCID is optional and checksummed", () => {
+  const details = common();
+  const parsed = commonDetailsSchema.parse(details);
+  assert.equal(parsed.linkedinUrl, "https://www.linkedin.com/in/test-student");
+  assert.equal(parsed.githubUrl, "https://github.com/test-student");
+  assert.equal(parsed.orcidUrl, "");
   assert.equal(
-    web.data.questionSnapshot.at(-1)?.label,
-    inductions2026.departments[0].questions[0].label,
-  );
-  const aiInput = {
-    ...input(),
-    answers: {
-      "ai-interest": "Campus energy forecasting.",
-      "ai-motivation": "To learn and collaborate on real projects.",
-    },
-  };
-  const ai = prepareInductionSubmission(event, inductions2026, "ai", aiInput);
-  assert.ok(ai.ok);
-  assert.equal(ai.data.email, web.data.email);
-  assert.deepEqual(ai.data.answers, aiInput.answers);
-  aiInput.common.name = "Changed for the second department";
-  assert.equal(web.data.name, "Test Student");
-});
-
-test("unknown departments, unexpected questions, missing required answers, and honeypots fail", () => {
-  assert.equal(
-    prepareInductionSubmission(event, inductions2026, "unknown", input()).ok,
-    false,
+    commonDetailsSchema.parse({
+      ...details,
+      linkedinUrl: "https://in.linkedin.com/in/test-student?trk=share",
+    }).linkedinUrl,
+    "https://www.linkedin.com/in/test-student",
   );
   for (const change of [
-    { answers: {} },
-    { answers: { "web-interest": "" } },
-    { answers: { "web-interest": "hello", injected: "question" } },
+    { linkedinUrl: "" },
+    { linkedinUrl: "linkedin.com/company/gdgc" },
+    { linkedinUrl: "linkedin.com.evil.com/in/test" },
+    { githubUrl: "" },
+    { githubUrl: "github.com/" },
+    { githubUrl: "github.com/test--student" },
+    { githubUrl: "github.com/test-student/repo" },
+    { githubUrl: "gitlab.com/test-student" },
+    { orcidUrl: "0000-0002-1825-0098" },
+    { orcidUrl: "orcid.org/1234" },
+  ])
+    assert.equal(
+      commonDetailsSchema.safeParse({ ...details, ...change }).success,
+      false,
+      JSON.stringify(change),
+    );
+  for (const orcidUrl of [
+    "0000-0002-1825-0097",
+    "https://orcid.org/0000-0002-1825-0097/",
+  ])
+    assert.equal(
+      commonDetailsSchema.parse({ ...details, orcidUrl }).orcidUrl,
+      "https://orcid.org/0000-0002-1825-0097",
+    );
+  assert.equal(
+    commonDetailsSchema.parse({ ...details, orcidUrl: "0000-0002-9079-593x" })
+      .orcidUrl,
+    "https://orcid.org/0000-0002-9079-593X",
+  );
+});
+
+test("one submission carries up to two departments in preference order with separate snapshots", () => {
+  const prepared = prepareInductionSubmission(
+    event,
+    inductions2026,
+    input([
+      { departmentId: "ai", answers: aiAnswers },
+      { departmentId: "web", answers: webAnswers },
+    ]),
+  );
+  assert.ok(prepared.ok);
+  assert.equal(prepared.data.email, "student@nitj.ac.in");
+  assert.equal(prepared.data.phone, "9876543210");
+  assert.equal(prepared.data.name, "Test Student");
+  assert.equal(prepared.data.rollNumber, "23103045");
+  assert.equal(prepared.data.orcidUrl, null);
+  assert.equal(prepared.data.maxDepartments, 2);
+  const [ai, web] = prepared.data.applications;
+  assert.equal(ai.departmentId, "ai");
+  assert.deepEqual(ai.answers, aiAnswers);
+  assert.equal(
+    web.questionSnapshot.at(-1)?.label,
+    inductions2026.departments[0].questions[0].label,
+  );
+  assert.ok(
+    web.questionSnapshot.some(
+      (question) => question.id === "linkedinUrl" && question.type === "common",
+    ),
+  );
+});
+
+test("more than two, repeated, or unknown departments cannot submit", () => {
+  for (const applications of [
+    [],
+    [
+      { departmentId: "web", answers: webAnswers },
+      { departmentId: "ai", answers: aiAnswers },
+      { departmentId: "creatives", answers: {} },
+    ],
+    [
+      { departmentId: "web", answers: webAnswers },
+      { departmentId: "web", answers: webAnswers },
+    ],
+    [{ departmentId: "unknown", answers: {} }],
+  ])
+    assert.equal(
+      prepareInductionSubmission(event, inductions2026, input(applications))
+        .ok,
+      false,
+    );
+});
+
+test("unexpected questions, missing required answers, and honeypots fail", () => {
+  for (const change of [
+    { applications: [{ departmentId: "web", answers: {} }] },
+    { applications: [{ departmentId: "web", answers: { "web-interest": "" } }] },
+    {
+      applications: [
+        {
+          departmentId: "web",
+          answers: { "web-interest": "hello", injected: "question" },
+        },
+      ],
+    },
     { leaveBlank: "bot" },
   ])
     assert.equal(
-      prepareInductionSubmission(event, inductions2026, "web", {
+      prepareInductionSubmission(event, inductions2026, {
         ...input(),
         ...change,
       }).ok,
@@ -167,26 +262,21 @@ test("unknown departments, unexpected questions, missing required answers, and h
 });
 
 test("stale versions, drafts, closed windows, and mismatched cycles cannot submit", () => {
-  const stale = prepareInductionSubmission(event, inductions2026, "web", {
+  const stale = prepareInductionSubmission(event, inductions2026, {
     ...input(),
     version: 0,
   });
   assert.ok(!stale.ok && stale.code === "stale");
   for (const status of ["completed", "cancelled", "postponed"] as const)
     assert.equal(
-      prepareInductionSubmission(
-        { ...event, status },
-        inductions2026,
-        "web",
-        input(),
-      ).ok,
+      prepareInductionSubmission({ ...event, status }, inductions2026, input())
+        .ok,
       false,
     );
   assert.equal(
     prepareInductionSubmission(
       { ...event, visibility: "draft" },
       inductions2026,
-      "web",
       input(),
     ).ok,
     false,
@@ -195,7 +285,6 @@ test("stale versions, drafts, closed windows, and mismatched cycles cannot submi
     prepareInductionSubmission(
       event,
       { ...inductions2026, eventId: "other" },
-      "web",
       input(),
     ).ok,
     false,
@@ -211,7 +300,6 @@ test("stale versions, drafts, closed windows, and mismatched cycles cannot submi
     prepareInductionSubmission(
       { ...event, registration },
       inductions2026,
-      "web",
       input(),
       Date.parse(registration.closesAt),
     ).ok,
@@ -219,22 +307,30 @@ test("stale versions, drafts, closed windows, and mismatched cycles cannot submi
   );
 });
 
+// Mirrors the stored row shape the export reads.
+function storedRows(prepared: ReturnType<typeof prepareInductionSubmission>) {
+  assert.ok(prepared.ok);
+  const { applications, maxDepartments: _max, ...common } = prepared.data;
+  return applications.map((application, index) => ({
+    ...common,
+    ...application,
+    id: `test-${index}`,
+    preference: index + 1,
+    createdAt: "2026-11-10T10:00:00Z",
+  }));
+}
+
 test("CSV preserves multiline responses and original prompts while neutralizing formulas", () => {
   assert.equal(csvCell('a,"b"\nc'), '"a,""b""\nc"');
   for (const value of ["=cmd()", " +1", "-1", "@SUM(1)", "\tformula"])
     assert.ok(csvCell(value).startsWith("\"'"));
-  const prepared = prepareInductionSubmission(
-    event,
-    inductions2026,
-    "web",
-    input(),
+  const csv = inductionCsv(
+    storedRows(prepareInductionSubmission(event, inductions2026, input())),
   );
-  assert.ok(prepared.ok);
-  const csv = inductionCsv([
-    { ...prepared.data, id: "test", createdAt: "2026-11-10T10:00:00Z" },
-  ]);
   assert.ok(csv.includes(inductions2026.departments[0].questions[0].label));
   assert.ok(csv.includes("A campus library website."));
+  assert.ok(csv.includes("https://github.com/test-student"));
+  assert.ok(csv.includes('"Preference"'));
 });
 
 const creatives = inductions2026.departments.find(
@@ -342,10 +438,11 @@ test("new question definitions reject duplicate options and invalid conditional 
 });
 
 test("stale AI tabs receive a version error even when the current form has new required fields", () => {
-  const stale = prepareInductionSubmission(event, inductions2026, "ai", {
-    ...input(),
+  const stale = prepareInductionSubmission(event, inductions2026, {
+    ...input([
+      { departmentId: "ai", answers: { "ai-interest": "Old prompt answer" } },
+    ]),
     version: 1,
-    answers: { "ai-interest": "Old prompt answer" },
   });
   assert.ok(!stale.ok && stale.code === "stale");
 });
@@ -354,29 +451,23 @@ test("ranking snapshots and CSV retain human-readable labels and exact order", (
   const prepared = prepareInductionSubmission(
     event,
     inductions2026,
-    "creatives",
-    { ...input(), answers: creativeAnswers() },
+    input([{ departmentId: "creatives", answers: creativeAnswers() }]),
   );
   assert.ok(prepared.ok);
+  const [creativeApplication] = prepared.data.applications;
   assert.equal(
-    prepared.data.questionSnapshot.find(
+    creativeApplication.questionSnapshot.find(
       (question) => question.type === "ranking",
     )?.options?.length,
     5,
   );
   assert.equal(
-    prepared.data.questionSnapshot.some(
+    creativeApplication.questionSnapshot.some(
       (question) => question.id === "creative-social-content",
     ),
     false,
   );
-  const csv = inductionCsv([
-    {
-      ...prepared.data,
-      id: "creative-test",
-      createdAt: "2026-11-10T10:00:00Z",
-    },
-  ]);
+  const csv = inductionCsv(storedRows(prepared));
   assert.ok(csv.includes("1. Video editing"));
   assert.ok(csv.includes("5. Art and decoration"));
   assert.ok(csv.includes("No"));

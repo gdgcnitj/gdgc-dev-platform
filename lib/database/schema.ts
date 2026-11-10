@@ -11,16 +11,25 @@ export const inductionSubmission = pgTable("induction_submission", {
   departmentId: text("department_id").notNull(),
   name: text().notNull(),
   email: text().notNull(),
+  rollNumber: text("roll_number").notNull(),
   phone: text().notNull(),
   branch: text().notNull(),
+  linkedinUrl: text("linkedin_url").notNull(),
+  githubUrl: text("github_url").notNull(),
+  orcidUrl: text("orcid_url"),
   otherClubs: text("other_clubs").notNull(),
   whyGdgc: text("why_gdgc").notNull(),
+  // 1 is the applicant's first choice within the cycle.
+  preference: integer().notNull(),
   answers: jsonb().$type<DepartmentAnswers>().notNull(),
   formVersion: integer("form_version").notNull(),
   questionSnapshot: jsonb("question_snapshot").$type<QuestionSnapshot[]>().notNull(),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
 }, (table) => [
   unique("induction_submission_cycle_department_email_unique").on(table.cycleId, table.departmentId, table.email),
+  unique("induction_submission_cycle_department_roll_unique").on(table.cycleId, table.departmentId, table.rollNumber),
+  index("induction_submission_cycle_email_lookup").on(table.cycleId, table.email),
+  index("induction_submission_cycle_roll_lookup").on(table.cycleId, table.rollNumber),
   index("induction_submission_cycle_department_lookup").on(table.cycleId, table.departmentId, table.createdAt),
 ]);
 

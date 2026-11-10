@@ -17,7 +17,8 @@ export default async function ApplicationLayout({
   params: Promise<{ id: string }>;
 }) {
   const event = getEvent((await params).id);
-  if (!event || !getEventInduction(event)) notFound();
+  const cycle = event && getEventInduction(event);
+  if (!event || !cycle) notFound();
   return (
     <HomeMotion>
       <div className="induction-application club-hero-field">
@@ -25,7 +26,10 @@ export default async function ApplicationLayout({
           <Link href={`/events/${event.slug}`} className="club-back-link">
             <ArrowLeft size={16} aria-hidden="true" /> Back to {event.title}
           </Link>
-          <InductionFlowProvider key={event.id}>
+          <InductionFlowProvider
+            key={event.id}
+            storageKey={`gdgc-induction:${cycle.id}:v${cycle.version}`}
+          >
             {children}
           </InductionFlowProvider>
         </div>

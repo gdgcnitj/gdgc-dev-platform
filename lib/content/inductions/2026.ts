@@ -12,7 +12,7 @@ const question = (id: string, label: string) => ({
 export const inductions2026 = defineInductionCycle({
   id: "inductions-2026",
   eventId: "inductions-2026",
-  version: 2,
+  version: 3,
   departments: [
     {
       id: "web",

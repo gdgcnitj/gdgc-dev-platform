@@ -1,5 +1,5 @@
 {
-  "id": "a54b23a0-3cf2-4c99-b380-3367561a585f",
+  "id": "1750423c-b785-470f-bcf6-a33775345f30",
   "prevId": "464b7d50-d006-4525-b25d-dcfab1a9cd3b",
   "version": "7",
   "dialect": "postgresql",
@@ -291,6 +291,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "roll_number": {
+          "name": "roll_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "phone": {
           "name": "phone",
           "type": "text",
@@ -303,6 +309,24 @@
           "primaryKey": false,
           "notNull": true
         },
+        "linkedin_url": {
+          "name": "linkedin_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "github_url": {
+          "name": "github_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "orcid_url": {
+          "name": "orcid_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "other_clubs": {
           "name": "other_clubs",
           "type": "text",
@@ -312,6 +336,12 @@
         "why_gdgc": {
           "name": "why_gdgc",
           "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "preference": {
+          "name": "preference",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -342,6 +372,48 @@
         }
       },
       "indexes": {
+        "induction_submission_cycle_email_lookup": {
+          "name": "induction_submission_cycle_email_lookup",
+          "columns": [
+            {
+              "expression": "cycle_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "induction_submission_cycle_roll_lookup": {
+          "name": "induction_submission_cycle_roll_lookup",
+          "columns": [
+            {
+              "expression": "cycle_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "roll_number",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
         "induction_submission_cycle_department_lookup": {
           "name": "induction_submission_cycle_department_lookup",
           "columns": [
@@ -380,6 +452,15 @@
             "cycle_id",
             "department_id",
             "email"
+          ]
+        },
+        "induction_submission_cycle_department_roll_unique": {
+          "name": "induction_submission_cycle_department_roll_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "cycle_id",
+            "department_id",
+            "roll_number"
           ]
         }
       },

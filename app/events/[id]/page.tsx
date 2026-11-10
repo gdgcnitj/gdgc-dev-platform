@@ -84,7 +84,11 @@ export default async function EventPage({ params }: Props) {
 
   return (
     <HomeMotion>
-      <div className="event-page" data-tone={event.color}>
+      <div
+        className="event-page"
+        data-tone={event.color}
+        data-event-kind={event.kind}
+      >
         <section className="club-hero-field" aria-labelledby="event-title">
           <div className="club-container event-header">
             <Link href="/events" className="club-back-link">

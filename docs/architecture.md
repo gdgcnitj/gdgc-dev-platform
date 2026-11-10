@@ -10,7 +10,7 @@ Pages use server components unless they declare `"use client"`.
 | `app/template.tsx`                             | Short fade when moving between pages. The header stays still.                                              |
 | `app/alumni/`                                  | Alumni page, grouped by graduating batch                                                                   |
 | `app/events/`                                  | Searchable archive, shared event page, challenge archive, scoped styles, and registration server action    |
-| `app/events/[id]/apply/`                       | Dynamic induction choices, department forms, shared client flow, and submission server action              |
+| `app/events/[id]/apply/`                       | Single induction application, legacy department redirects, and submission server action                    |
 | `app/forms/mobile26/`                          | Unlisted app-dev response form. It is not linked from navigation or events.                                |
 | `app/(auth)/`                                  | Sign-in and sign-up pages                                                                                  |
 | `app/(dashboard)/`                             | Dashboard pages                                                                                            |
@@ -22,7 +22,7 @@ Pages use server components unless they declare `"use client"`.
 | `lib/content/home.ts`                          | Faculty coordinators, department leads, gallery items, common questions, and community links               |
 | `lib/content/departments.ts`                   | Serializable department identities shared by content and validation                                        |
 | `lib/content/inductions/`, `lib/inductions/`   | Versioned induction questions/expectations, validation, transactional submission storage, and tests        |
-| `components/inductions/`                       | Department cards, expectations disclosures, and three-step interest forms                                  |
+| `components/inductions/`                       | Department cards, expectations sheet, and the four-step application flow                                   |
 | `scripts/export-inductions.ts`                 | Operator-only read-only CSV export of induction responses                                                  |
 | `lib/content/events/`                          | Validated event registry and one content file per event                                                    |
 | `lib/events/`                                  | Event schema and types, authoring presets, display helpers, registration availability checks, and tests    |
@@ -53,10 +53,11 @@ explicit event state, and known event end time. Event registration uses the same
 database and stores one row per sign-up. Event IDs stay stable independently of
 URL slugs; the migration preserves all existing IDs and URLs.
 Induction applications use a separate table with one complete snapshot per cycle,
-department, and normalized email. The shared application layout keeps drafts in
-client memory; there is no sign-in, public lookup, or editing of saved responses.
+department, and normalized email, at most two departments per email or roll number.
+The shared application layout keeps the draft in client memory and tab session
+storage; there is no sign-in, public lookup, or editing of saved responses.
 Server submissions validate the current version and availability, and PostgreSQL
-enforces duplicates and transactional attempt budgets. See [induction content](induction-content.md).
+enforces duplicates, the department cap, and transactional attempt budgets. See [induction content](induction-content.md).
 
 The app reads `DATABASE_URL` when it creates the database connection pool.
 A remote database also uses the CA certificate at `DATABASE_CA_PATH`.

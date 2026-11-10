@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { test } from "node:test";
 import type { PreparedSubmission } from "./submission";
-import { and, eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 
 test(
-  "PostgreSQL saves separate department snapshots, deduplicates concurrent submits, and enforces attempt budgets",
+  "PostgreSQL saves preference-ordered snapshots, caps departments per email or roll number, and enforces attempt budgets",
   {
     skip:
       !process.env.INDUCTION_TEST_DATABASE_URL &&
@@ -25,131 +25,136 @@ test(
     const { storeInductionSubmission } = await import("./store");
     const cycleId = `test-${randomUUID()}`;
     const scope = `induction:${cycleId}`;
-    const hashes = {
+    const hashes = () => ({
       address: `address-${randomUUID()}`,
       email: `email-${randomUUID()}`,
-    };
-    const data: PreparedSubmission = {
-      eventId: "test-event",
-      cycleId,
-      departmentId: "web",
-      name: "Test Student",
-      email: "test@nitj.ac.in",
-      phone: "9876543210",
-      branch: "Other",
-      otherClubs: "None",
-      whyGdgc: "Testing an isolated submission.",
-      answers: { interest: "First department answer" },
-      formVersion: 1,
+      roll: `roll-${randomUUID()}`,
+    });
+    const application = (
+      departmentId: PreparedSubmission["applications"][number]["departmentId"],
+      answer = `${departmentId} answer`,
+    ) => ({
+      departmentId,
+      answers: { interest: answer },
       questionSnapshot: [
         { id: "interest", label: "Original question", type: "textarea" },
       ],
+    });
+    const data: PreparedSubmission = {
+      eventId: "test-event",
+      cycleId,
+      maxDepartments: 2,
+      name: "Test Student",
+      email: "test@nitj.ac.in",
+      rollNumber: "23103045",
+      phone: "9876543210",
+      branch: "Other",
+      linkedinUrl: "https://www.linkedin.com/in/test-student",
+      githubUrl: "https://github.com/test-student",
+      orcidUrl: null,
+      otherClubs: "None",
+      whyGdgc: "Testing an isolated submission.",
+      formVersion: 1,
+      applications: [application("web")],
     };
+    const rows = () =>
+      db
+        .select()
+        .from(inductionSubmission)
+        .where(eq(inductionSubmission.cycleId, cycleId))
+        .orderBy(asc(inductionSubmission.preference));
     try {
+      const student = hashes();
       const concurrent = await Promise.all([
-        storeInductionSubmission(data, hashes),
-        storeInductionSubmission(data, hashes),
+        storeInductionSubmission(data, student),
+        storeInductionSubmission(data, student),
       ]);
-      assert.equal(
-        concurrent.filter((result) => result.ok && result.status === "created")
-          .length,
-        1,
+      assert.deepEqual(
+        concurrent.map((result) => result.ok && result.status).sort(),
+        ["created", "duplicate"],
       );
-      assert.equal(
-        concurrent.filter(
-          (result) => result.ok && result.status === "duplicate",
-        ).length,
-        1,
-      );
+      assert.ok(concurrent.every((result) => result.ok && result.remaining === 1));
+
+      // Adding a department later continues the preference order.
       const second = await storeInductionSubmission(
         {
           ...data,
-          departmentId: "ai",
           name: "Updated name",
-          answers: { interest: "Second department answer" },
+          applications: [application("web"), application("ai", "Second")],
         },
-        hashes,
+        student,
       );
-      assert.ok(second.ok && second.status === "created");
-      const rows = await db
-        .select()
-        .from(inductionSubmission)
-        .where(eq(inductionSubmission.cycleId, cycleId));
-      assert.equal(rows.length, 2);
-      assert.equal(
-        rows.find((row) => row.departmentId === "web")?.name,
-        "Test Student",
+      assert.deepEqual(second, {
+        ok: true,
+        status: "created",
+        departments: ["web", "ai"],
+        remaining: 0,
+      });
+      const saved = await rows();
+      assert.deepEqual(
+        saved.map((row) => [row.departmentId, row.preference, row.name]),
+        [
+          ["web", 1, "Test Student"],
+          ["ai", 2, "Updated name"],
+        ],
       );
-      assert.equal(
-        rows.find((row) => row.departmentId === "ai")?.answers.interest,
-        "Second department answer",
-      );
-      assert.equal(rows[0].questionSnapshot[0].label, "Original question");
+      assert.equal(saved[0].questionSnapshot[0].label, "Original question");
+      assert.equal(saved[0].orcidUrl, null);
 
-      // One student can complete all eight departments within the email budget.
-      for (const departmentId of [
-        "ui",
-        "cp",
-        "mobile",
-        "wit",
-        "devsecops",
-        "creatives",
-      ] as const)
-        assert.deepEqual(
-          await storeInductionSubmission(
-            {
-              ...data,
-              departmentId,
-              ...(departmentId === "creatives"
-                ? {
-                    answers: {
-                      interest: ["video-editing", "poster-designing"],
-                    },
-                  }
-                : {}),
-            },
-            hashes,
-          ),
-          { ok: true, status: "created" },
+      // The cap applies to the same email or the same roll number.
+      for (const change of [
+        { rollNumber: "99999999" },
+        { email: "other@nitj.ac.in" },
+      ]) {
+        const third = await storeInductionSubmission(
+          { ...data, ...change, applications: [application("ui")] },
+          hashes(),
         );
-      const [creativeRow] = await db
-        .select()
-        .from(inductionSubmission)
-        .where(
-          and(
-            eq(inductionSubmission.cycleId, cycleId),
-            eq(inductionSubmission.departmentId, "creatives"),
+        assert.ok(!third.ok && third.code === "full");
+      }
+      assert.equal((await rows()).length, 2);
+
+      // Concurrent attempts for different departments cannot exceed the cap.
+      const racer = {
+        ...data,
+        email: "racer@nitj.ac.in",
+        rollNumber: "23103046",
+      };
+      const racerHashes = hashes();
+      await storeInductionSubmission(
+        { ...racer, applications: [application("cp")] },
+        racerHashes,
+      );
+      const race = await Promise.all(
+        (["mobile", "wit", "devsecops"] as const).map((departmentId) =>
+          storeInductionSubmission(
+            { ...racer, applications: [application(departmentId)] },
+            racerHashes,
           ),
-        );
-      assert.deepEqual(creativeRow.answers.interest, [
-        "video-editing",
-        "poster-designing",
-      ]);
+        ),
+      );
+      assert.equal(race.filter((result) => result.ok).length, 1);
+      assert.equal(
+        (await rows()).filter((row) => row.email === racer.email).length,
+        2,
+      );
+
+      const limitedHashes = hashes();
       await db.insert(registrationAttempt).values(
         Array.from({ length: 24 }, () => ({
           eventId: scope,
-          clientHash: hashes.email,
+          clientHash: limitedHashes.email,
         })),
       );
       const limited = await storeInductionSubmission(
-        { ...data, departmentId: "web" },
-        hashes,
+        {
+          ...data,
+          email: "limited@nitj.ac.in",
+          rollNumber: "23103047",
+        },
+        limitedHashes,
       );
       assert.ok(!limited.ok && limited.code === "limited");
-      assert.equal(
-        (
-          await db
-            .select()
-            .from(inductionSubmission)
-            .where(
-              and(
-                eq(inductionSubmission.cycleId, cycleId),
-                eq(inductionSubmission.departmentId, "web"),
-              ),
-            )
-        ).length,
-        1,
-      );
     } finally {
       await db
         .delete(inductionSubmission)

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, GripVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { AnswerValue, InductionQuestion } from "@/lib/inductions/schema";
@@ -18,9 +18,46 @@ function Ranking({
 }) {
   const [dragged, setDragged] = useState<string>();
   const [announcement, setAnnouncement] = useState("");
+  const list = useRef<HTMLOListElement>(null);
+  const previousPositions = useRef(new Map<string, number>());
+  const movement = useRef<Animation[]>([]);
+
+  useLayoutEffect(() => {
+    const previous = previousPositions.current;
+    previousPositions.current = new Map();
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    list.current
+      ?.querySelectorAll<HTMLElement>("[data-option-id]")
+      .forEach((item) => {
+        const oldTop = previous.get(item.dataset.optionId!);
+        if (oldTop === undefined) return;
+        const distance = oldTop - item.getBoundingClientRect().top;
+        if (distance && item.animate)
+          movement.current.push(
+            item.animate(
+              [
+                { transform: `translateY(${distance}px)` },
+                { transform: "translateY(0)" },
+              ],
+              { duration: 190, easing: "cubic-bezier(0.2, 0, 0, 1)" },
+            ),
+          );
+      });
+    return () => {
+      movement.current.forEach((animation) => animation.cancel());
+      movement.current = [];
+    };
+  }, [value]);
   function move(optionId: string, to: number, control?: "up" | "down") {
     const from = value.indexOf(optionId);
     if (from < 0 || to < 0 || to >= value.length || from === to) return;
+    movement.current.forEach((animation) => animation.cancel());
+    previousPositions.current = new Map(
+      Array.from(
+        list.current?.querySelectorAll<HTMLElement>("[data-option-id]") ?? [],
+        (item) => [item.dataset.optionId!, item.getBoundingClientRect().top],
+      ),
+    );
     const next = [...value];
     next.splice(from, 1);
     next.splice(to, 0, optionId);
@@ -42,12 +79,17 @@ function Ranking({
   }
   return (
     <>
-      <ol className="induction-ranking" aria-label="Preference order">
+      <ol
+        ref={list}
+        className="induction-ranking"
+        aria-label="Preference order"
+      >
         {value.map((optionId, index) => {
           const option = question.options.find((item) => item.id === optionId)!;
           return (
             <li
               key={optionId}
+              data-option-id={optionId}
               data-dragging={dragged === optionId ? "" : undefined}
               onDragOver={(event) => {
                 if (dragged) event.preventDefault();
@@ -141,7 +183,7 @@ export function QuestionInput({
       <fieldset
         id={id}
         tabIndex={-1}
-        className="club-form-field induction-question-group"
+        className="club-form-field induction-question-group induction-question"
         data-invalid={error ? "" : undefined}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy}
@@ -192,7 +234,10 @@ export function QuestionInput({
     ) => onChange(event.target.value),
   };
   return (
-    <div className="club-form-field" data-invalid={error ? "" : undefined}>
+    <div
+      className="club-form-field induction-question"
+      data-invalid={error ? "" : undefined}
+    >
       <label htmlFor={id}>{label}</label>
       {question.type === "text" ? (
         <input {...props} type="text" />
