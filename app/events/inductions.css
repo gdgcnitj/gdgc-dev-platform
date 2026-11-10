@@ -442,7 +442,7 @@
   line-height: 1.3;
   margin: 2px 0 6px;
 }
-.induction-pick-text > span {
+.induction-pick-text > span:not(.induction-pick-badge, .induction-received) {
   display: block;
   font-size: 13px;
   line-height: 1.55;
@@ -498,6 +498,15 @@
 .induction-pick:has(.induction-received) .induction-pick-mark {
   background: #137333;
   border-color: #137333;
+}
+.induction-pick-text > .induction-pick-badge,
+.induction-pick-text > .induction-received {
+  margin-top: 10px;
+}
+.induction-pick-text > .induction-received {
+  display: flex;
+  min-height: 0;
+  font-size: 13px;
 }
 .induction-pick-badge {
   display: inline-flex;
@@ -558,6 +567,10 @@
   font-size: 15px;
   color: var(--club-muted);
   line-height: 1.65;
+}
+/* A neighbour's hint makes the row taller; keep label and input at the top. */
+.induction-form-fields .club-form-field {
+  align-content: start;
 }
 .induction-form-fields {
   display: grid;
@@ -926,5 +939,358 @@
       transform: translateY(40px);
       opacity: 0;
     }
+  }
+}
+
+/* Single application banner, leads, PDF links, and reassurance copy. */
+.induction-apply-banner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 22px;
+  padding: 22px 26px;
+  margin-bottom: 24px;
+  border: 1px solid var(--club-line);
+  border-radius: 22px;
+  background:
+    radial-gradient(120% 140% at 0% 0%, #e8f0fe 0%, transparent 55%),
+    var(--club-paper);
+}
+.induction-apply-banner h3 {
+  margin: 0 0 4px;
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.induction-apply-banner p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--club-muted);
+}
+.induction-apply-banner .club-button {
+  height: auto;
+  min-height: 46px;
+  padding: 12px 20px;
+  font-size: 14px;
+}
+.induction-apply-mark {
+  width: 56px;
+  height: auto;
+  overflow: visible;
+}
+.induction-lead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: -4px 0 18px !important;
+  font-size: 13px !important;
+  color: var(--club-muted);
+}
+.induction-lead strong {
+  color: var(--club-ink);
+  font-weight: 500;
+}
+.induction-lead-photo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--club-tone-soft, #e8f0fe);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--club-ink);
+}
+.induction-pdf-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--club-muted);
+  text-decoration: none;
+  border-radius: 4px;
+}
+.induction-pdf-link:hover {
+  color: var(--club-action);
+}
+.induction-pdf-link:focus-visible,
+.induction-pdf-button:focus-visible {
+  outline: 2px solid var(--club-action);
+  outline-offset: 4px;
+}
+.induction-pick-footer .induction-pdf-link {
+  font-size: 13px;
+}
+.induction-pick-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.induction-pick-links .induction-expectations-trigger,
+.induction-pick-links .induction-expectations-pending {
+  margin-left: 0;
+}
+.induction-intro-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 22px;
+  margin-top: 4px;
+}
+.induction-reassurance {
+  margin: 0 0 22px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #e6f4ea;
+  color: #0d652d;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.induction-pick-grid + .induction-reassurance,
+.induction-swap + .induction-reassurance {
+  margin: 18px 0 0;
+}
+.induction-swap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.induction-sheet-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 28px;
+  border-top: 1px solid var(--club-line);
+  font-size: 13px;
+  color: var(--club-muted);
+}
+.induction-pdf-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--club-action);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.induction-pdf-button:hover {
+  background: #185abc;
+}
+.induction-progress {
+  position: relative;
+}
+.induction-progress::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  width: calc(var(--progress, 0) * 100%);
+  border-radius: 2px;
+  background: var(--club-action);
+}
+.success-mark {
+  margin-bottom: 16px;
+  overflow: visible;
+}
+@media (max-width: 700px) {
+  .induction-apply-banner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    padding: 20px;
+  }
+  .induction-apply-banner .club-button {
+    justify-self: start;
+  }
+  .induction-sheet-footer {
+    padding: 14px 20px;
+  }
+  .induction-sheet-footer > span {
+    display: none;
+  }
+  .induction-sheet-footer {
+    justify-content: flex-end;
+  }
+}
+
+/* Micro-interactions. Every movement is skipped when reduced motion is requested. */
+@media (prefers-reduced-motion: no-preference) {
+  .induction-progress::after {
+    transition: width 420ms var(--club-ease);
+  }
+  .induction-step-content[data-direction="forward"] {
+    animation: induction-step-forward 260ms var(--club-ease);
+  }
+  .induction-step-content[data-direction="back"] {
+    animation: induction-step-back 260ms var(--club-ease);
+  }
+  .induction-pick[data-selected] .induction-pick-mark {
+    animation: induction-pop 260ms var(--club-ease);
+  }
+  .induction-pick[data-selected] .induction-pick-badge,
+  .induction-pick[data-selected] .induction-pdf-link {
+    animation: induction-content-in 220ms var(--club-ease);
+  }
+  .induction-pick:not([data-disabled]):hover {
+    border-color: #a8c7fa;
+  }
+  .induction-pick .induction-department-icon {
+    transition: transform 200ms var(--club-ease);
+  }
+  .induction-pick[data-selected] .induction-department-icon {
+    transform: rotate(-4deg) scale(1.06);
+  }
+  .induction-swap[data-spun="a"] svg {
+    animation: induction-spin-a 360ms var(--club-ease);
+  }
+  .induction-swap[data-spun="b"] svg {
+    animation: induction-spin-b 360ms var(--club-ease);
+  }
+  .induction-reassurance {
+    animation: induction-content-in 240ms var(--club-ease);
+  }
+  .induction-form-fields .club-form-field[data-invalid] :is(input, select, textarea) {
+    animation: induction-nudge 280ms ease-in-out;
+  }
+  .induction-pdf-link svg,
+  .induction-pdf-button svg {
+    transition: transform 180ms var(--club-ease);
+  }
+  .induction-pdf-link:is(:hover, :focus-visible) svg,
+  .induction-pdf-button:is(:hover, :focus-visible) svg {
+    transform: translateY(2px);
+  }
+  .induction-expectations-trigger svg {
+    transition: transform 180ms var(--club-ease);
+  }
+  .induction-expectations-trigger:is(:hover, :focus-visible) svg {
+    transform: rotate(-8deg) scale(1.08);
+  }
+  .induction-sheet[open] .induction-expectation-content li {
+    animation: induction-content-in 260ms var(--club-ease) backwards;
+    animation-delay: calc(var(--i, 0) * 22ms + 90ms);
+  }
+  .induction-lead-photo {
+    transition: transform 200ms var(--club-ease);
+  }
+  .induction-department:hover .induction-lead-photo {
+    transform: scale(1.08);
+  }
+  .success-ring {
+    stroke-dasharray: 139;
+    stroke-dashoffset: 139;
+    animation: induction-draw 520ms var(--club-ease) 80ms forwards;
+    transform: rotate(-90deg);
+    transform-origin: center;
+  }
+  .success-check {
+    stroke-dasharray: 32;
+    stroke-dashoffset: 32;
+    animation: induction-draw 320ms var(--club-ease) 520ms forwards;
+  }
+  .success-spark {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: induction-spark 520ms var(--club-ease) forwards;
+    animation-delay: calc(var(--i) * 50ms + 700ms);
+  }
+  .induction-apply-banner:hover .bracket-bar {
+    animation: induction-bracket-wiggle 420ms var(--club-ease);
+    animation-delay: calc(var(--i) * 45ms);
+  }
+  .bracket-bar {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  @supports (animation-timeline: view()) {
+    .induction-apply-mark .bracket-bar {
+      animation: induction-bracket-in linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry calc(70% + var(--i) * 6%);
+    }
+  }
+}
+
+@keyframes induction-step-forward {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+}
+@keyframes induction-step-back {
+  from {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+}
+@keyframes induction-pop {
+  0% {
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.18);
+  }
+}
+@keyframes induction-spin-a {
+  from {
+    transform: rotate(-180deg);
+  }
+}
+@keyframes induction-spin-b {
+  from {
+    transform: rotate(180deg);
+  }
+}
+@keyframes induction-nudge {
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+}
+@keyframes induction-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes induction-spark {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+}
+@keyframes induction-bracket-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) rotate(-12deg) scale(0.7);
+  }
+}
+@keyframes induction-bracket-wiggle {
+  50% {
+    transform: translateY(-2px) rotate(-6deg);
   }
 }

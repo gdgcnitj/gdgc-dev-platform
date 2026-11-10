@@ -41,7 +41,7 @@ export const inductions = defineEvent({
       title: "What happens next",
       navLabel: "Next steps",
       items: [
-        "Express your interest. Submit a separate form for each department you’d like to join.",
+        "Express your interest. Apply once and choose up to two departments, in order of preference.",
         "Shortlisting. The team reviews your responses before the next round.",
         "Meet us in person. Shortlisted applicants move to an offline round or interview. Date, time, and venue will be announced.",
         "Meet the new team. We announce the induction results after the selection process.",
@@ -56,7 +56,7 @@ export const inductions = defineEvent({
         {
           question: "Can I apply to more than one department?",
           answer:
-            "Yes. Each department has its own interest form. Your common details carry over while you move between forms in the application flow, and you submit to each department separately.",
+            "Yes, up to two. You fill in your details once, choose one or two departments in order of preference, and answer a few questions for each. If you apply to one now, you can add a second later with the same email and roll number.",
         },
         {
           question: "Does submitting a form confirm my place?",

@@ -73,10 +73,22 @@ the supplied flat SVG is original department-themed artwork, not an event photo.
 
 ## Application behavior
 
-Department cards on the event page link to `/events/<slug>/apply?department=<id>`,
-which preselects that department. Older `/events/<slug>/apply/<department>` links
-redirect there. Each card's "See what's expected" button opens the department's
-expectations in a side sheet (a bottom sheet on phones), so the grid stays even.
+The event page has one "Start your application" button. Department cards are for
+reading: each shows its lead, a "See what's expected" button that opens a side
+sheet (a bottom sheet on phones), and a PDF download. The site tells applicants
+that these are expectations, not requirements. `/events/<slug>/apply?department=<id>`
+preselects a department, and older `/events/<slug>/apply/<department>` links
+redirect there. In the application, a chosen department's tile and question page
+also offer its expectations and PDF.
+
+## Expectation PDFs
+
+`npm run inductions:pdfs` builds one A4 PDF per department with expectations into
+`public/inductions/<cycle>/`, using XeLaTeX, the chapter logo, and Instrument Sans
+(`scripts/induction-expectations/`, OFL-licensed). Each PDF shows the department,
+its lead, its preview, and its expectations. Departments without expectations get
+no PDF. Rebuild after editing expectations, previews, titles, or leads; a unit test
+compares `manifest.json` with the current content and fails until you do.
 
 One application has four steps:
 

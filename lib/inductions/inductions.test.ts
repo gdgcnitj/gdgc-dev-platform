@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { test } from "node:test";
+import { expectationsDigest } from "@/scripts/induction-expectations/digest";
 import { departmentIds } from "@/lib/content/departments";
 import { allEvents, getEvent, getFeaturedEvents } from "@/lib/content/events";
 import { inductions2026 } from "@/lib/content/inductions/2026";
@@ -18,6 +21,10 @@ import {
 } from "./schema";
 import { prepareInductionSubmission } from "./submission";
 import { csvCell, inductionCsv } from "./csv";
+import {
+  expectationsManifestPath,
+  expectationsPdfHref,
+} from "./expectations-pdf";
 
 const event = getEvent("inductions-2026")!;
 const common = () => ({
@@ -471,4 +478,29 @@ test("ranking snapshots and CSV retain human-readable labels and exact order", (
   assert.ok(csv.includes("1. Video editing"));
   assert.ok(csv.includes("5. Art and decoration"));
   assert.ok(csv.includes("No"));
+});
+
+test("expectation PDFs exist for supplied expectations and match the current content", () => {
+  const manifest = JSON.parse(
+    readFileSync(
+      join("public", expectationsManifestPath(inductions2026.id)),
+      "utf8",
+    ),
+  );
+  for (const department of inductions2026.departments) {
+    const pdf = join(
+      "public",
+      expectationsPdfHref(inductions2026.id, department.id),
+    );
+    if (!department.expectations) {
+      assert.equal(department.id in manifest, false);
+      continue;
+    }
+    assert.ok(existsSync(pdf), `${pdf} is missing`);
+    assert.equal(
+      manifest[department.id],
+      expectationsDigest(department),
+      `${department.id} expectations changed; run npm run inductions:pdfs`,
+    );
+  }
 });

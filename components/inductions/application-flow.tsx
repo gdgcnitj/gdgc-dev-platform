@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   ArrowLeft,
   ArrowRight,
+  ArrowUpDown,
   Check,
   CheckCircle2,
   LoaderCircle,
@@ -27,6 +28,8 @@ import {
 } from "@/lib/inductions/schema";
 import { QuestionInput } from "./question-input";
 import { Expectations } from "./expectations";
+import { ExpectationsPdfLink } from "./pdf-link";
+import { SuccessMark } from "./bracket-mark";
 import { DepartmentIcon } from "./department-icon";
 import { useInductionFlow } from "./flow-provider";
 
@@ -125,6 +128,8 @@ export function ApplicationFlow({
   }>();
   const [leaveBlank, setLeaveBlank] = useState("");
   const heading = useRef<HTMLHeadingElement>(null);
+  // Steps slide in from the side the applicant is moving towards.
+  const [direction, setDirection] = useState<"forward" | "back">("forward");
   const max = cycle.maxDepartments;
   const selectable = Math.max(0, max - flow.received.length);
   const selected = flow.selected
@@ -178,6 +183,7 @@ export function ApplicationFlow({
   }, [focusVersion]);
 
   function goTo(next: number) {
+    setDirection(next < stepIndex ? "back" : "forward");
     setErrors({});
     setAlert("");
     flow.setStep(next);
@@ -380,7 +386,7 @@ export function ApplicationFlow({
     return (
       <div className="induction-flow">
         <div className="induction-form-surface induction-form-receipt" role="status">
-          <CheckCircle2 size={40} strokeWidth={1.5} aria-hidden="true" />
+          <SuccessMark />
           <h2 ref={heading} tabIndex={-1}>
             {receipt.status === "created"
               ? "Application submitted."
@@ -462,7 +468,11 @@ export function ApplicationFlow({
         </h1>
       </div>
       <div className="induction-form-surface">
-        <ol className="induction-progress" aria-label="Application progress">
+        <ol
+          className="induction-progress"
+          aria-label="Application progress"
+          style={{ "--progress": progress / 3 } as React.CSSProperties}
+        >
           {progressLabels.map((label, index) => (
             <li
               key={label}
@@ -491,6 +501,7 @@ export function ApplicationFlow({
           <div
             key={`${step.kind}-${step.kind === "questions" ? step.department.id : ""}`}
             className="induction-step-content"
+            data-direction={direction}
           >
             <div className="induction-form-intro">
               <p className="club-eyebrow">{intro.eyebrow}</p>
@@ -513,7 +524,14 @@ export function ApplicationFlow({
               )}
               <p>{intro.text}</p>
               {step.kind === "questions" && (
-                <Expectations department={step.department} />
+                <div className="induction-intro-links">
+                  <Expectations department={step.department} cycleId={cycle.id} />
+                  <ExpectationsPdfLink
+                    cycleId={cycle.id}
+                    department={step.department}
+                    label="Download PDF"
+                  />
+                </div>
               )}
             </div>
             <fieldset disabled={busy} className="induction-form-fields">
@@ -593,6 +611,16 @@ export function ApplicationFlow({
                             <span className="induction-pick-text">
                               <strong>{identity.inductionTitle}</strong>
                               <span>{department.preview}</span>
+                              {position >= 0 ? (
+                                <span className="induction-pick-badge">
+                                  {ordinal[position]} choice
+                                </span>
+                              ) : received ? (
+                                <span className="induction-received">
+                                  <CheckCircle2 size={15} aria-hidden="true" />{" "}
+                                  Submitted
+                                </span>
+                              ) : null}
                             </span>
                             <span className="induction-pick-mark" aria-hidden="true">
                               {position >= 0 ? (
@@ -603,17 +631,19 @@ export function ApplicationFlow({
                             </span>
                           </label>
                           <div className="induction-pick-footer">
-                            {position >= 0 ? (
-                              <span className="induction-pick-badge">
-                                {ordinal[position]} choice
-                              </span>
-                            ) : received ? (
-                              <span className="induction-received">
-                                <CheckCircle2 size={15} aria-hidden="true" />{" "}
-                                Submitted
-                              </span>
-                            ) : null}
-                            <Expectations department={department} />
+                            <span className="induction-pick-links">
+                              <Expectations
+                                department={department}
+                                cycleId={cycle.id}
+                                label="Expectations"
+                              />
+                              {position >= 0 && (
+                                <ExpectationsPdfLink
+                                  cycleId={cycle.id}
+                                  department={department}
+                                />
+                              )}
+                            </span>
                           </div>
                         </li>
                       );
@@ -623,12 +653,22 @@ export function ApplicationFlow({
                     <button
                       type="button"
                       className="club-text-link induction-swap"
-                      onClick={() =>
-                        flow.setSelected([...flow.selected].reverse())
-                      }
+                      onClick={(event) => {
+                        event.currentTarget.dataset.spun =
+                          event.currentTarget.dataset.spun === "a" ? "b" : "a";
+                        flow.setSelected([...flow.selected].reverse());
+                      }}
                     >
-                      Swap first and second choice
+                      <ArrowUpDown size={15} aria-hidden="true" /> Swap first
+                      and second choice
                     </button>
+                  )}
+                  {selected.length > 0 && (
+                    <p className="induction-reassurance" aria-live="polite">
+                      Read what your choices expect before you continue, or keep
+                      the PDF. These are expectations, not requirements: you
+                      don’t need to know all of them to get in.
+                    </p>
                   )}
                   {errors.departments && (
                     <p id="departments-message" className="club-form-error">

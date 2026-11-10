@@ -5,6 +5,11 @@ import { BookOpen, X } from "lucide-react";
 import { getDepartment } from "@/lib/content/departments";
 import type { InductionDepartment } from "@/lib/inductions/schema";
 import { DepartmentIcon } from "./department-icon";
+import { ExpectationsPdfLink } from "./pdf-link";
+
+// Staggers list items as the sheet opens; the index is capped so long lists stay quick.
+const stagger = (index: number) =>
+  ({ "--i": Math.min(index, 12) }) as React.CSSProperties;
 
 function ExpectationContent({
   content,
@@ -20,8 +25,10 @@ function ExpectationContent({
         <section key={group.title}>
           <h3>{group.title}</h3>
           <ul>
-            {group.items.map((item) => (
-              <li key={item}>{item}</li>
+            {group.items.map((item, index) => (
+              <li key={item} style={stagger(index)}>
+                {item}
+              </li>
             ))}
           </ul>
           {group.sections?.map((section) => (
@@ -31,8 +38,10 @@ function ExpectationContent({
             >
               <h4>{section.title}</h4>
               <ul>
-                {section.items.map((item) => (
-                  <li key={item}>{item}</li>
+                {section.items.map((item, index) => (
+                  <li key={item} style={stagger(index)}>
+                    {item}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -48,8 +57,10 @@ function ExpectationContent({
             <section key={track.title}>
               <h3>{track.title}</h3>
               <ul>
-                {track.items.map((item) => (
-                  <li key={item}>{item}</li>
+                {track.items.map((item, index) => (
+                  <li key={item} style={stagger(index)}>
+                    {item}
+                  </li>
                 ))}
               </ul>
             </section>
@@ -63,17 +74,21 @@ function ExpectationContent({
 // A native modal dialog keeps focus, Escape, and the backdrop accessible without a dependency.
 export function Expectations({
   department,
+  cycleId,
+  label = "See what’s expected",
 }: {
   department: InductionDepartment;
+  cycleId: string;
+  label?: string;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const identity = getDepartment(department.id)!;
   const titleId = `expectations-${department.id}-title`;
   if (!department.expectations)
     return (
-      <p className="induction-expectations-pending">
+      <span className="induction-expectations-pending">
         Expectations will be shared soon.
-      </p>
+      </span>
     );
   return (
     <>
@@ -83,7 +98,7 @@ export function Expectations({
         aria-haspopup="dialog"
         onClick={() => dialog.current?.showModal()}
       >
-        <BookOpen size={16} aria-hidden="true" /> See what’s expected
+        <BookOpen size={16} aria-hidden="true" /> {label}
       </button>
       <dialog
         ref={dialog}
@@ -115,8 +130,21 @@ export function Expectations({
           </header>
           <div className="induction-sheet-body">
             <p className="induction-sheet-preview">{department.preview}</p>
+            <p className="induction-reassurance">
+              These are expectations, not requirements. You don’t need to know
+              all of them to get in.
+            </p>
             <ExpectationContent content={department.expectations} />
           </div>
+          <footer className="induction-sheet-footer">
+            <span>Keep a copy to read again later.</span>
+            <ExpectationsPdfLink
+              cycleId={cycleId}
+              department={department}
+              label="Download PDF"
+              className="induction-pdf-button"
+            />
+          </footer>
         </div>
       </dialog>
     </>
