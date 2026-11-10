@@ -1,4 +1,8 @@
 /* Shared event layouts and content sections */
+.events-layout .club-hero-field::before {
+  content: none;
+}
+
 .event-header {
   padding-block: 36px 48px;
 }

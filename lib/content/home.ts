@@ -9,9 +9,17 @@ import {
   Smartphone,
   type LucideIcon,
 } from "lucide-react";
+import {
+  departmentCatalog,
+  type DepartmentId,
+} from "@/lib/content/departments";
 import { type BrandColor } from "@/lib/design/theme";
 
-export type ProfileLinks = { linkedin?: string; instagram?: string; website?: string };
+export type ProfileLinks = {
+  linkedin?: string;
+  instagram?: string;
+  website?: string;
+};
 export type Department = {
   id: string;
   title: string;
@@ -31,7 +39,8 @@ export const socialLinks = {
   linkedin: "https://www.linkedin.com/company/dscnitj/",
   github: "https://github.com/gdgcnitj",
   youtube: "https://www.youtube.com/@DSCNITJ",
-  chapter: "https://gdg.community.dev/gdg-on-campus-dr-b-r-ambedkar-national-institute-of-technology-jalandhar-india/",
+  chapter:
+    "https://gdg.community.dev/gdg-on-campus-dr-b-r-ambedkar-national-institute-of-technology-jalandhar-india/",
   email: "mailto:dsc@nitj.ac.in",
 } as const;
 
@@ -66,7 +75,8 @@ export const facultyCoordinators: FacultyCoordinator[] = [
     image: "/images/faculty/gopendra-vikram-singh.jpg",
     title: "Assistant Professor",
     email: "gopendra@nitj.ac.in",
-    profile: "https://departments.nitj.ac.in/dept/cse/Faculty/68cb9882f82446e66598e762",
+    profile:
+      "https://departments.nitj.ac.in/dept/cse/Faculty/68cb9882f82446e66598e762",
     color: "blue",
   },
   {
@@ -76,7 +86,8 @@ export const facultyCoordinators: FacultyCoordinator[] = [
     image: "/images/faculty/prashant-shukla.jpg",
     title: "Assistant Professor",
     email: "shuklap@nitj.ac.in",
-    profile: "https://departments.nitj.ac.in/dept/cse/Faculty/68be8541f6d5734224e60b0a",
+    profile:
+      "https://departments.nitj.ac.in/dept/cse/Faculty/68be8541f6d5734224e60b0a",
     color: "green",
   },
 ];
@@ -119,11 +130,11 @@ export const chapterLeads: ChapterLead[] = [
 ];
 
 // Role and lead names reproduce the list supplied by the project owner.
-export const departments: Department[] = [
-  {
-    id: "web",
-    title: "Web Development",
-    description: "Websites and web apps.",
+const departmentProfiles: Record<
+  DepartmentId,
+  Omit<Department, "id" | "title" | "description" | "color">
+> = {
+  web: {
     lead: "Anup",
     initials: "A",
     image: "/images/leads/anup.jpg",
@@ -133,12 +144,8 @@ export const departments: Department[] = [
       website: "https://anuptiwari.me",
     },
     icon: Code2,
-    color: "blue",
   },
-  {
-    id: "ai",
-    title: "AI",
-    description: "AI models and applications.",
+  ai: {
     lead: "Kartik Sirohi",
     initials: "KS",
     image: "/images/leads/kartik.jpeg",
@@ -148,12 +155,8 @@ export const departments: Department[] = [
       website: "https://sirohikartik.github.io/",
     },
     icon: BrainCircuit,
-    color: "blue",
   },
-  {
-    id: "ui",
-    title: "UI",
-    description: "Interface design and user experience.",
+  ui: {
     lead: "Kaushik",
     initials: "K",
     image: "/images/leads/kaushik.jpg",
@@ -163,12 +166,8 @@ export const departments: Department[] = [
       website: "https://tryx.framer.website/",
     },
     icon: PanelsTopLeft,
-    color: "yellow",
   },
-  {
-    id: "cp",
-    title: "Competitive Programming",
-    description: "Algorithms and problem solving.",
+  cp: {
     lead: "Kavish",
     initials: "K",
     image: "/images/leads/kavish.jpg",
@@ -177,12 +176,8 @@ export const departments: Department[] = [
       instagram: "https://www.instagram.com/kavish_0024/",
     },
     icon: Braces,
-    color: "yellow",
   },
-  {
-    id: "mobile",
-    title: "Mobile Development",
-    description: "Apps for mobile devices.",
+  mobile: {
     lead: "Rishi",
     initials: "R",
     image: "/images/leads/rishi.jpg",
@@ -192,12 +187,8 @@ export const departments: Department[] = [
       website: "https://rishia.in/",
     },
     icon: Smartphone,
-    color: "green",
   },
-  {
-    id: "wit",
-    title: "Women in Tech",
-    description: "Connections and support for women in tech.",
+  wit: {
     lead: "Rydham",
     initials: "R",
     image: "/images/leads/rydham.jpg",
@@ -206,12 +197,8 @@ export const departments: Department[] = [
       instagram: "https://www.instagram.com/rydham._.77/",
     },
     icon: HeartHandshake,
-    color: "red",
   },
-  {
-    id: "devsecops",
-    title: "DevSecOps",
-    description: "Infrastructure and software delivery.",
+  devsecops: {
     lead: "Sushobhit",
     initials: "S",
     image: "/images/leads/sushobhit.jpg",
@@ -220,12 +207,8 @@ export const departments: Department[] = [
       instagram: "https://www.instagram.com/sushobhitxd/",
     },
     icon: CloudCog,
-    color: "green",
   },
-  {
-    id: "creatives",
-    title: "Creatives",
-    description: "Design, stories, and visual content.",
+  creatives: {
     lead: "Vanshish",
     initials: "V",
     image: "/images/leads/vanshish.jpg",
@@ -234,9 +217,15 @@ export const departments: Department[] = [
       instagram: "https://www.instagram.com/vanshish_chaturvedi/",
     },
     icon: PenTool,
-    color: "red",
   },
-];
+};
+
+export const departments: Department[] = departmentCatalog.map(
+  (department) => ({
+    ...department,
+    ...departmentProfiles[department.id],
+  }),
+);
 
 export const galleryMoments: GalleryMoment[] = [
   { id: "life1", image: "/images/life/life1.jpg" },
@@ -250,23 +239,28 @@ export const galleryMoments: GalleryMoment[] = [
 export const commonQuestions = [
   {
     question: "How do I join GDGC NITJ?",
-    answer: "Contact the chapter on Instagram for the current joining process and recruitment updates.",
+    answer:
+      "Contact the chapter on Instagram for the current joining process and recruitment updates.",
   },
   {
     question: "Who can join the chapter?",
-    answer: "Contact the team to check the current membership requirements. For an event, check the eligibility details in its announcement.",
+    answer:
+      "Contact the team to check the current membership requirements. For an event, check the eligibility details in its announcement.",
   },
   {
     question: "What if I’m new to a domain?",
-    answer: "Find the department lead in the grid above. Contact the chapter to discuss where to start and which skills to learn.",
+    answer:
+      "Find the department lead in the grid above. Contact the chapter to discuss where to start and which skills to learn.",
   },
   {
     question: "How do I register for an event?",
-    answer: "Check the event announcement for registration instructions. Follow the chapter on Instagram for upcoming event updates.",
+    answer:
+      "Check the event announcement for registration instructions. Follow the chapter on Instagram for upcoming event updates.",
   },
   {
     question: "How can I contribute to a club project?",
-    answer: "Explore the chapter’s GitHub repositories. Check the project’s README for setup and contribution details.",
+    answer:
+      "Explore the chapter’s GitHub repositories. Check the project’s README for setup and contribution details.",
   },
 ];
 export const communityPhoto: string | undefined = undefined;

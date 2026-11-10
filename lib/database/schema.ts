@@ -1,7 +1,28 @@
-import { bigint, boolean, foreignKey, index, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core"
+import { bigint, boolean, foreignKey, index, integer, jsonb, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
+import type { DepartmentAnswers, QuestionSnapshot } from "@/lib/inductions/schema"
 
 
+
+export const inductionSubmission = pgTable("induction_submission", {
+  id: text().primaryKey().notNull(),
+  eventId: text("event_id").notNull(),
+  cycleId: text("cycle_id").notNull(),
+  departmentId: text("department_id").notNull(),
+  name: text().notNull(),
+  email: text().notNull(),
+  phone: text().notNull(),
+  branch: text().notNull(),
+  otherClubs: text("other_clubs").notNull(),
+  whyGdgc: text("why_gdgc").notNull(),
+  answers: jsonb().$type<DepartmentAnswers>().notNull(),
+  formVersion: integer("form_version").notNull(),
+  questionSnapshot: jsonb("question_snapshot").$type<QuestionSnapshot[]>().notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" }).defaultNow().notNull(),
+}, (table) => [
+  unique("induction_submission_cycle_department_email_unique").on(table.cycleId, table.departmentId, table.email),
+  index("induction_submission_cycle_department_lookup").on(table.cycleId, table.departmentId, table.createdAt),
+]);
 
 export const eventRegistration = pgTable("event_registration", {
 	id: text().primaryKey().notNull(),

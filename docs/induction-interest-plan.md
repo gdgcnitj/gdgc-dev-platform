@@ -1,7 +1,8 @@
 # Induction interest forms
 
-Planning proposal for the next induction cycle. No application code or database
-changes are included in this document. The working branch is
+Accepted design for the next induction cycle, updated with the supplied AI and
+Creatives questions, CP syllabus, and required other-clubs answer. Implementation and editing instructions
+are in [the induction content guide](induction-content.md). The working branch is
 `feat/induction-interest`, created from the latest `origin/develop`.
 
 ## Confirmed scope
@@ -11,7 +12,7 @@ changes are included in this document. The working branch is
 - Students may submit interest forms for multiple departments, separately.
 - Require an `@nitj.ac.in` email, with no account or sign-in step.
 - Share the common questions across every department form.
-- Start with one editable sample question per department.
+- Use supplied AI and Creatives questions; retain editable samples for other departments.
 - Show the supplied expectations for the six technical departments.
 - Keep expectations optional for departments whose content has not been supplied.
 
@@ -57,11 +58,11 @@ do not fabricate requirements for either department.
 
 Routes:
 
-| Route | Purpose |
-| --- | --- |
-| `/events/inductions-2026` | Public event, expectations, and department choices |
-| `/events/inductions-2026/apply` | Department choices within the application flow |
-| `/events/inductions-2026/apply/<department>` | Direct link to one department form |
+| Route                                        | Purpose                                            |
+| -------------------------------------------- | -------------------------------------------------- |
+| `/events/inductions-2026`                    | Public event, expectations, and department choices |
+| `/events/inductions-2026/apply`              | Department choices within the application flow     |
+| `/events/inductions-2026/apply/<department>` | Direct link to one department form                 |
 
 The actual route files live under `app/events/[id]/apply/`, with a dynamic
 `[department]` child. Only events with the induction form configuration support
@@ -90,14 +91,14 @@ details or answers in URLs or persistent browser storage.
 
 Define these once and render the same schema in every department form.
 
-| Field | Input | Validation and copy |
-| --- | --- | --- |
-| Name | Text, name autocomplete | Required; trimmed full name |
-| Email | Email, email autocomplete | Required; normalized lowercase `@nitj.ac.in` address |
-| Phone | Telephone, telephone autocomplete | Required; reuse Indian mobile validation and normalization |
-| Branch | Select | Required; reuse the existing branch options, including Other |
-| Other clubs you are part of | Short textarea | Optional; helper: "Leave blank if none." |
-| Why do you want to join GDGC? | Textarea | Required; a concise explanation, with a sensible maximum length |
+| Field                         | Input                             | Validation and copy                                                 |
+| ----------------------------- | --------------------------------- | ------------------------------------------------------------------- |
+| Name                          | Text, name autocomplete           | Required; trimmed full name                                         |
+| Email                         | Email, email autocomplete         | Required; normalized lowercase `@nitj.ac.in` address                |
+| Phone                         | Telephone, telephone autocomplete | Required; reuse Indian mobile validation and normalization          |
+| Branch                        | Select                            | Required; reuse the existing branch options, including Other        |
+| Other clubs you are part of   | Short textarea                    | Required; helper: "Write None if you are not part of another club." |
+| Why do you want to join GDGC? | Textarea                          | Required; a concise explanation, with a sensible maximum length     |
 
 Do not add roll number, year, course, resume, or portfolio as compulsory fields.
 Those belong in a later, explicitly requested change. The current campus event
@@ -105,20 +106,22 @@ registration schema requires several of them, so do not reuse it unchanged.
 
 ## Editable sample department questions
 
-These are placeholders for review, not confirmed assessment questions. Keep their
+The original sample prompts below are retained here as design history. AI and
+Creatives now use the supplied questions in the content file. Other departments
+still use editable samples. Keep their
 IDs stable when only copy changes. Each initially uses one required textarea.
 Replace or explicitly approve the sample questions before opening the real form.
 
-| Department | Question ID | Sample question |
-| --- | --- | --- |
-| Web Development | `web-interest` | What is one website you would like to build, and who would use it? |
-| AI/ML | `ai-interest` | What is one everyday problem you would like to explore using AI? |
-| UI/UX | `ui-interest` | Pick an app you use. What is one screen you would improve, and why? |
-| Competitive Programming | `cp-interest` | How do you approach a programming problem you have not seen before? |
-| App Development | `mobile-interest` | What is one mobile app you would like to build, and why? |
-| Women in Tech | `wit-interest` | What is one activity you would suggest to help more women participate in technology? |
-| DevSecOps | `devsecops-interest` | What would you like to learn about deploying or securing an application? |
-| Creatives | `creatives-interest` | What is one creative idea you would use to introduce GDGC to new students? |
+| Department              | Question ID          | Sample question                                                                      |
+| ----------------------- | -------------------- | ------------------------------------------------------------------------------------ |
+| Web Development         | `web-interest`       | What is one website you would like to build, and who would use it?                   |
+| AI/ML                   | `ai-interest`        | What is one everyday problem you would like to explore using AI?                     |
+| UI/UX                   | `ui-interest`        | Pick an app you use. What is one screen you would improve, and why?                  |
+| Competitive Programming | `cp-interest`        | How do you approach a programming problem you have not seen before?                  |
+| App Development         | `mobile-interest`    | What is one mobile app you would like to build, and why?                             |
+| Women in Tech           | `wit-interest`       | What is one activity you would suggest to help more women participate in technology? |
+| DevSecOps               | `devsecops-interest` | What would you like to learn about deploying or securing an application?             |
+| Creatives               | `creatives-interest` | What is one creative idea you would use to introduce GDGC to new students?           |
 
 ## Supplied expectation content
 
@@ -127,14 +130,14 @@ mandatory projects, or thresholds. Repeated slide branding, the quotation, and
 closing slides do not need to become page sections. Replace the slide's "Google
 form" reference with "interest form" because submissions live in this app.
 
-| Department | Groups and topics |
-| --- | --- |
-| Competitive Programming | **Foundations:** compilers, runtime environments, online judges, time and space complexity, basic math and number theory, inference and induction proofs. **Data structures:** arrays, strings, linked lists, stacks, queues, hashing. **Techniques and practice:** sorting, searching, two pointers, sliding window, prefix and suffix techniques, recursion, backtracking, problem-solving patterns, basic contest practice. |
-| UI/UX | **People and process:** introduction to UI/UX, user-centered design, user needs and personas, design thinking, user research. **Structure and visuals:** information architecture, wireframing, low-fidelity prototypes, visual hierarchy, layout, color, typography, iconography, imagery. **Interaction and evaluation:** accessibility, inclusive design, interaction basics, usability testing, feedback loops, responsive design, micro-interactions, motion, iteration. **Tools and communication:** Figma fundamentals, component systems, design systems and consistency, FigJam/Miro collaboration, portfolio presentation, case studies. |
-| AI/ML | **Python and maths:** lists, dictionaries, functions, NumPy, Pandas, Scikit-learn, problem solving, linear algebra, basic calculus. **Probability and statistics:** expectation values, distributions, hypothesis testing, correlation versus causation. **Data:** missing values, outliers, data types, categorical encoding, charts, choosing plots, EDA, interpretation, feature engineering. **Models and evaluation:** linear/logistic regression, decision trees, random forests, ensembles, SVM, K-means, perceptrons, forward/backpropagation, activation functions, gradient descent, bias/variance, train/test/validation splits. |
-| Web Development | **Web fundamentals:** full-stack, frontend, backend, REST APIs, HTTP methods/status codes, routing, middleware. **Applications:** databases, authentication, authorization, CRUD, WebSockets, real-time communication, API testing. **Delivery and collaboration:** deployment, Git/GitHub, version control, branching, merging, pull requests, conflicts, environment variables, error handling, debugging. |
-| App Development | **Shared basics:** OOP, classes/objects/inheritance, simple problem solving such as reversing a string, summing a list and factorial logic, MVVM/MVC. **Swift/iOS track:** Swift syntax, variables, optionals, functions, struct/class, `@State`/`@Binding`, SwiftUI VStack/HStack/ZStack/Text/Button/Image, basic state/counter, navigation/NavigationStack. **Flutter/Dart track:** variables, functions, lists, maps, Stateless/Stateful Widgets, null safety, Column/Row/Container/Text/Image/Scaffold, `setState`, rebuilds, MaterialApp → Scaffold → Body. **Kotlin/Android track:** Android Studio, syntax, val/var, functions, null safety (`?`, `!!`), activities, MainActivity/XML layouts, `findViewById`, `setOnClickListener`, intents/navigation, TextView/Button/EditText. |
-| DevSecOps | **Linux:** commands, filesystem, permissions, packages, shell scripting, processes, environment variables, logs. **Networking:** OSI/TCP-IP, IP addressing, DNS, DHCP, HTTP, ports, protocols, firewalls, NAT, network tools, VPNs, proxies. **Collaboration:** version control, Git setup, branches, merging/conflicts, `.gitignore`, GitHub/GitLab, pull requests, code review. |
+| Department              | Groups and topics                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Competitive Programming | **Foundations:** compilers, runtime environments, online judges, time and space complexity, basic math and number theory, inference and induction proofs. **Data structures:** arrays, strings, linked lists, stacks, queues, hashing. **Techniques and practice:** sorting, searching, two pointers, sliding window, prefix and suffix techniques, recursion, backtracking, problem-solving patterns, basic contest practice.                                                                                                                                                                                                                                                                                                                                                            |
+| UI/UX                   | **People and process:** introduction to UI/UX, user-centered design, user needs and personas, design thinking, user research. **Structure and visuals:** information architecture, wireframing, low-fidelity prototypes, visual hierarchy, layout, color, typography, iconography, imagery. **Interaction and evaluation:** accessibility, inclusive design, interaction basics, usability testing, feedback loops, responsive design, micro-interactions, motion, iteration. **Tools and communication:** Figma fundamentals, component systems, design systems and consistency, FigJam/Miro collaboration, portfolio presentation, case studies.                                                                                                                                        |
+| AI/ML                   | **Python and maths:** lists, dictionaries, functions, NumPy, Pandas, Scikit-learn, problem solving, linear algebra, basic calculus. **Probability and statistics:** expectation values, distributions, hypothesis testing, correlation versus causation. **Data:** missing values, outliers, data types, categorical encoding, charts, choosing plots, EDA, interpretation, feature engineering. **Models and evaluation:** linear/logistic regression, decision trees, random forests, ensembles, SVM, K-means, perceptrons, forward/backpropagation, activation functions, gradient descent, bias/variance, train/test/validation splits.                                                                                                                                               |
+| Web Development         | **Web fundamentals:** full-stack, frontend, backend, REST APIs, HTTP methods/status codes, routing, middleware. **Applications:** databases, authentication, authorization, CRUD, WebSockets, real-time communication, API testing. **Delivery and collaboration:** deployment, Git/GitHub, version control, branching, merging, pull requests, conflicts, environment variables, error handling, debugging.                                                                                                                                                                                                                                                                                                                                                                              |
+| App Development         | **Shared basics:** OOP, classes/objects/inheritance, simple problem solving such as reversing a string, summing a list and factorial logic, MVVM/MVC. **Swift/iOS track:** Swift syntax, variables, optionals, functions, struct/class, `@State`/`@Binding`, SwiftUI VStack/HStack/ZStack/Text/Button/Image, basic state/counter, navigation/NavigationStack. **Flutter/Dart track:** variables, functions, lists, maps, Stateless/Stateful Widgets, null safety, Column/Row/Container/Text/Image/Scaffold, `setState`, rebuilds, MaterialApp → Scaffold → Body. **Kotlin/Android track:** Android Studio, syntax, val/var, functions, null safety (`?`, `!!`), activities, MainActivity/XML layouts, `findViewById`, `setOnClickListener`, intents/navigation, TextView/Button/EditText. |
+| DevSecOps               | **Linux:** commands, filesystem, permissions, packages, shell scripting, processes, environment variables, logs. **Networking:** OSI/TCP-IP, IP addressing, DNS, DHCP, HTTP, ports, protocols, firewalls, NAT, network tools, VPNs, proxies. **Collaboration:** version control, Git setup, branches, merging/conflicts, `.gitignore`, GitHub/GitLab, pull requests, code review.                                                                                                                                                                                                                                                                                                                                                                                                         |
 
 ## Content and code structure
 
@@ -160,10 +163,10 @@ event-to-cycle link and do not repeat the cycle configuration in sections.
 The hero action becomes **Explore departments**, rather than a generic Register
 button. The existing campus action must explicitly reject this new preset.
 
-The initial question renderer only needs textareas. Give questions stable IDs,
+The question renderer supports text, textarea, choice, and ranking inputs, plus
+conditions referencing earlier choices. Give questions stable IDs,
 labels, helper text, required flags, and length bounds. Store expectations as
-groups of items, with optional track groups. Add other input types when actual
-questions require them; do not build an arbitrary form builder or admin editor.
+groups of items, with optional track groups. Do not build an arbitrary form builder or admin editor.
 
 For discovery, feature the induction event in the homepage spotlight and order
 active featured events before completed featured recaps. In the archive, order
@@ -176,13 +179,13 @@ push the induction event to the top or restore the removed status filter/pills.
 Use a new `induction_submission` table, rather than overloading
 `event_registration.interests` or the unrelated `app_dev_response` table.
 
-| Data | Storage |
-| --- | --- |
-| Identity | UUID, stable event/cycle ID, department ID, creation timestamp |
-| Common answers | Name, normalized email/phone, branch, other clubs, why GDGC |
-| Department answers | Validated JSONB keyed by stable question ID |
+| Data                     | Storage                                                                     |
+| ------------------------ | --------------------------------------------------------------------------- |
+| Identity                 | UUID, stable event/cycle ID, department ID, creation timestamp              |
+| Common answers           | Name, normalized email/phone, branch, other clubs, why GDGC                 |
+| Department answers       | Validated JSONB keyed by stable question ID                                 |
 | Definition at submission | Form version and a server-built snapshot of question IDs, labels, and types |
-| Duplicate constraint | Unique event/cycle + department + normalized email |
+| Duplicate constraint     | Unique event/cycle + department + normalized email                          |
 
 One successful submit writes one complete row in one operation. Copy the common
 answers into that department's row. This deliberate snapshot keeps each submission
@@ -238,4 +241,5 @@ Keep the event as a draft until the page copy/artwork and sample questions are
 reviewed. Opening interest collection does not require an offline date, time, or
 venue. Set application availability explicitly; an unknown deadline stays absent.
 Publishing or releasing this feature follows the normal PR workflow after execution
-is requested. This planning step does not open forms or change production.
+is requested. The implementation enables local preview of the complete flow; production forms
+open only after the feature is reviewed and released.

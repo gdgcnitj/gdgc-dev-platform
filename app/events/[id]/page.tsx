@@ -46,6 +46,9 @@ export default async function EventPage({ params }: Props) {
   const sections = visibleSections(event);
   const registrationOpen = canRegister(event);
   const registration = event.registration;
+  const applicationSection = sections.find(
+    (section) => section.type === "applications",
+  );
   const related = getRelatedEvents(event);
   const primarySection =
     sections.find(
@@ -135,6 +138,13 @@ export default async function EventPage({ params }: Props) {
                         >
                           Register on {registration.provider}
                           <ArrowUpRight size={17} aria-hidden="true" />
+                        </a>
+                      </Button>
+                    ) : applicationSection ? (
+                      <Button asChild className="club-button">
+                        <a href={`#section-${applicationSection.id}`}>
+                          Explore departments
+                          <ArrowRight size={17} aria-hidden="true" />
                         </a>
                       </Button>
                     ) : registrationOpen ? (

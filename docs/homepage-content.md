@@ -37,8 +37,9 @@ controls upcoming and completed lists independently of featuring. The homepage
 shows up to three upcoming and three recent unfeatured events; `/events` lists
 all published events with search and a type filter.
 
+Active events appear before completed recaps, including announcements without dates.
 Each card always links to its local event page. A dedicated external event site
-can be shown as a separate link. Dates, descriptions, photos, problem statements,
+is linked from that event page. Dates, descriptions, photos, problem statements,
 and winners are maintained once in the event file and reused across pages.
 Do not invent missing historical dates, venues, resources, or results.
 
@@ -58,16 +59,16 @@ Do not add a phone number, home address, or date of birth from the directory.
 
 The current list comes from the project owner's role table.
 
-| Department | Lead |
-| --- | --- |
-| Web Development | Anup |
-| Creatives | Vanshish |
-| Mobile Development | Rishi |
-| UI | Kaushik |
-| Women in Tech | Rydham |
-| AI | Kartik Sirohi |
-| Competitive Programming | Kavish |
-| DevSecOps | Sushobhit |
+| Department              | Lead          |
+| ----------------------- | ------------- |
+| Web Development         | Anup          |
+| Creatives               | Vanshish      |
+| Mobile Development      | Rishi         |
+| UI                      | Kaushik       |
+| Women in Tech           | Rydham        |
+| AI                      | Kartik Sirohi |
+| Competitive Programming | Kavish        |
+| DevSecOps               | Sushobhit     |
 
 Update `lead`, `initials`, and `image` when the roster changes.
 Store portraits in `public/images/leads/` as 800 × 640 JPEGs.
@@ -89,14 +90,14 @@ The alumni page groups people by `batch`, the graduation year, with the newest b
 A new batch gets its own section when you add its first person.
 Store portraits in `public/images/alumni/<batch>/`.
 
-| Field | Content |
-| --- | --- |
-| `department` | Department `id` from `departments`; sets the icon and color |
-| `role` | Role shown on the card; defaults to the department title |
-| `session` | Session the role was held, such as `2024–25` |
-| `nowAt` | Current company or program, shown as "@ Microsoft"; optional |
-| `note` | Short line from the alumni; optional |
-| `links` | Same `linkedin`, `instagram`, and `website` keys as leads |
+| Field        | Content                                                      |
+| ------------ | ------------------------------------------------------------ |
+| `department` | Department `id` from `departments`; sets the icon and color  |
+| `role`       | Role shown on the card; defaults to the department title     |
+| `session`    | Session the role was held, such as `2024–25`                 |
+| `nowAt`      | Current company or program, shown as "@ Microsoft"; optional |
+| `note`       | Short line from the alumni; optional                         |
+| `links`      | Same `linkedin`, `instagram`, and `website` keys as leads    |
 
 Add `nowAt` only when the person confirms it.
 A card without a role or department shows "Role coming soon".

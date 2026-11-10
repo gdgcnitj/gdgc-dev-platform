@@ -3,33 +3,38 @@
 The app uses the Next.js App Router.
 Pages use server components unless they declare `"use client"`.
 
-| Path | Purpose |
-| --- | --- |
-| `app/page.tsx` | Club home page |
-| `app/layout.tsx` | Shared page layout, fonts, navigation, and theme |
-| `app/template.tsx` | Short fade when moving between pages. The header stays still. |
-| `app/alumni/` | Alumni page, grouped by graduating batch |
-| `app/events/` | Searchable archive, shared event page, challenge archive, scoped styles, and registration server action |
-| `app/forms/mobile26/` | Unlisted app-dev response form. It is not linked from navigation or events. |
-| `app/(auth)/` | Sign-in and sign-up pages |
-| `app/(dashboard)/` | Dashboard pages |
-| `app/api/auth/[...all]/route.ts` | Better Auth request handlers |
-| `app/actions/auth.ts` | Server actions for authentication |
-| `components/` | Website components |
-| `components/ui/` | Shared UI components |
-| `components/home-hero.tsx`, `components/home/` | Home-page sections, artwork, and photo frames |
-| `lib/content/home.ts` | Faculty coordinators, departments, leads, gallery items, common questions, and community links |
-| `lib/content/events/` | Validated event registry and one content file per event |
-| `lib/events/` | Event schema and types, authoring presets, display helpers, registration availability checks, and tests |
-| `components/events/` | Shared carousel, event cards, directory filters, content sections, registration form, and challenge viewer |
-| `lib/content/problem-statements.ts` | Challenge archive lookup derived from event sections |
-| `lib/content/alumni.ts` | Alumni roster and batch grouping |
-| `app/home.css` | Home-page and navigation styles |
-| `app/fonts/google-sans/` | Local home-page font and its license |
-| `lib/auth/` | Server and client auth configuration |
-| `lib/database/` | Database connection, schema, and relations |
-| `drizzle/` | Database migrations and metadata |
-| `middleware.ts` | Route checks for protected pages |
+| Path                                           | Purpose                                                                                                    |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `app/page.tsx`                                 | Club home page                                                                                             |
+| `app/layout.tsx`                               | Shared page layout, fonts, navigation, and theme                                                           |
+| `app/template.tsx`                             | Short fade when moving between pages. The header stays still.                                              |
+| `app/alumni/`                                  | Alumni page, grouped by graduating batch                                                                   |
+| `app/events/`                                  | Searchable archive, shared event page, challenge archive, scoped styles, and registration server action    |
+| `app/events/[id]/apply/`                       | Dynamic induction choices, department forms, shared client flow, and submission server action              |
+| `app/forms/mobile26/`                          | Unlisted app-dev response form. It is not linked from navigation or events.                                |
+| `app/(auth)/`                                  | Sign-in and sign-up pages                                                                                  |
+| `app/(dashboard)/`                             | Dashboard pages                                                                                            |
+| `app/api/auth/[...all]/route.ts`               | Better Auth request handlers                                                                               |
+| `app/actions/auth.ts`                          | Server actions for authentication                                                                          |
+| `components/`                                  | Website components                                                                                         |
+| `components/ui/`                               | Shared UI components                                                                                       |
+| `components/home-hero.tsx`, `components/home/` | Home-page sections, artwork, and photo frames                                                              |
+| `lib/content/home.ts`                          | Faculty coordinators, department leads, gallery items, common questions, and community links               |
+| `lib/content/departments.ts`                   | Serializable department identities shared by content and validation                                        |
+| `lib/content/inductions/`, `lib/inductions/`   | Versioned induction questions/expectations, validation, transactional submission storage, and tests        |
+| `components/inductions/`                       | Department cards, expectations disclosures, and three-step interest forms                                  |
+| `scripts/export-inductions.ts`                 | Operator-only read-only CSV export of induction responses                                                  |
+| `lib/content/events/`                          | Validated event registry and one content file per event                                                    |
+| `lib/events/`                                  | Event schema and types, authoring presets, display helpers, registration availability checks, and tests    |
+| `components/events/`                           | Shared carousel, event cards, directory filters, content sections, registration form, and challenge viewer |
+| `lib/content/problem-statements.ts`            | Challenge archive lookup derived from event sections                                                       |
+| `lib/content/alumni.ts`                        | Alumni roster and batch grouping                                                                           |
+| `app/home.css`                                 | Home-page and navigation styles                                                                            |
+| `app/fonts/google-sans/`                       | Local home-page font and its license                                                                       |
+| `lib/auth/`                                    | Server and client auth configuration                                                                       |
+| `lib/database/`                                | Database connection, schema, and relations                                                                 |
+| `drizzle/`                                     | Database migrations and metadata                                                                           |
+| `middleware.ts`                                | Route checks for protected pages                                                                           |
 
 ## Data flow
 
@@ -47,6 +52,12 @@ availability again on every submission, including the opening/closing window,
 explicit event state, and known event end time. Event registration uses the same
 database and stores one row per sign-up. Event IDs stay stable independently of
 URL slugs; the migration preserves all existing IDs and URLs.
+Induction applications use a separate table with one complete snapshot per cycle,
+department, and normalized email. The shared application layout keeps drafts in
+client memory; there is no sign-in, public lookup, or editing of saved responses.
+Server submissions validate the current version and availability, and PostgreSQL
+enforces duplicates and transactional attempt budgets. See [induction content](induction-content.md).
+
 The app reads `DATABASE_URL` when it creates the database connection pool.
 A remote database also uses the CA certificate at `DATABASE_CA_PATH`.
 
@@ -55,14 +66,14 @@ Use named `GET` and `POST` exports for App Router request handlers.
 
 ## Setup files
 
-| Path | Purpose |
-| --- | --- |
-| `.nvmrc` | Development Node.js version |
-| `.env.example` | Local environment settings |
-| `compose.dev.yaml` | Local PostgreSQL service |
-| `mprocs.yaml` | Development process list |
-| `Makefile` | Optional command shortcuts |
-| `drizzle.config.ts` | Migration and Studio settings |
-| `.github/workflows/ci.yml` | PR and branch checks |
-| `.github/workflows/deploy.yml` | Production deploy after a merge to `main` |
-| `deploy/` | Instance bootstrap and the restricted deploy command |
+| Path                           | Purpose                                              |
+| ------------------------------ | ---------------------------------------------------- |
+| `.nvmrc`                       | Development Node.js version                          |
+| `.env.example`                 | Local environment settings                           |
+| `compose.dev.yaml`             | Local PostgreSQL service                             |
+| `mprocs.yaml`                  | Development process list                             |
+| `Makefile`                     | Optional command shortcuts                           |
+| `drizzle.config.ts`            | Migration and Studio settings                        |
+| `.github/workflows/ci.yml`     | PR and branch checks                                 |
+| `.github/workflows/deploy.yml` | Production deploy after a merge to `main`            |
+| `deploy/`                      | Instance bootstrap and the restricted deploy command |

@@ -48,9 +48,13 @@ jobs:
       - name: Check code
         run: npm run check
       - name: Check event content and registration rules
-        run: node --import tsx --test lib/events/events.test.ts
+        run: node --import tsx --test lib/events/events.test.ts lib/inductions/inductions.test.ts
       - name: Apply database migrations
-        run: npm run db:migrate
+        run: |
+          npm run db:migrate
+          node --import tsx scripts/migrate-database.ts
+      - name: Check induction submissions in PostgreSQL
+        run: INDUCTION_TEST_DATABASE_URL="$DATABASE_URL" node --import tsx --test lib/inductions/store.integration.test.ts
       - name: Build
         env:
           BETTER_AUTH_URL: http://localhost:3000

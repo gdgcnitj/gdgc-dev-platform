@@ -1,0 +1,533 @@
+/* Department choices and the shared induction application flow. */
+.induction-application::before {
+  content: none;
+}
+
+.induction-department-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+.induction-department {
+  background: var(--club-paper);
+  border: 1px solid var(--club-line);
+  border-radius: 22px;
+  padding: 26px;
+  min-width: 0;
+}
+.induction-department-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.induction-department-heading h2,
+.induction-department-heading h3 {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+.induction-department-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  background: var(--club-tone-soft, #e8f0fe);
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  color: var(--club-ink);
+}
+.induction-department > p {
+  color: var(--club-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+.induction-department-action {
+  margin-block: 18px;
+}
+.induction-department-action .club-button {
+  min-height: 44px;
+  padding: 11px 18px;
+  height: auto;
+  font-size: 14px;
+  white-space: normal;
+}
+.induction-expectations {
+  border-block: 1px solid var(--club-line);
+}
+.induction-expectations summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  list-style: none;
+  cursor: pointer;
+  padding-block: 14px;
+  color: var(--club-action);
+  font-size: 14px;
+  font-weight: 500;
+}
+.induction-expectations summary::-webkit-details-marker {
+  display: none;
+}
+.induction-expectations summary svg {
+  flex-shrink: 0;
+  transition: transform 0.18s ease;
+}
+.induction-expectations[open] > summary svg {
+  transform: rotate(180deg);
+}
+.induction-expectation-content {
+  padding-bottom: 20px;
+  display: grid;
+  gap: 20px;
+}
+.induction-expectation-content h3,
+.induction-expectation-content h4,
+.induction-expectation-content h5 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+.induction-expectation-subsection {
+  margin-top: 18px;
+}
+.induction-ranking {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  margin: 8px 0 0;
+}
+.induction-ranking li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--club-line);
+  border-radius: 12px;
+  background: var(--club-paper);
+}
+.induction-ranking [data-dragging] {
+  opacity: 0.55;
+}
+.induction-drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  cursor: grab;
+  color: var(--club-muted);
+  flex-shrink: 0;
+}
+.induction-ranking-number {
+  font-size: 12px;
+  color: var(--club-muted);
+  flex-shrink: 0;
+}
+.induction-ranking-label {
+  font-size: 14px;
+  line-height: 1.5;
+  flex: 1;
+  min-width: 0;
+}
+.induction-ranking-controls {
+  display: flex;
+  flex-shrink: 0;
+}
+.induction-ranking-controls button {
+  min-width: 40px;
+  min-height: 44px;
+  color: var(--club-action);
+}
+.induction-choices {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.induction-choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--club-line);
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.induction-choice:has(:checked) {
+  border-color: var(--club-action);
+  background: #e8f0fe;
+}
+.club-form-field .induction-choice input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  min-height: 18px;
+  padding: 0;
+  accent-color: var(--club-action);
+}
+.induction-expectation-content ul {
+  margin: 0;
+  padding-left: 19px;
+  color: var(--club-muted);
+  font-size: 14px;
+  line-height: 1.65;
+  list-style: disc;
+}
+.induction-expectation-content li + li {
+  margin-top: 6px;
+}
+.induction-tracks {
+  display: grid;
+  gap: 20px;
+  border-top: 1px solid var(--club-line);
+  padding-top: 18px;
+}
+.induction-track-intro {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--club-muted);
+}
+.induction-expectations-pending {
+  font-size: 13px !important;
+  color: var(--club-muted);
+  padding-block: 14px;
+  border-block: 1px solid var(--club-line);
+  margin: 0 !important;
+}
+.induction-availability {
+  padding: 16px 20px;
+  border: 1px solid var(--club-line);
+  border-radius: 12px;
+  background: #f1f3f4;
+  margin-bottom: 24px;
+}
+.induction-received {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 14px;
+  color: #137333;
+}
+.induction-application {
+  background: #f8f9fa;
+  padding-block: 32px 80px;
+  min-height: 75vh;
+}
+.induction-application-heading {
+  margin-block: 36px;
+  max-width: 840px;
+}
+.induction-application-heading .club-eyebrow {
+  margin-block: 28px 14px;
+}
+.induction-application-heading h1 {
+  font-size: clamp(38px, 5.5vw, 66px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+  margin: 0 0 20px;
+  overflow-wrap: anywhere;
+}
+.induction-application-heading > p:last-child {
+  color: var(--club-muted);
+  font-size: 17px;
+  line-height: 1.65;
+  max-width: 680px;
+}
+.induction-form-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.6fr);
+  gap: 54px;
+  align-items: start;
+}
+.induction-form-context {
+  position: sticky;
+  top: 110px;
+  padding-block: 8px;
+}
+.induction-form-context h2 {
+  font-size: 23px;
+  letter-spacing: -0.025em;
+  font-weight: 500;
+  margin: 20px 0 12px;
+}
+.induction-form-context > p {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--club-muted);
+  margin: 0 0 22px;
+}
+.induction-form-context .induction-context-note {
+  margin-top: 22px;
+  font-size: 13px;
+}
+.induction-form-surface {
+  border: 1px solid var(--club-line);
+  border-radius: 26px;
+  background: var(--club-paper);
+  padding: 32px;
+  min-width: 0;
+  box-shadow: 0 8px 32px rgb(60 64 67 / 4%);
+}
+.induction-progress {
+  display: flex;
+  list-style: none;
+  padding: 0 0 24px;
+  margin: 0 0 28px;
+  border-bottom: 1px solid var(--club-line);
+  gap: 18px;
+}
+.induction-progress li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--club-muted);
+  font-size: 13px;
+}
+.induction-progress li > span {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--club-line);
+  border-radius: 50%;
+  flex-shrink: 0;
+  font-size: 12px;
+}
+.induction-progress [data-active] {
+  color: var(--club-action);
+  font-weight: 500;
+}
+.induction-progress [data-active] > span {
+  color: #fff;
+  background: var(--club-action);
+  border-color: var(--club-action);
+}
+.induction-progress [data-done] > span {
+  border-color: transparent;
+  color: #137333;
+}
+.induction-form-intro {
+  margin-bottom: 26px;
+}
+.induction-form-intro .club-eyebrow {
+  font-size: 12px;
+  color: var(--club-muted);
+}
+.induction-form-intro h2,
+.induction-form-receipt h2 {
+  font-size: clamp(25px, 3vw, 32px);
+  line-height: 1.15;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  margin: 10px 0 14px;
+  scroll-margin-top: 115px;
+}
+.induction-form-intro p:last-child,
+.induction-form-receipt p {
+  font-size: 15px;
+  color: var(--club-muted);
+  line-height: 1.65;
+}
+.induction-form-fields {
+  display: grid;
+  gap: 22px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.induction-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 22px;
+  margin-top: 30px;
+}
+.induction-form-actions .club-text-link {
+  margin-right: auto;
+}
+.induction-form-actions .club-button,
+.induction-form-receipt .club-button {
+  height: auto;
+  min-height: 46px;
+  font-size: 14px;
+  white-space: normal;
+  text-align: left;
+  max-width: 100%;
+  padding: 13px 20px;
+}
+.induction-form-actions button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+.induction-details-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 14px;
+}
+.induction-details-summary strong,
+.induction-details-summary span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.induction-details-summary strong {
+  font-weight: 500;
+}
+.induction-details-summary span {
+  font-size: 13px;
+  color: var(--club-muted);
+  margin-top: 4px;
+}
+.induction-details-summary button {
+  flex-shrink: 0;
+  font-size: 13px;
+}
+.induction-review-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.induction-review-heading h3 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+}
+.induction-review-heading button {
+  font-size: 13px;
+}
+.induction-review-details {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 24px;
+  margin: 0;
+  border-bottom: 1px solid var(--club-line);
+}
+.induction-review-details > div {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  gap: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.induction-review-details dt {
+  color: var(--club-muted);
+}
+.induction-review-details dd,
+.induction-review-answer p {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.induction-review-answer h4 {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+.induction-review-answer p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--club-muted);
+}
+.induction-context-note {
+  color: var(--club-muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.induction-form-receipt {
+  padding-block: 20px;
+}
+.induction-form-receipt > svg {
+  color: #137333;
+  margin-bottom: 20px;
+}
+.induction-form-receipt .club-button {
+  margin-top: 24px;
+}
+.induction-session-note {
+  padding: 14px 18px;
+  border: 1px solid var(--club-line);
+  border-radius: 12px;
+  background: var(--club-paper);
+}
+@media (max-width: 900px) {
+  .induction-form-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .induction-form-context {
+    position: static;
+  }
+  .induction-form-context > .induction-department-icon {
+    display: none;
+  }
+  .induction-form-context h2 {
+    margin-top: 0;
+  }
+  .induction-form-context .induction-context-note {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .induction-department-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .induction-department {
+    padding: 22px;
+  }
+  .induction-application {
+    padding-block: 24px 56px;
+  }
+  .induction-application-heading {
+    margin-block: 28px;
+  }
+  .induction-form-surface {
+    padding: 24px 20px;
+    border-radius: 20px;
+  }
+  .induction-progress {
+    gap: 12px;
+    justify-content: space-between;
+  }
+  .induction-progress li {
+    gap: 5px;
+    font-size: 11px;
+  }
+  .induction-progress li > span {
+    width: 21px;
+    height: 21px;
+  }
+  .induction-form-fields .club-form-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+  .induction-review-details > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  .induction-details-summary {
+    flex-wrap: wrap;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .induction-expectations summary svg {
+    transition: none;
+  }
+}

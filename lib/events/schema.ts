@@ -54,6 +54,7 @@ export const problemStatementSchema = z.object({
 });
 
 const sections = z.discriminatedUnion("type", [
+  section.extend({ type: z.literal("applications") }),
   section.extend({
     type: z.literal("story"),
     paragraphs: z.array(copy).min(1),
@@ -157,17 +158,28 @@ const registrationDetails = z.object({
   eligibility: copy.optional(),
   teamSize: copy.optional(),
 });
-const registration = z.discriminatedUnion("mode", [
-  z.object({ mode: z.literal("none") }),
-  registrationDetails.extend({
-    mode: z.literal("internal"),
-    form: z.literal("campus"),
-  }),
-  registrationDetails.extend({
-    mode: z.literal("external"),
-    provider: copy,
-    url: webUrl,
-  }),
+const registration = z.union([
+  z.object({ mode: z.literal("none") }).strict(),
+  registrationDetails
+    .extend({
+      mode: z.literal("internal"),
+      form: z.literal("campus"),
+    })
+    .strict(),
+  registrationDetails
+    .extend({
+      mode: z.literal("internal"),
+      form: z.literal("department-interest"),
+      cycleId: id,
+    })
+    .strict(),
+  registrationDetails
+    .extend({
+      mode: z.literal("external"),
+      provider: copy,
+      url: webUrl,
+    })
+    .strict(),
 ]);
 
 export const eventSchema = z
@@ -281,6 +293,22 @@ export const eventSchema = z
       issue("Registration close must follow open", [
         "registration",
         "closesAt",
+      ]);
+    const applicationSections = event.sections.filter(
+      (item) => item.type === "applications",
+    );
+    const inductionForm =
+      event.registration.mode === "internal" &&
+      event.registration.form === "department-interest";
+    if (applicationSections.length > 1)
+      issue("Use one applications section per event", ["sections"]);
+    if (applicationSections.length && !inductionForm)
+      issue("Applications sections require a department-interest form", [
+        "registration",
+      ]);
+    if (inductionForm && !applicationSections.some((item) => !item.hidden))
+      issue("Department-interest forms need a visible applications section", [
+        "sections",
       ]);
     const challenges = event.sections.find(
       (item) => item.type === "challenges",
