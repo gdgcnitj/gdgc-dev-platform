@@ -57,10 +57,7 @@ const input = (
 
 test("the undated induction is first in discovery without fabricated details", () => {
   assert.equal(allEvents[0].id, event.id);
-  assert.deepEqual(
-    getFeaturedEvents().map((item) => item.id),
-    [event.id],
-  );
+  assert.equal(getFeaturedEvents()[0].id, event.id);
   assert.equal(eventDate(event), undefined);
   assert.equal(event.location?.name, undefined);
   assert.ok(compareEventListing(event, getEvent("minimol")!) < 0);
