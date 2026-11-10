@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { getEventInduction } from "@/lib/content/inductions";
+import { DepartmentChoices } from "@/components/inductions/department-choices";
+import { canRegister, registrationStatus } from "@/lib/events/helpers";
 import Image from "next/image";
 import { ArrowRight, ArrowUpRight, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,6 +16,17 @@ function SectionContent({
   event: ClubEvent;
 }) {
   switch (section.type) {
+    case "applications": {
+      const cycle = getEventInduction(event);
+      return cycle ? (
+        <DepartmentChoices
+          cycle={cycle}
+          eventSlug={event.slug}
+          open={canRegister(event)}
+          status={registrationStatus(event)}
+        />
+      ) : null;
+    }
     case "story":
       return (
         <>

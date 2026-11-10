@@ -12,7 +12,13 @@ const messages = {
 export function EventRegistration({ event }: { event: ClubEvent }) {
   const registration = event.registration;
   const status = registrationStatus(event);
-  if (registration.mode === "none" || status === "none") return null;
+  if (
+    registration.mode === "none" ||
+    status === "none" ||
+    (registration.mode === "internal" &&
+      registration.form === "department-interest")
+  )
+    return null;
   return (
     <section
       id="registration"

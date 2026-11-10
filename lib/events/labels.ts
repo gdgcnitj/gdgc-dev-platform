@@ -1,6 +1,7 @@
 import type { EventKind, EventStatus } from "./schema";
 
 export const eventKinds = [
+  "induction",
   "hackathon",
   "workshop",
   "bootcamp",
@@ -10,6 +11,7 @@ export const eventKinds = [
   "other",
 ] as const;
 export const eventKindLabels: Record<EventKind, string> = {
+  induction: "Inductions",
   hackathon: "Hackathon",
   workshop: "Workshop",
   bootcamp: "Bootcamp",

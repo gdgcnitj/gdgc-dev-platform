@@ -147,3 +147,29 @@ export function eventSummary(event: ClubEvent): EventSummary {
     media: cover ? [cover] : [],
   };
 }
+
+// Date-less upcoming announcements belong above historical recaps too.
+export function compareEventListing(a: ClubEvent, b: ClubEvent) {
+  const rank = {
+    live: 0,
+    scheduled: 1,
+    postponed: 2,
+    completed: 3,
+    cancelled: 4,
+  };
+  const group = rank[a.status] - rank[b.status];
+  if (group) return group;
+  if (a.status === "scheduled" || a.status === "live")
+    return (
+      (eventStart(a) || Infinity) - (eventStart(b) || Infinity) ||
+      a.id.localeCompare(b.id)
+    );
+  return eventStart(b) - eventStart(a);
+}
+
+export function isCampusRegistration(event: ClubEvent) {
+  return (
+    event.registration.mode === "internal" &&
+    event.registration.form === "campus"
+  );
+}

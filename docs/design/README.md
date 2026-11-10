@@ -25,3 +25,12 @@ The layouts were checked at 1280px desktop and 390px phone widths.
 
 - [Challenge reader](previews/challenges-desktop.png)
 - [Event guidelines](previews/event-rules-desktop.png)
+
+## Induction forms
+
+The induction forms use solid reading surfaces. Creatives rankings support drag
+handles and keyboard/touch-friendly up/down controls. These previews were checked
+at 1280px desktop and 390px phone widths.
+
+- [Creatives form on desktop](previews/inductions-creatives-desktop.png)
+- [Creatives form on a phone](previews/inductions-creatives-mobile.png)

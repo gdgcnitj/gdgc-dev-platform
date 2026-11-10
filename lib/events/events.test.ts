@@ -290,7 +290,7 @@ test("custom tracks work before winners exist, with derived challenge counts", (
 test("the archive preserves event IDs, routes, assets, winners and MiniMol challenge links", () => {
   assert.deepEqual(
     allEvents.map((event) => event.id),
-    ["minimol", "orientation-2026", "hackmol", "winterfest", "bootcamp"],
+    ["inductions-2026", "minimol", "orientation-2026", "hackmol", "winterfest", "bootcamp"],
   );
   for (const event of allEvents) {
     assert.equal(getEvent(event.slug), getEventById(event.id));
