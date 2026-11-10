@@ -43,6 +43,17 @@ is linked from that event page. Dates, descriptions, photos, problem statements,
 and winners are maintained once in the event file and reused across pages.
 Do not invent missing historical dates, venues, resources, or results.
 
+Orientation 2026 uses five chapter-supplied photos in
+`public/images/events/orientation-2026/`. The closer audience photo is the card
+cover and first carousel slide, followed by the presentation, on-stage moment,
+wider lecture-theatre view, and group photo. Web copies are resized to 2000 × 1500
+and saved as WebP without EXIF metadata; retain the original files outside the repo.
+
+MiniMol uses its existing project-demonstration photo as the card cover, with
+all three real photos retained in its gallery. MiniMol appears in Recent events;
+Inductions 2026 is the only current spotlight. The old MiniMol and Orientation
+illustration covers have been removed.
+
 ## Faculty coordinators
 
 Edit `facultyCoordinators` in `lib/content/home.ts`.
