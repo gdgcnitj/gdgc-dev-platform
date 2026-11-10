@@ -34,3 +34,10 @@ at 1280px desktop and 390px phone widths.
 
 - [Creatives form on desktop](previews/inductions-creatives-desktop.png)
 - [Creatives form on a phone](previews/inductions-creatives-mobile.png)
+
+The Orientation carousel uses five supplied event photos, including the audience
+cover. MiniMol and Orientation use real photos in the homepage cards; only
+Inductions remains in the current spotlight.
+
+- [Orientation gallery](previews/orientation-gallery-desktop.png)
+- [Updated recent-event covers](previews/event-covers-desktop.png)

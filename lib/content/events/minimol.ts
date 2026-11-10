@@ -44,19 +44,13 @@ export const minimol = defineEvent({
         "Live project evaluation and pitch demonstration with GDGC mentors.",
       kind: "photo",
     },
-    {
-      id: "cover",
-      src: "/images/events/minimol.webp",
-      alt: "MiniMol event artwork",
-      kind: "illustration",
-    },
   ],
-  coverId: "cover",
+  coverId: "moment-3",
   registration: {
     mode: "none",
   },
   homepage: {
-    featured: true,
+    featured: false,
   },
   sections: [
     {
