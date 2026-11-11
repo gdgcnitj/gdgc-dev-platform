@@ -148,7 +148,7 @@ const departmentProfiles: Record<
   ai: {
     lead: "Kartik Sirohi",
     initials: "KS",
-    image: "/images/leads/kartik.jpeg",
+    image: "/images/leads/kartik-sirohi.jpeg",
     links: {
       linkedin: "https://www.linkedin.com/in/kartik-sirohi-b81625325/",
       instagram: "https://www.instagram.com/kartiksirohi12/",

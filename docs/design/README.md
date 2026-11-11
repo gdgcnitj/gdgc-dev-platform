@@ -41,3 +41,9 @@ Inductions remains in the current spotlight.
 
 - [Orientation gallery](previews/orientation-gallery-desktop.png)
 - [Updated recent-event covers](previews/event-covers-desktop.png)
+
+The expectations sheet wraps text even when opened from the application picker’s
+action links. Its body scrolls independently on narrow screens.
+
+- [Expectations sheet on desktop](previews/induction-expectations-hotfix-desktop.png)
+- [Expectations sheet on a phone](previews/induction-expectations-hotfix-mobile.png)
