@@ -69,8 +69,8 @@ export const registrationSchema = z.object({
     ),
   interests: z
     .array(z.enum(departmentIds))
-    .min(1, "Choose at least one department")
-    .max(departmentIds.length, "Choose a department from the list"),
+    .min(1, "Choose at least one domain")
+    .max(departmentIds.length, "Choose a domain from the list"),
   // Browsers autofill a field named company. This name is not a contact field.
   leaveBlank: z.string().max(200).optional(),
 });

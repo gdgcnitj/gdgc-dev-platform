@@ -250,7 +250,7 @@ export const commonQuestions = [
   {
     question: "What if I’m new to a domain?",
     answer:
-      "Find the department lead in the grid above. Contact the chapter to discuss where to start and which skills to learn.",
+      "Find the domain lead in the grid above. Contact the chapter to discuss where to start and which skills to learn.",
   },
   {
     question: "How do I register for an event?",

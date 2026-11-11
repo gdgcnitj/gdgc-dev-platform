@@ -12,7 +12,7 @@ const question = (id: string, label: string) => ({
 export const inductions2026 = defineInductionCycle({
   id: "inductions-2026",
   eventId: "inductions-2026",
-  version: 3,
+  version: 5,
   departments: [
     {
       id: "web",
@@ -47,10 +47,90 @@ export const inductions2026 = defineInductionCycle({
         ],
       },
       questions: [
-        question(
-          "web-interest",
-          "What is one website you would like to build, and who would use it?",
-        ),
+        {
+          id: "web-experience",
+          label:
+            "How would you describe your current experience in web development?",
+          type: "textarea",
+        },
+        {
+          id: "web-areas",
+          label: "Which areas of web development have you explored?",
+          type: "multi",
+          options: [
+            { id: "frontend", label: "Frontend development" },
+            { id: "backend", label: "Backend development" },
+            { id: "full-stack", label: "Full-stack development" },
+            { id: "ui-ux", label: "UI/UX design" },
+            { id: "deployment", label: "Deployment and hosting" },
+            { id: "other", label: "Other" },
+          ],
+        },
+        {
+          id: "web-stack",
+          label: "What is the primary tech stack you work with?",
+          type: "textarea",
+          maxLength: 1000,
+        },
+        {
+          id: "web-project",
+          label:
+            "What is the name of your project, and what problem does it solve?",
+          hint: "About your best web project. If you haven’t built one yet, write NA.",
+          type: "textarea",
+        },
+        {
+          id: "web-project-tech",
+          label: "Explain the technologies and tools used in this project.",
+          hint: "Write NA if you haven’t built a project yet.",
+          type: "textarea",
+        },
+        {
+          id: "web-project-role",
+          label:
+            "What was your role, and which features did you implement yourself?",
+          hint: "Write NA if you haven’t built a project yet.",
+          type: "textarea",
+        },
+        {
+          id: "web-project-links",
+          label: "GitHub repository and live deployment",
+          hint: "Add the repository and, if it’s deployed, the live link. Skip this if you haven’t built a project yet.",
+          type: "links",
+          required: false,
+          maxLinks: 4,
+        },
+        {
+          id: "web-why",
+          label: "Why do you want to join the GDGC Web Development team?",
+          type: "textarea",
+        },
+        {
+          id: "web-interest",
+          label: "What interests you most about web development?",
+          type: "textarea",
+        },
+        {
+          id: "web-learning",
+          label:
+            "What are you learning now, or planning to explore next, in web development?",
+          type: "textarea",
+        },
+        {
+          id: "web-contribute",
+          label:
+            "What kind of projects or contributions would you like to work on at GDGC?",
+          type: "textarea",
+        },
+        {
+          id: "web-resume",
+          label: "Google Drive link to your latest resume (PDF)",
+          hint: "Upload your resume to Google Drive and set sharing to “Anyone with the link can view”.",
+          type: "links",
+          required: false,
+          maxLinks: 1,
+          notes: false,
+        },
       ],
     },
     {
@@ -263,7 +343,15 @@ export const inductions2026 = defineInductionCycle({
     },
     {
       id: "mobile",
-      preview: "Bring an idea to a phone. Explore iOS, Flutter, or Android.",
+      preview:
+        "Bring an idea to a phone. Explore Flutter, React Native, iOS, or Android.",
+      note: [
+        "Hi, I’m Rishi, and I’m leading App Development this year.",
+        "This is a short form, and it isn’t a test. Nothing here decides anything on its own. We’re a really chill domain, and we’d love to build with you.",
+        "Our team is small right now, but we want to grow it a lot this year. Whether you’ve shipped an app or never opened Android Studio, please apply.",
+        "Filled the brownie points form after my orientation talk? That form only asked for your name and branch, so use the same name and branch here and we’ll match it.",
+        "You can message me anywhere, anytime. I’m open to anything: https://rishia.in/links",
+      ],
       expectations: {
         groups: [
           {
@@ -276,18 +364,8 @@ export const inductions2026 = defineInductionCycle({
           },
         ],
         tracksIntro:
-          "Explore one of these three tracks alongside the shared basics.",
+          "Explore one of these four tracks alongside the shared basics.",
         tracks: [
-          {
-            title: "Swift · iOS",
-            items: [
-              "Swift syntax, variables, optionals, and functions",
-              "Struct versus class, @State, and @Binding",
-              "SwiftUI: VStack, HStack, ZStack, Text, Button, and Image",
-              "Basic state management, such as a counter app",
-              "Navigation and NavigationStack basics",
-            ],
-          },
           {
             title: "Flutter · Dart",
             items: [
@@ -296,6 +374,26 @@ export const inductions2026 = defineInductionCycle({
               "Column, Row, Container, Text, Image, and Scaffold",
               "setState(), widget rebuilds, and the widget tree",
               "MaterialApp → Scaffold → Body",
+            ],
+          },
+          {
+            title: "React Native · JavaScript",
+            items: [
+              "JavaScript or TypeScript basics: variables, functions, arrays, objects, and async/await",
+              "Components, props, and state with useState",
+              "View, Text, Image, Pressable, and FlatList",
+              "Styling with StyleSheet and Flexbox",
+              "Stack navigation with React Navigation",
+            ],
+          },
+          {
+            title: "Swift · iOS",
+            items: [
+              "Swift syntax, variables, optionals, and functions",
+              "Struct versus class, @State, and @Binding",
+              "SwiftUI: VStack, HStack, ZStack, Text, Button, and Image",
+              "Basic state management, such as a counter app",
+              "Navigation and NavigationStack basics",
             ],
           },
           {
@@ -311,22 +409,168 @@ export const inductions2026 = defineInductionCycle({
         ],
       },
       questions: [
-        question(
-          "mobile-interest",
-          "What is one mobile app you would like to build, and why?",
-        ),
+        {
+          id: "mobile-track",
+          label: "Which track are you applying for?",
+          type: "choice",
+          options: [
+            {
+              id: "flutter",
+              label: "Flutter",
+              description: "Dart · one codebase for Android and iOS",
+            },
+            {
+              id: "react-native",
+              label: "React Native",
+              description: "JavaScript · one codebase for Android and iOS",
+            },
+            {
+              id: "swift",
+              label: "Swift",
+              description: "SwiftUI · native iOS, needs a Mac",
+            },
+            {
+              id: "kotlin",
+              label: "Kotlin",
+              description: "Android Studio · native Android",
+            },
+            {
+              id: "undecided",
+              label: "Not sure yet",
+              description: "We’ll help you pick",
+            },
+          ],
+        },
+        {
+          id: "mobile-machine",
+          label: "Which laptop will you build on?",
+          hint: "Swift and Xcode run only on a Mac. Any laptop works for Flutter, React Native, and Kotlin.",
+          type: "choice",
+          options: [
+            { id: "mac", label: "Mac" },
+            { id: "windows", label: "Windows" },
+            { id: "linux", label: "Linux" },
+            { id: "none", label: "No laptop yet" },
+          ],
+        },
+        {
+          id: "mobile-ram",
+          label: "How much RAM does it have?",
+          hint: "Android emulators run best with 16 GB. With 8 GB you can test on your own phone instead. This helps us plan; it won’t rule you out.",
+          type: "choice",
+          when: {
+            questionId: "mobile-machine",
+            equals: ["mac", "windows", "linux"],
+          },
+          options: [
+            { id: "8-or-less", label: "8 GB or less" },
+            { id: "16", label: "16 GB" },
+            { id: "more", label: "More than 16 GB" },
+            { id: "unsure", label: "Not sure" },
+          ],
+        },
+        {
+          id: "mobile-level",
+          label: "Where are you with app development right now?",
+          type: "choice",
+          options: [
+            { id: "new", label: "New to it" },
+            {
+              id: "practice",
+              label: "Followed tutorials or built practice apps",
+            },
+            { id: "built", label: "Built a complete app, alone or in a team" },
+            {
+              id: "published",
+              label: "Published an app (Play Store, App Store, or TestFlight)",
+            },
+          ],
+        },
+        {
+          id: "mobile-project",
+          label: "Your best project: its name and what it does",
+          type: "text",
+          maxLength: 200,
+          when: {
+            questionId: "mobile-level",
+            equals: ["practice", "built", "published"],
+          },
+        },
+        {
+          id: "mobile-project-role",
+          label: "What did you build yourself?",
+          hint: "Your part, what was hard, and what you would improve.",
+          type: "textarea",
+          when: {
+            questionId: "mobile-level",
+            equals: ["practice", "built", "published"],
+          },
+        },
+        {
+          id: "mobile-project-links",
+          label: "Links to see it",
+          hint: "A GitHub repo, store listing, demo video, or a Drive folder with screenshots and code. A README isn’t needed. Say what each link shows, and make sure anyone with the link can open it.",
+          type: "links",
+          maxLinks: 5,
+          when: {
+            questionId: "mobile-level",
+            equals: ["practice", "built", "published"],
+          },
+        },
+        {
+          id: "mobile-other-project",
+          label: "Another project",
+          hint: "Its name, your part, and a link.",
+          type: "textarea",
+          required: false,
+          maxLength: 1500,
+          when: {
+            questionId: "mobile-level",
+            equals: ["practice", "built", "published"],
+          },
+        },
+        {
+          id: "mobile-idea",
+          label: "Describe an app you’d like to build",
+          hint: "The problem it solves, its main screens, and which track you’d use.",
+          type: "textarea",
+          when: { questionId: "mobile-level", equals: "new" },
+        },
+        {
+          id: "mobile-explain",
+          label:
+            "Pick one topic from the expectations you already understand, and explain it as if you were teaching a friend.",
+          hint: "A few sentences is plenty.",
+          type: "textarea",
+          maxLength: 1500,
+        },
+        {
+          id: "mobile-favorite-app",
+          label: "Which app on your phone feels the best to use, and why?",
+          type: "textarea",
+          required: false,
+          maxLength: 1000,
+        },
+        {
+          id: "mobile-brownie",
+          label:
+            "Did you fill the App Dev brownie points form after the orientation talk?",
+          hint: "If yes, use the same name and branch as on that form so we can match it.",
+          type: "choice",
+          options: [
+            { id: "yes", label: "Yes" },
+            { id: "no", label: "No" },
+          ],
+        },
       ],
     },
     {
       id: "wit",
       preview:
         "Help more women find their community and participate in technology.",
-      questions: [
-        question(
-          "wit-interest",
-          "What is one activity you would suggest to help more women participate in technology?",
-        ),
-      ],
+      applications: false,
+      membership:
+        "No separate application. Join any domain and you’re part of Women in Tech.",
     },
     {
       id: "devsecops",
@@ -369,6 +613,23 @@ export const inductions2026 = defineInductionCycle({
       id: "creatives",
       preview:
         "Tell the chapter’s stories through design, words, and visual content.",
+      expectations: {
+        intro:
+          "You do not need to be a tech expert to join the Creatives team. We are looking for people who get things done and help run our events smoothly. You also do not have to know everything: we do not expect you to handle posters, video editing, and management all at once. Being good at just one of these areas is more than enough.",
+        groups: [
+          {
+            title: "What we look for",
+            items: [
+              "Event management and coordination: people who can talk to people, handle logistics, and manage things on the ground while an event is happening",
+              "Video editing: no professional software or flashy transitions needed. If you can use a basic app like CapCut to put together a clean, well-edited reel for our socials, you are good to go",
+              "Poster designing: we want our posters to look sharp and catchy. An eye for layouts, colours, and decent design sense fits right in",
+              "Acting and directing: ideas for reels or short videos, the ability to execute them, or being comfortable in front of the camera",
+            ],
+          },
+        ],
+        outro:
+          "We will not judge you on perfection. If you have taken even one step into any of these areas, we will help you explore the rest while you grow with us.",
+      },
       questions: [
         {
           id: "creative-preferences",

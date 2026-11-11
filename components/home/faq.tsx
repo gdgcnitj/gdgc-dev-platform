@@ -13,7 +13,7 @@ export function HomeFaq() {
       <div className="club-section club-container club-questions">
         <div className="club-questions-heading" data-reveal>
           <h2 id="questions-title">Common questions.</h2>
-          <p>Joining the chapter, choosing a department, and taking part.</p>
+          <p>Joining the chapter, choosing a domain, and taking part.</p>
           <a
             className="club-text-link"
             href={socialLinks.instagram}

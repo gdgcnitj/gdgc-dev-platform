@@ -10,7 +10,7 @@ const footerGroups = [
     title: "Explore",
     links: [
       { label: "Events", href: "/events" },
-      { label: "Departments & leads", href: "/#departments" },
+      { label: "Domains & leads", href: "/#departments" },
       { label: "Faculty coordinators", href: "/#faculty" },
       { label: "Gallery", href: "/#gallery" },
       { label: "Common questions", href: "/#questions" },
@@ -42,7 +42,7 @@ export function HomeFooter() {
               Join the<br />community.
             </h2>
             <div className="club-footer-invitation-copy">
-              <p>Talk to the chapter about departments, events, and how to get involved.</p>
+              <p>Talk to the chapter about domains, events, and how to get involved.</p>
               <Button asChild className="club-button club-footer-button">
                 <a href={socialLinks.instagram} target="_blank" rel="noreferrer">
                   Contact on Instagram <ArrowUpRight className="club-action-arrow" aria-hidden="true" />

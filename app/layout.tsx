@@ -40,7 +40,7 @@ const googleSans = localFont({
 export const metadata: Metadata = {
   title: "GDGC NITJ · Learn. Build. Belong.",
   description:
-    "Meet the GDG on Campus community at NIT Jalandhar. Explore our events, departments, student leads, and campus moments.",
+    "Meet the GDG on Campus community at NIT Jalandhar. Explore our events, domains, student leads, and campus moments.",
   icons: {
     icon: siteIcon.src,
   },

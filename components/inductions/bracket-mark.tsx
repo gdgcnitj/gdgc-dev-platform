@@ -50,7 +50,14 @@ export function SuccessMark() {
       fill="none"
       aria-hidden="true"
     >
-      <circle className="success-ring" cx="32" cy="32" r="22" stroke="#137333" strokeWidth="2.5" />
+      <circle
+        className="success-ring"
+        cx="32"
+        cy="32"
+        r="22"
+        stroke="#137333"
+        strokeWidth="2.5"
+      />
       <path
         className="success-check"
         d="M22.5 32.5l6.5 6.5 13-14"

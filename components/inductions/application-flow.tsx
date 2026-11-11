@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState, type ReactNode } from "react";
@@ -9,10 +10,13 @@ import {
   ArrowUpDown,
   Check,
   CheckCircle2,
+  FileDown,
   LoaderCircle,
 } from "lucide-react";
 import { submitInductionApplication } from "@/app/events/[id]/apply/actions";
 import { getDepartment } from "@/lib/content/departments";
+import { palette } from "@/lib/design/theme";
+import type { AnswerCopy } from "@/lib/inductions/answer-pdf";
 import { branches } from "@/lib/content/registration";
 import {
   commonQuestionLabels,
@@ -20,9 +24,11 @@ import {
   departmentAnswersSchema,
   visibleAnswers,
   isQuestionVisible,
+  emptyAnswer,
   formatDepartmentAnswer,
   type CommonDraft,
   type DepartmentAnswers,
+  type LinkAnswer,
   type InductionCycle,
   type InductionDepartment,
 } from "@/lib/inductions/schema";
@@ -35,7 +41,7 @@ import { useInductionFlow } from "./flow-provider";
 
 const labels = commonQuestionLabels;
 const ordinal = ["First", "Second", "Third", "Fourth"];
-const progressLabels = ["About you", "Departments", "Questions", "Review"];
+const progressLabels = ["About you", "Domains", "Questions", "Review"];
 
 type Step =
   | { kind: "about" }
@@ -44,7 +50,10 @@ type Step =
   | { kind: "review" };
 
 const fieldTypes: Partial<
-  Record<keyof CommonDraft, { type: string; autoComplete?: string; max: number }>
+  Record<
+    keyof CommonDraft,
+    { type: string; autoComplete?: string; max: number }
+  >
 > = {
   name: { type: "text", autoComplete: "name", max: 80 },
   email: { type: "email", autoComplete: "email", max: 254 },
@@ -53,6 +62,7 @@ const fieldTypes: Partial<
   linkedinUrl: { type: "url", autoComplete: "url", max: 200 },
   githubUrl: { type: "url", autoComplete: "url", max: 200 },
   orcidUrl: { type: "text", autoComplete: "off", max: 200 },
+  portfolioUrl: { type: "url", autoComplete: "url", max: 500 },
 };
 
 function Field({
@@ -91,10 +101,7 @@ function draftAnswers(
   return Object.fromEntries(
     department.questions.map((question) => [
       question.id,
-      saved?.[question.id] ??
-        (question.type === "ranking"
-          ? question.options.map((option) => option.id)
-          : ""),
+      saved?.[question.id] ?? emptyAnswer(question),
     ]),
   );
 }
@@ -106,6 +113,7 @@ export function ApplicationFlow({
   cycle,
   open,
   status,
+  leads = {},
   initialDepartment,
 }: {
   eventId: string;
@@ -114,6 +122,7 @@ export function ApplicationFlow({
   cycle: InductionCycle;
   open: boolean;
   status: string;
+  leads?: Record<string, { name: string; image?: string; initials: string }>;
   initialDepartment?: string;
 }) {
   const flow = useInductionFlow();
@@ -121,6 +130,9 @@ export function ApplicationFlow({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [alert, setAlert] = useState("");
   const [busy, setBusy] = useState(false);
+  // The applicant's own copy, kept only in this page's memory for the download.
+  const [copy, setCopy] = useState<AnswerCopy>();
+  const [downloading, setDownloading] = useState(false);
   const [receipt, setReceipt] = useState<{
     status: "created" | "duplicate";
     departments: string[];
@@ -166,7 +178,9 @@ export function ApplicationFlow({
       initialDepartment &&
       !flow.selected.length &&
       !flow.received.includes(initialDepartment) &&
-      cycle.departments.some((item) => item.id === initialDepartment)
+      cycle.departments.some(
+        (item) => item.id === initialDepartment && item.applications,
+      )
     )
       flow.setSelected([initialDepartment]);
   }, [flow, initialDepartment, cycle.departments]);
@@ -228,7 +242,7 @@ export function ApplicationFlow({
     }
     if (step.kind === "choose") {
       if (!selected.length) {
-        setErrors({ departments: "Choose at least one department" });
+        setErrors({ departments: "Choose at least one domain" });
         return;
       }
       return goTo(2);
@@ -274,6 +288,33 @@ export function ApplicationFlow({
       setAlert(result.error);
       return;
     }
+    setCopy(
+      result.status === "created"
+        ? {
+            submittedAt: new Date().toISOString(),
+            common: common.data,
+            applications: applications.map(({ departmentId, answers }) => {
+              const department = selected.find(
+                (item) => item.id === departmentId,
+              )!;
+              const identity = getDepartment(departmentId)!;
+              return {
+                title: identity.inductionTitle,
+                color: palette[identity.color],
+                questions: department.questions
+                  .filter((question) => isQuestionVisible(question, answers))
+                  .map((question) => ({
+                    label: question.label,
+                    type: question.type,
+                    options:
+                      "options" in question ? question.options : undefined,
+                    answer: answers[question.id],
+                  })),
+              };
+            }),
+          }
+        : undefined,
+    );
     flow.markReceived(result.departments, common.data.email);
     flow.setStep(1);
     setReceipt(result);
@@ -295,7 +336,7 @@ export function ApplicationFlow({
       id,
       name: key,
       value: flow.common[key],
-      required: key !== "orcidUrl",
+      required: key !== "orcidUrl" && key !== "portfolioUrl",
       "aria-invalid": errors[key] ? (true as const) : undefined,
       "aria-describedby": errors[key] || hint ? `${id}-message` : undefined,
       onChange: (
@@ -385,7 +426,10 @@ export function ApplicationFlow({
       .join(" and ");
     return (
       <div className="induction-flow">
-        <div className="induction-form-surface induction-form-receipt" role="status">
+        <div
+          className="induction-form-surface induction-form-receipt"
+          role="status"
+        >
           <SuccessMark />
           <h2 ref={heading} tabIndex={-1}>
             {receipt.status === "created"
@@ -401,6 +445,50 @@ export function ApplicationFlow({
             Shortlisting and an offline round follow. Submitting does not
             confirm selection.
           </p>
+          {copy && (
+            <div className="induction-answer-copy">
+              <div>
+                <strong>Keep a copy of your answers</strong>
+                <span>
+                  A PDF of everything you submitted, handy for preparing later.
+                </span>
+              </div>
+              <button
+                type="button"
+                className="induction-pdf-button"
+                disabled={downloading}
+                onClick={async () => {
+                  setDownloading(true);
+                  try {
+                    const { downloadAnswerPdf } =
+                      await import("@/lib/inductions/answer-pdf");
+                    await downloadAnswerPdf(copy, "GDGC-application.pdf");
+                  } catch {
+                    setAlert(
+                      "We couldn’t make the PDF. Your application is still saved; please try again.",
+                    );
+                  }
+                  setDownloading(false);
+                }}
+              >
+                {downloading ? (
+                  <LoaderCircle
+                    size={16}
+                    className="club-form-spinner"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <FileDown size={16} aria-hidden="true" />
+                )}
+                {downloading ? "Preparing PDF" : "Download PDF"}
+              </button>
+            </div>
+          )}
+          {alert && (
+            <p className="club-form-alert" role="alert">
+              {alert}
+            </p>
+          )}
           <div className="induction-receipt-actions">
             {receipt.remaining > 0 && (
               <Button
@@ -411,14 +499,16 @@ export function ApplicationFlow({
                   goTo(1);
                 }}
               >
-                Apply to {receipt.remaining} more department
+                Apply to {receipt.remaining} more domain
                 {receipt.remaining === 1 ? "" : "s"}
                 <ArrowRight size={16} aria-hidden="true" />
               </Button>
             )}
             <Button
               asChild
-              className={receipt.remaining > 0 ? "club-button-secondary" : "club-button"}
+              className={
+                receipt.remaining > 0 ? "club-button-secondary" : "club-button"
+              }
             >
               <Link href={`/events/${eventSlug}`}>Back to {eventTitle}</Link>
             </Button>
@@ -432,20 +522,20 @@ export function ApplicationFlow({
     about: {
       eyebrow: "Step 1 of 4",
       title: "Tell us about you",
-      text: `We use these details for every department you choose. Everything except ORCID iD is required.`,
+      text: `We use these details for every domain you choose. Everything except ORCID iD and portfolio is required.`,
     },
     choose: {
       eyebrow: "Step 2 of 4",
-      title: "Choose your departments",
+      title: "Choose your domains",
       text:
         selectable < max
-          ? `You already applied to ${max - selectable} department this session, so you can choose ${selectable} more.`
+          ? `You already applied to ${max - selectable} domain this session, so you can choose ${selectable} more.`
           : `Pick up to ${max === 2 ? "two" : max}. The first one you pick is your first preference.`,
     },
     questions:
       step.kind === "questions"
         ? {
-            eyebrow: `Step 3 of 4 · Department ${step.index + 1} of ${selected.length}`,
+            eyebrow: `Step 3 of 4 · Domain ${step.index + 1} of ${selected.length}`,
             title: getDepartment(step.department.id)!.inductionTitle,
             text: "A short answer in your own words is all you need.",
           }
@@ -453,7 +543,7 @@ export function ApplicationFlow({
     review: {
       eyebrow: "Step 4 of 4",
       title: "Review your application",
-      text: "Check everything once. Your application goes to the induction team for each department you chose.",
+      text: "Check everything once. Your application goes to the induction team for each domain you chose.",
     },
   }[step.kind]!;
 
@@ -525,7 +615,10 @@ export function ApplicationFlow({
               <p>{intro.text}</p>
               {step.kind === "questions" && (
                 <div className="induction-intro-links">
-                  <Expectations department={step.department} cycleId={cycle.id} />
+                  <Expectations
+                    department={step.department}
+                    cycleId={cycle.id}
+                  />
                   <ExpectationsPdfLink
                     cycleId={cycle.id}
                     department={step.department}
@@ -534,6 +627,61 @@ export function ApplicationFlow({
                 </div>
               )}
             </div>
+            {step.kind === "questions" &&
+              step.department.note &&
+              (() => {
+                const lead = leads[step.department.id];
+                return (
+                  <aside className="induction-lead-note">
+                    <div className="induction-lead-note-head">
+                      {lead?.image ? (
+                        <Image
+                          src={lead.image}
+                          alt=""
+                          width={44}
+                          height={44}
+                          className="induction-lead-photo"
+                        />
+                      ) : (
+                        <span
+                          className="induction-lead-photo"
+                          aria-hidden="true"
+                        >
+                          {lead?.initials}
+                        </span>
+                      )}
+                      <p>
+                        <strong>A note from {lead?.name ?? "the lead"}</strong>
+                        <span>
+                          {getDepartment(step.department.id)!.inductionTitle}{" "}
+                          lead
+                        </span>
+                      </p>
+                    </div>
+                    {step.department.note.map((paragraph) => (
+                      <p key={paragraph}>
+                        {/* Web addresses in a note become links. */}
+                        {paragraph
+                          .split(/(https:\/\/\S+)/)
+                          .map((part, index) =>
+                            index % 2 ? (
+                              <a
+                                key={part}
+                                href={part}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {part.replace(/^https:\/\//, "")}
+                              </a>
+                            ) : (
+                              part
+                            ),
+                          )}
+                      </p>
+                    ))}
+                  </aside>
+                );
+              })()}
             <fieldset disabled={busy} className="induction-form-fields">
               <legend className="sr-only">{intro.title}</legend>
               <input
@@ -557,10 +705,16 @@ export function ApplicationFlow({
                     {commonField("linkedinUrl", "linkedin.com/in/your-name")}
                     {commonField("githubUrl", "github.com/your-username")}
                   </div>
-                  {commonField(
-                    "orcidUrl",
-                    "Only if you have one, like 0000-0002-1825-0097.",
-                  )}
+                  <div className="club-form-row">
+                    {commonField(
+                      "portfolioUrl",
+                      "A site with your work, if you have one.",
+                    )}
+                    {commonField(
+                      "orcidUrl",
+                      "Only if you have one, like 0000-0002-1825-0097.",
+                    )}
+                  </div>
                   {commonField(
                     "otherClubs",
                     "Write None if you are not part of another club.",
@@ -584,70 +738,78 @@ export function ApplicationFlow({
                     {selected.length} of {selectable} selected
                   </p>
                   <ul className="induction-pick-grid">
-                    {cycle.departments.map((department) => {
-                      const identity = getDepartment(department.id)!;
-                      const position = flow.selected.indexOf(department.id);
-                      const received = flow.received.includes(department.id);
-                      const full =
-                        position < 0 && selected.length >= selectable;
-                      return (
-                        <li
-                          key={department.id}
-                          className="induction-pick"
-                          data-tone={identity.color}
-                          data-selected={position >= 0 ? "" : undefined}
-                          data-disabled={received || full ? "" : undefined}
-                        >
-                          <label>
-                            <input
-                              type="checkbox"
-                              checked={position >= 0 || received}
-                              disabled={received || full}
-                              onChange={() => toggle(department.id)}
-                            />
-                            <span className="induction-department-icon">
-                              <DepartmentIcon id={department.id} />
-                            </span>
-                            <span className="induction-pick-text">
-                              <strong>{identity.inductionTitle}</strong>
-                              <span>{department.preview}</span>
-                              {position >= 0 ? (
-                                <span className="induction-pick-badge">
-                                  {ordinal[position]} choice
-                                </span>
-                              ) : received ? (
-                                <span className="induction-received">
-                                  <CheckCircle2 size={15} aria-hidden="true" />{" "}
-                                  Submitted
-                                </span>
-                              ) : null}
-                            </span>
-                            <span className="induction-pick-mark" aria-hidden="true">
-                              {position >= 0 ? (
-                                position + 1
-                              ) : received ? (
-                                <Check size={14} />
-                              ) : null}
-                            </span>
-                          </label>
-                          <div className="induction-pick-footer">
-                            <span className="induction-pick-links">
-                              <Expectations
-                                department={department}
-                                cycleId={cycle.id}
-                                label="Expectations"
+                    {cycle.departments
+                      .filter((department) => department.applications)
+                      .map((department) => {
+                        const identity = getDepartment(department.id)!;
+                        const position = flow.selected.indexOf(department.id);
+                        const received = flow.received.includes(department.id);
+                        const full =
+                          position < 0 && selected.length >= selectable;
+                        return (
+                          <li
+                            key={department.id}
+                            className="induction-pick"
+                            data-tone={identity.color}
+                            data-selected={position >= 0 ? "" : undefined}
+                            data-disabled={received || full ? "" : undefined}
+                          >
+                            <label>
+                              <input
+                                type="checkbox"
+                                checked={position >= 0 || received}
+                                disabled={received || full}
+                                onChange={() => toggle(department.id)}
                               />
-                              {position >= 0 && (
-                                <ExpectationsPdfLink
-                                  cycleId={cycle.id}
+                              <span className="induction-department-icon">
+                                <DepartmentIcon id={department.id} />
+                              </span>
+                              <span className="induction-pick-text">
+                                <strong>{identity.inductionTitle}</strong>
+                                <span>{department.preview}</span>
+                                {position >= 0 ? (
+                                  <span className="induction-pick-badge">
+                                    {ordinal[position]} choice
+                                  </span>
+                                ) : received ? (
+                                  <span className="induction-received">
+                                    <CheckCircle2
+                                      size={15}
+                                      aria-hidden="true"
+                                    />{" "}
+                                    Submitted
+                                  </span>
+                                ) : null}
+                              </span>
+                              <span
+                                className="induction-pick-mark"
+                                aria-hidden="true"
+                              >
+                                {position >= 0 ? (
+                                  position + 1
+                                ) : received ? (
+                                  <Check size={14} />
+                                ) : null}
+                              </span>
+                            </label>
+                            <div className="induction-pick-footer">
+                              <span className="induction-pick-links">
+                                <Expectations
                                   department={department}
+                                  cycleId={cycle.id}
+                                  label="Expectations"
                                 />
-                              )}
-                            </span>
-                          </div>
-                        </li>
-                      );
-                    })}
+                                {position >= 0 && (
+                                  <ExpectationsPdfLink
+                                    cycleId={cycle.id}
+                                    department={department}
+                                  />
+                                )}
+                              </span>
+                            </div>
+                          </li>
+                        );
+                      })}
                   </ul>
                   {selected.length === 2 && (
                     <button
@@ -741,12 +903,35 @@ export function ApplicationFlow({
                               key={question.id}
                             >
                               <h4>{question.label}</h4>
-                              <p>
-                                {formatDepartmentAnswer(
-                                  answers[question.id],
-                                  question,
-                                ) || "No answer provided"}
-                              </p>
+                              {question.type === "links" ? (
+                                <ul className="induction-review-links">
+                                  {(answers[question.id] as LinkAnswer[])
+                                    .filter((link) => link.url.trim())
+                                    .map((link) => (
+                                      <li key={link.url}>
+                                        <span>{link.note}</span>
+                                        <a
+                                          href={
+                                            /^https?:\/\//i.test(link.url)
+                                              ? link.url
+                                              : `https://${link.url}`
+                                          }
+                                          target="_blank"
+                                          rel="noreferrer"
+                                        >
+                                          {link.url}
+                                        </a>
+                                      </li>
+                                    ))}
+                                </ul>
+                              ) : (
+                                <p>
+                                  {formatDepartmentAnswer(
+                                    answers[question.id],
+                                    question,
+                                  ) || "No answer provided"}
+                                </p>
+                              )}
                             </div>
                           ))}
                       </section>
@@ -755,7 +940,7 @@ export function ApplicationFlow({
                   <p className="induction-context-note">
                     This is an expression of interest. Shortlisting and an
                     offline round follow before selection. You can apply to at
-                    most {max} departments in this cycle.
+                    most {max} domains in this cycle.
                   </p>
                 </>
               )}

@@ -39,6 +39,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.6",
+    "jspdf": "^4.2.1",
     "lucide-react": "^0.545.0",
     "next": "15.5.5",
     "next-auth": "^5.0.0-beta.29",

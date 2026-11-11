@@ -11,14 +11,18 @@ const expectationSection = z.object({
 const expectationGroup = expectationSection.extend({
   sections: z.array(expectationSection).min(1).optional(),
 });
-const option = z.object({ id, label: copy });
+// A description turns a choice into a tile with a second line.
+const option = z.object({ id, label: copy, description: copy.optional() });
 const questionBase = z.object({
   id,
   label: copy,
   hint: copy.optional(),
   required: z.boolean().default(true),
   sample: z.boolean().default(false),
-  when: z.object({ questionId: id, equals: copy }).optional(),
+  // Shows the question when an earlier choice is the option, or any of the options.
+  when: z
+    .object({ questionId: id, equals: z.union([copy, z.array(copy).min(1)]) })
+    .optional(),
 });
 const textLength = z.number().int().min(1).max(5000);
 const questionSchema = z.discriminatedUnion("type", [
@@ -38,6 +42,18 @@ const questionSchema = z.discriminatedUnion("type", [
     type: z.literal("ranking"),
     options: z.array(option).min(2).max(12),
   }),
+  // Any number of options; answers keep the options' order.
+  questionBase.extend({
+    type: z.literal("multi"),
+    options: z.array(option).min(2).max(12),
+  }),
+  // Links with a short note each, such as a repository, store listing, or demo video.
+  questionBase.extend({
+    type: z.literal("links"),
+    maxLinks: z.number().int().min(1).max(10).default(5),
+    // False for a single obvious link, such as a resume, that needs no note.
+    notes: z.boolean().default(true),
+  }),
 ]);
 
 export const inductionCycleSchema = z
@@ -46,7 +62,12 @@ export const inductionCycleSchema = z
     eventId: id,
     version: z.number().int().positive(),
     // Counted per normalized email and roll number across every submission.
-    maxDepartments: z.number().int().min(1).max(departmentIds.length).default(2),
+    maxDepartments: z
+      .number()
+      .int()
+      .min(1)
+      .max(departmentIds.length)
+      .default(2),
     departments: z
       .array(
         z.object({
@@ -58,9 +79,17 @@ export const inductionCycleSchema = z
               groups: z.array(expectationGroup).min(1),
               tracks: z.array(expectationGroup).min(1).optional(),
               tracksIntro: copy.optional(),
+              // A closing line after every group and track.
+              outro: copy.optional(),
             })
             .optional(),
-          questions: z.array(questionSchema).min(1).max(12),
+          // The department lead's welcome, shown above that department's questions.
+          note: z.array(copy).min(1).optional(),
+          // False for departments members belong to without applying, such as Women in Tech.
+          applications: z.boolean().default(true),
+          // Shown on the event card when the department takes no applications.
+          membership: copy.optional(),
+          questions: z.array(questionSchema).max(12).default([]),
         }),
       )
       .min(1)
@@ -77,6 +106,20 @@ export const inductionCycleSchema = z
         message: "Department IDs must be unique",
       });
     for (const [index, department] of cycle.departments.entries()) {
+      if (department.applications !== !!department.questions.length)
+        ctx.addIssue({
+          code: "custom",
+          path: ["departments", index, "questions"],
+          message:
+            "Departments taking applications need questions; others have none",
+        });
+      if (!department.applications && !department.membership)
+        ctx.addIssue({
+          code: "custom",
+          path: ["departments", index, "membership"],
+          message:
+            "Explain how to join a department that takes no applications",
+        });
       if (
         new Set(department.questions.map((question) => question.id)).size !==
         department.questions.length
@@ -101,11 +144,12 @@ export const inductionCycleSchema = z
           const controller = department.questions
             .slice(0, questionIndex)
             .find((item) => item.id === question.when!.questionId);
+          const expected = [question.when.equals].flat();
           if (
             !controller ||
             controller.type !== "choice" ||
-            !controller.options.some(
-              (item) => item.id === question.when!.equals,
+            !expected.every((value) =>
+              controller.options.some((item) => item.id === value),
             )
           )
             ctx.addIssue({
@@ -122,7 +166,8 @@ export const inductionCycleSchema = z
 export type InductionCycle = z.infer<typeof inductionCycleSchema>;
 export type InductionDepartment = InductionCycle["departments"][number];
 export type InductionQuestion = InductionDepartment["questions"][number];
-export type AnswerValue = string | string[];
+export type LinkAnswer = { url: string; note: string };
+export type AnswerValue = string | string[] | LinkAnswer[];
 export type DepartmentAnswers = Record<string, AnswerValue>;
 export type QuestionSnapshot = {
   id: string;
@@ -164,13 +209,34 @@ function profileLink(
 function validOrcid(id: string) {
   const digits = id.replaceAll("-", "");
   let total = 0;
-  for (const digit of digits.slice(0, -1))
-    total = (total + Number(digit)) * 2;
+  for (const digit of digits.slice(0, -1)) total = (total + Number(digit)) * 2;
   const check = (12 - (total % 11)) % 11;
   return digits.at(-1) === (check === 10 ? "X" : String(check));
 }
 
 const orcidPattern = /^(?:orcid\.org\/)?(\d{4}-\d{4}-\d{4}-\d{3}[\dX])\/?$/i;
+
+// Pasted links often lack a scheme; only web links are accepted.
+function webLink(message: string, optional = false) {
+  return z
+    .string()
+    .trim()
+    .max(500, "Use a shorter link")
+    .transform((value, ctx) => {
+      if (optional && !value) return "";
+      try {
+        const url = new URL(
+          /^https?:\/\//i.test(value) ? value : `https://${value}`,
+        );
+        if (!/^https?:$/.test(url.protocol) || !url.hostname.includes("."))
+          throw new Error();
+        return url.href;
+      } catch {
+        ctx.addIssue({ code: "custom", message });
+        return z.NEVER;
+      }
+    });
+}
 
 export const commonDetailsSchema = registrationSchema
   .pick({ name: true, email: true, phone: true, branch: true })
@@ -208,6 +274,10 @@ export const commonDetailsSchema = registrationSchema
         }
         return `https://orcid.org/${id}`;
       }),
+    portfolioUrl: webLink(
+      "Enter your portfolio or website link, like yourname.dev",
+      true,
+    ),
     otherClubs: z
       .string()
       .trim()
@@ -230,6 +300,7 @@ export const commonQuestionLabels = {
   linkedinUrl: "LinkedIn profile",
   githubUrl: "GitHub profile",
   orcidUrl: "ORCID iD (optional)",
+  portfolioUrl: "Portfolio or personal website (optional)",
   otherClubs: "Other clubs you are part of",
   whyGdgc: "Why do you want to join GDGC?",
 } as const;
@@ -245,18 +316,40 @@ export const emptyCommonDetails: CommonDraft = {
   linkedinUrl: "",
   githubUrl: "",
   orcidUrl: "",
+  portfolioUrl: "",
   otherClubs: "",
   whyGdgc: "",
 };
 
 export function isQuestionVisible(
-  question: InductionQuestion,
-  answers: DepartmentAnswers,
+  question: Pick<InductionQuestion, "when">,
+  answers: Partial<DepartmentAnswers>,
 ) {
+  if (!question.when) return true;
+  const value = answers[question.when.questionId];
   return (
-    !question.when || answers[question.when.questionId] === question.when.equals
+    typeof value === "string" && [question.when.equals].flat().includes(value)
   );
 }
+
+export function emptyAnswer(question: InductionQuestion): AnswerValue {
+  if (question.type === "ranking")
+    return question.options.map((item) => item.id);
+  return question.type === "links" || question.type === "multi" ? [] : "";
+}
+
+const linkUrl = webLink("Enter a full link, like github.com/you/app");
+const linkAnswer = (notes: boolean) =>
+  z
+    .object({
+      url: linkUrl,
+      note: z
+        .string()
+        .trim()
+        .min(notes ? 1 : 0, "Say what this link shows")
+        .max(200, "Keep this note under 200 characters"),
+    })
+    .strict();
 
 export function visibleAnswers(
   department: InductionDepartment,
@@ -267,10 +360,7 @@ export function visibleAnswers(
       .filter((question) => isQuestionVisible(question, answers))
       .map((question) => [
         question.id,
-        answers[question.id] ??
-          (question.type === "ranking"
-            ? question.options.map((item) => item.id)
-            : ""),
+        answers[question.id] ?? emptyAnswer(question),
       ]),
   );
 }
@@ -293,6 +383,41 @@ function questionValueSchema(question: InductionQuestion) {
       question.options.map((item) => item.id) as [string, ...string[]],
       "Choose an option",
     );
+  if (question.type === "multi") {
+    const ids = question.options.map((item) => item.id);
+    return z
+      .array(z.string())
+      .min(question.required ? 1 : 0, "Choose at least one option")
+      .refine(
+        (values) =>
+          new Set(values).size === values.length &&
+          values.every((value) => ids.includes(value)),
+        "Choose from the listed options",
+      )
+      .transform((values) => ids.filter((id) => values.includes(id)));
+  }
+  if (question.type === "links")
+    return z
+      .preprocess(
+        // Rows left completely blank are ignored rather than rejected.
+        (rows) =>
+          Array.isArray(rows)
+            ? rows.filter(
+                (row) =>
+                  !row ||
+                  typeof row !== "object" ||
+                  String(row.url ?? "").trim() ||
+                  String(row.note ?? "").trim(),
+              )
+            : rows,
+        z.array(linkAnswer(question.notes)),
+      )
+      .pipe(
+        z
+          .array(linkAnswer(question.notes))
+          .min(question.required ? 1 : 0, "Add at least one link")
+          .max(question.maxLinks, `Add up to ${question.maxLinks} links`),
+      );
   return z
     .string()
     .trim()
@@ -319,8 +444,7 @@ export function departmentAnswersSchema(department: InductionDepartment) {
     .superRefine((answers, ctx) => {
       for (const question of department.questions) {
         if (!question.when) continue;
-        const shown =
-          answers[question.when.questionId] === question.when.equals;
+        const shown = isQuestionVisible(question, answers as DepartmentAnswers);
         if (shown && question.required && answers[question.id] === undefined)
           ctx.addIssue({
             code: "custom",
@@ -335,13 +459,12 @@ export function departmentAnswersSchema(department: InductionDepartment) {
           });
       }
     })
-    .transform(
-      (answers): DepartmentAnswers =>
-        Object.fromEntries(
-          Object.entries(answers).filter(
-            (entry): entry is [string, AnswerValue] => entry[1] !== undefined,
-          ),
+    .transform((answers): DepartmentAnswers =>
+      Object.fromEntries(
+        Object.entries(answers).filter(
+          (entry): entry is [string, AnswerValue] => entry[1] !== undefined,
         ),
+      ),
     );
 }
 
@@ -349,8 +472,19 @@ export function formatDepartmentAnswer(
   value: AnswerValue | undefined,
   question: Pick<QuestionSnapshot, "type" | "options">,
 ) {
+  if (question.type === "multi" && Array.isArray(value))
+    return (value as string[])
+      .map(
+        (id) =>
+          question.options?.find((option) => option.id === id)?.label ?? id,
+      )
+      .join(", ");
+  if (question.type === "links" && Array.isArray(value))
+    return (value as LinkAnswer[])
+      .map((link) => `${link.note}: ${link.url}`)
+      .join("\n");
   if (Array.isArray(value))
-    return value
+    return (value as string[])
       .map(
         (id, index) =>
           `${index + 1}. ${question.options?.find((option) => option.id === id)?.label ?? id}`,
@@ -375,10 +509,10 @@ export function submissionSchema(cycle: InductionCycle) {
         .array(
           z.object({ departmentId: z.string(), answers: z.unknown() }).strict(),
         )
-        .min(1, "Choose at least one department")
+        .min(1, "Choose at least one domain")
         .max(
           cycle.maxDepartments,
-          `Choose up to ${cycle.maxDepartments} departments`,
+          `Choose up to ${cycle.maxDepartments} domains`,
         )
         .transform((applications, ctx) => {
           const parsed: {
@@ -395,14 +529,14 @@ export function submissionSchema(cycle: InductionCycle) {
                 application.answers,
               );
             if (
-              !department ||
+              !department?.applications ||
               !answers?.success ||
               parsed.some((item) => item.department.id === department.id)
             ) {
               ctx.addIssue({
                 code: "custom",
                 path: [index],
-                message: "Check this department's answers",
+                message: "Check this domain's answers",
               });
               return z.NEVER;
             }
