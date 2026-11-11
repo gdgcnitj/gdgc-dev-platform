@@ -16,6 +16,8 @@ export const inductionSubmission = pgTable("induction_submission", {
   branch: text().notNull(),
   // Nullable only for rows saved before the question existed.
   year: text(),
+  // Nullable only for rows saved before the question existed.
+  gender: text(),
   linkedinUrl: text("linkedin_url").notNull(),
   githubUrl: text("github_url").notNull(),
   orcidUrl: text("orcid_url"),

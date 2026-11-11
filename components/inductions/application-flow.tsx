@@ -17,7 +17,7 @@ import { submitInductionApplication } from "@/app/events/[id]/apply/actions";
 import { getDepartment } from "@/lib/content/departments";
 import { palette } from "@/lib/design/theme";
 import type { AnswerCopy } from "@/lib/inductions/answer-pdf";
-import { branches, years } from "@/lib/content/registration";
+import { branches, genders, years } from "@/lib/content/registration";
 import {
   commonQuestionLabels,
   commonDetailsSchema,
@@ -36,6 +36,9 @@ import { QuestionInput } from "./question-input";
 import { Expectations } from "./expectations";
 import { ExpectationsPdfLink } from "./pdf-link";
 import { SuccessMark } from "./bracket-mark";
+import { LinkedText } from "./linked-text";
+import { ReceiptContacts } from "./receipt-contacts";
+import { leadPhones } from "@/lib/content/inductions/contacts";
 import { DepartmentIcon } from "./department-icon";
 import { useInductionFlow } from "./flow-provider";
 
@@ -354,12 +357,21 @@ export function ApplicationFlow({
         hint={hint}
         error={errors[key]}
       >
-        {key === "branch" || key === "year" ? (
+        {key === "branch" || key === "year" || key === "gender" ? (
           <select {...props}>
             <option value="" disabled>
-              {key === "year" ? "Select your year" : "Select your branch"}
+              {key === "year"
+                ? "Select your year"
+                : key === "gender"
+                  ? "Select an option"
+                  : "Select your branch"}
             </option>
-            {(key === "year" ? years : branches).map((item) => (
+            {(key === "year"
+              ? years
+              : key === "gender"
+                ? genders
+                : branches
+            ).map((item) => (
               <option key={item}>{item}</option>
             ))}
           </select>
@@ -489,6 +501,15 @@ export function ApplicationFlow({
               {alert}
             </p>
           )}
+          <ReceiptContacts
+            leads={receipt.departments.map((id) => ({
+              name: leads[id]?.name ?? "Domain lead",
+              role: `${getDepartment(id)?.inductionTitle ?? id} lead`,
+              phone: leadPhones[id],
+              image: leads[id]?.image,
+              initials: leads[id]?.initials ?? "",
+            }))}
+          />
           <div className="induction-receipt-actions">
             {receipt.remaining > 0 && (
               <Button
@@ -660,23 +681,7 @@ export function ApplicationFlow({
                     </div>
                     {step.department.note.map((paragraph) => (
                       <p key={paragraph}>
-                        {/* Web addresses in a note become links. */}
-                        {paragraph
-                          .split(/(https:\/\/\S+)/)
-                          .map((part, index) =>
-                            index % 2 ? (
-                              <a
-                                key={part}
-                                href={part}
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                {part.replace(/^https:\/\//, "")}
-                              </a>
-                            ) : (
-                              part
-                            ),
-                          )}
+                        <LinkedText text={paragraph} />
                       </p>
                     ))}
                   </aside>
@@ -692,7 +697,10 @@ export function ApplicationFlow({
               />
               {step.kind === "about" && (
                 <>
-                  {commonField("name")}
+                  <div className="club-form-row">
+                    {commonField("name")}
+                    {commonField("gender")}
+                  </div>
                   <div className="club-form-row">
                     {commonField("email", "Use your @nitj.ac.in address.")}
                     {commonField("rollNumber")}

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { departmentIds } from "@/lib/content/departments";
-import { registrationSchema } from "@/lib/content/registration";
+import { genders, registrationSchema } from "@/lib/content/registration";
 
 const id = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const copy = z.string().trim().min(1);
@@ -89,7 +89,7 @@ export const inductionCycleSchema = z
           applications: z.boolean().default(true),
           // Shown on the event card when the department takes no applications.
           membership: copy.optional(),
-          questions: z.array(questionSchema).max(12).default([]),
+          questions: z.array(questionSchema).max(16).default([]),
         }),
       )
       .min(1)
@@ -241,6 +241,7 @@ function webLink(message: string, optional = false) {
 export const commonDetailsSchema = registrationSchema
   .pick({ name: true, email: true, phone: true, branch: true, year: true })
   .extend({
+    gender: z.enum(genders, "Choose an option"),
     rollNumber: registrationSchema.shape.rollNumber.transform((value) =>
       value.toUpperCase(),
     ),
@@ -293,6 +294,7 @@ export const commonDetailsSchema = registrationSchema
 
 export const commonQuestionLabels = {
   name: "Full name",
+  gender: "Gender",
   email: "Institute email",
   rollNumber: "Roll number",
   phone: "Phone",
@@ -310,6 +312,7 @@ export type CommonDetails = z.infer<typeof commonDetailsSchema>;
 export type CommonDraft = Record<keyof CommonDetails, string>;
 export const emptyCommonDetails: CommonDraft = {
   name: "",
+  gender: "",
   email: "",
   rollNumber: "",
   phone: "",

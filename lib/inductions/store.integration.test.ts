@@ -49,6 +49,7 @@ test(
       phone: "9876543210",
       branch: "Other",
       year: "1st year",
+      gender: "Prefer not to say",
       linkedinUrl: "https://www.linkedin.com/in/test-student",
       githubUrl: "https://github.com/test-student",
       orcidUrl: null,
