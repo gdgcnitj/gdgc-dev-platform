@@ -1,12 +1,15 @@
+import { inductions } from "./inductions-2026";
+import { getEventInduction } from "@/lib/content/inductions";
 import { bootcamp } from "./bootcamp";
 import { hackmol } from "./hackmol";
 import { minimol } from "./minimol";
 import { orientation } from "./orientation-2026";
 import { winterfest } from "./winterfest";
 import type { ClubEvent } from "@/lib/events/schema";
-import { eventStart } from "@/lib/events/helpers";
+import { compareEventListing } from "@/lib/events/helpers";
 
 const events: ClubEvent[] = [
+  inductions,
   minimol,
   orientation,
   hackmol,
@@ -25,6 +28,12 @@ for (const event of events) {
     !events.some((parent) => parent.id === event.parentEventId)
   )
     throw new Error(`Unknown parent for ${event.id}`);
+  if (
+    event.registration.mode === "internal" &&
+    event.registration.form === "department-interest" &&
+    !getEventInduction(event)
+  )
+    throw new Error(`Unknown or mismatched induction cycle for ${event.id}`);
   const seen = new Set([event.id]);
   let parentId = event.parentEventId;
   while (parentId) {
@@ -37,7 +46,7 @@ for (const event of events) {
 
 export const allEvents = events
   .filter((event) => event.visibility === "published")
-  .sort((a, b) => eventStart(b) - eventStart(a));
+  .sort(compareEventListing);
 
 export function getEvent(slug: string) {
   return allEvents.find((event) => event.slug === slug);

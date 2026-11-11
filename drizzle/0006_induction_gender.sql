@@ -1,0 +1,1 @@
+ALTER TABLE "induction_submission" ADD COLUMN "gender" text;

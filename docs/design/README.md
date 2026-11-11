@@ -25,3 +25,19 @@ The layouts were checked at 1280px desktop and 390px phone widths.
 
 - [Challenge reader](previews/challenges-desktop.png)
 - [Event guidelines](previews/event-rules-desktop.png)
+
+## Induction forms
+
+The induction forms use solid reading surfaces. Creatives rankings support drag
+handles and keyboard/touch-friendly up/down controls. These previews were checked
+at 1280px desktop and 390px phone widths.
+
+- [Creatives form on desktop](previews/inductions-creatives-desktop.png)
+- [Creatives form on a phone](previews/inductions-creatives-mobile.png)
+
+The Orientation carousel uses five supplied event photos, including the audience
+cover. MiniMol and Orientation use real photos in the homepage cards; only
+Inductions remains in the current spotlight.
+
+- [Orientation gallery](previews/orientation-gallery-desktop.png)
+- [Updated recent-event covers](previews/event-covers-desktop.png)

@@ -90,7 +90,7 @@ export function AlumniDirectory() {
                   type="search"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search by name, department, or company"
+                  placeholder="Search by name, domain, or company"
                   aria-label="Search alumni"
                 />
               </label>

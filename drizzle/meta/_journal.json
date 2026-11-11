@@ -22,6 +22,34 @@
       "when": 1792091784702,
       "tag": "0002_app_dev_response",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794336315782,
+      "tag": "0003_induction_submission",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794380995253,
+      "tag": "0004_induction_portfolio",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794381453349,
+      "tag": "0005_induction_year",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794397277198,
+      "tag": "0006_induction_gender",
+      "breakpoints": true
     }
   ]
 }

@@ -3,6 +3,7 @@ import type { EventKind, EventSection } from "./schema";
 // Authoring suggestions only. The event's sections array controls the actual order.
 // Any event kind can use any section, including prizes at a workshop.
 export const eventPresets = {
+  induction: ["applications", "list", "faq"],
   workshop: ["story", "list", "speakers", "schedule", "resources", "faq"],
   hackathon: [
     "story",

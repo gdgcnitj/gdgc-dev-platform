@@ -1,0 +1,1749 @@
+/* Department choices and the shared induction application flow. */
+.induction-application::before {
+  content: none;
+}
+
+.induction-department-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.induction-department {
+  display: flex;
+  flex-direction: column;
+  background: var(--club-paper);
+  border: 1px solid var(--club-line);
+  border-radius: 22px;
+  padding: 26px;
+  min-width: 0;
+}
+.induction-department-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.induction-department-heading h2,
+.induction-department-heading h3 {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+.induction-department-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  background: var(--club-tone-soft, #e8f0fe);
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  color: var(--club-ink);
+}
+.induction-department > p {
+  color: var(--club-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+.induction-department-action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+.induction-department-action .club-button {
+  min-height: 44px;
+  padding: 11px 18px;
+  height: auto;
+  font-size: 14px;
+  white-space: normal;
+}
+.induction-expectations-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--club-action);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.induction-expectations-trigger:hover {
+  color: #185abc;
+}
+.induction-expectations-trigger:focus-visible {
+  outline: 2px solid var(--club-action);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.induction-sheet {
+  /* Desktop: a reading panel on the right. Phone: a bottom sheet. */
+  margin: 0 0 0 auto;
+  padding: 0;
+  border: 0;
+  width: min(560px, 100vw);
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  background: transparent;
+  color: var(--club-ink);
+  overflow: visible;
+}
+.induction-sheet::backdrop {
+  background: rgb(32 33 36 / 40%);
+}
+.induction-sheet-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--club-paper);
+  box-shadow: -12px 0 40px rgb(60 64 67 / 16%);
+}
+.induction-sheet-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid var(--club-line);
+}
+.induction-sheet-header > div {
+  flex: 1;
+  min-width: 0;
+}
+.induction-sheet-header .club-eyebrow {
+  margin: 0 0 4px;
+  font-size: 12px;
+  color: var(--club-muted);
+}
+.induction-sheet .induction-sheet-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+.induction-sheet-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--club-muted);
+  cursor: pointer;
+}
+.induction-sheet-close:hover,
+.induction-sheet-close:focus-visible {
+  background: #f1f3f4;
+  color: var(--club-ink);
+}
+.induction-sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 24px 28px 40px;
+}
+.induction-sheet-preview {
+  margin: 0 0 24px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--club-muted);
+}
+.induction-expectation-content {
+  display: grid;
+  gap: 26px;
+}
+.induction-expectation-content h3,
+.induction-expectation-content h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 10px;
+}
+.induction-expectation-content h4 {
+  font-size: 14px;
+  color: var(--club-muted);
+}
+.induction-expectation-subsection {
+  margin-top: 18px;
+}
+.induction-ranking {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  margin: 8px 0 0;
+}
+.induction-ranking li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--club-line);
+  border-radius: 12px;
+  background: var(--club-paper);
+}
+.induction-ranking [data-dragging] {
+  opacity: 0.55;
+}
+.induction-drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  cursor: grab;
+  color: var(--club-muted);
+  flex-shrink: 0;
+}
+.induction-ranking-number {
+  font-size: 12px;
+  color: var(--club-muted);
+  flex-shrink: 0;
+}
+.induction-ranking-label {
+  font-size: 14px;
+  line-height: 1.5;
+  flex: 1;
+  min-width: 0;
+}
+.induction-ranking-controls {
+  display: flex;
+  flex-shrink: 0;
+}
+.induction-ranking-controls button {
+  min-width: 40px;
+  min-height: 44px;
+  color: var(--club-action);
+}
+.induction-choices {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.induction-choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--club-line);
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.induction-choice:has(:checked) {
+  border-color: var(--club-action);
+  background: #e8f0fe;
+}
+.club-form-field .induction-choice input[type="radio"] {
+  /* Drawn here so the control looks the same in every browser colour scheme. */
+  appearance: none;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  min-height: 18px;
+  padding: 0;
+  border: 1.5px solid #80868b;
+  border-radius: 50%;
+  background: var(--club-paper);
+  cursor: pointer;
+}
+.club-form-field .induction-choice input[type="radio"]:checked {
+  border-color: var(--club-action);
+  box-shadow: inset 0 0 0 3.5px var(--club-paper);
+  background: var(--club-action);
+}
+.club-form-field .induction-choice input[type="radio"]:focus-visible {
+  outline: 2px solid var(--club-action);
+  outline-offset: 2px;
+}
+.induction-expectation-content ul {
+  margin: 0;
+  padding-left: 19px;
+  color: var(--club-muted);
+  font-size: 14px;
+  line-height: 1.65;
+  list-style: disc;
+}
+.induction-expectation-content li + li {
+  margin-top: 6px;
+}
+.induction-tracks {
+  display: grid;
+  gap: 20px;
+  border-top: 1px solid var(--club-line);
+  padding-top: 18px;
+}
+.induction-track-intro {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--club-muted);
+}
+.induction-expectations-pending {
+  font-size: 13px !important;
+  color: var(--club-muted);
+  margin: 0 !important;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.induction-availability {
+  padding: 16px 20px;
+  border: 1px solid var(--club-line);
+  border-radius: 12px;
+  background: #f1f3f4;
+  margin-bottom: 24px;
+}
+.induction-received {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 14px;
+  color: #137333;
+}
+.induction-application {
+  background: #f8f9fa;
+  padding-block: 32px 80px;
+  min-height: 75vh;
+}
+.induction-application-heading {
+  margin-block: 36px;
+  max-width: 840px;
+}
+.induction-application-heading .club-eyebrow {
+  margin-block: 28px 14px;
+}
+.induction-application-heading h1 {
+  font-size: clamp(38px, 5.5vw, 66px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+  margin: 0 0 20px;
+  overflow-wrap: anywhere;
+}
+.induction-application-heading > p:last-child {
+  color: var(--club-muted);
+  font-size: 17px;
+  line-height: 1.65;
+  max-width: 680px;
+}
+.induction-flow {
+  max-width: 820px;
+  margin-inline: auto;
+}
+.induction-flow .induction-application-heading {
+  margin-inline: 0;
+}
+.induction-form-surface {
+  border: 1px solid var(--club-line);
+  border-radius: 26px;
+  background: var(--club-paper);
+  padding: 32px;
+  min-width: 0;
+  box-shadow: 0 8px 32px rgb(60 64 67 / 4%);
+}
+.induction-progress {
+  display: flex;
+  list-style: none;
+  padding: 0 0 24px;
+  margin: 0 0 28px;
+  border-bottom: 1px solid var(--club-line);
+  gap: 18px;
+}
+.induction-progress li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--club-muted);
+  font-size: 13px;
+}
+.induction-progress li > span {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--club-line);
+  border-radius: 50%;
+  flex-shrink: 0;
+  font-size: 12px;
+}
+.induction-progress [data-active] {
+  color: var(--club-action);
+  font-weight: 500;
+}
+.induction-progress [data-active] > span {
+  color: #fff;
+  background: var(--club-action);
+  border-color: var(--club-action);
+}
+.induction-progress [data-done] > span {
+  border-color: transparent;
+  color: #137333;
+}
+.induction-form-intro {
+  margin-bottom: 26px;
+}
+.induction-question-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.induction-question-heading h2 {
+  margin-block: 10px;
+}
+.induction-form-intro .induction-expectations-trigger {
+  margin-top: 4px;
+}
+.induction-choice-count {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: var(--club-muted);
+}
+.induction-pick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.induction-pick {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--club-line);
+  border-radius: 18px;
+  background: var(--club-paper);
+  min-width: 0;
+}
+.induction-pick label {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: start;
+  padding: 18px 18px 8px;
+  cursor: pointer;
+}
+.induction-pick input {
+  /* The whole tile is the control; the native box stays for assistive tech. */
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: inherit;
+  margin: 0;
+}
+.induction-pick .induction-department-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+}
+.induction-pick-text strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.3;
+  margin: 2px 0 6px;
+}
+.induction-pick-text > span:not(.induction-pick-badge, .induction-received) {
+  display: block;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--club-muted);
+}
+.induction-pick-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid #bdc1c6;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+}
+.induction-pick-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding: 0 18px 6px 76px;
+  margin-top: auto;
+}
+.induction-pick-footer .induction-expectations-trigger,
+.induction-pick-footer .induction-expectations-pending {
+  margin-left: auto;
+  font-size: 13px;
+}
+.induction-pick[data-selected] {
+  border-color: var(--club-action);
+  background: #f8faff;
+  box-shadow: inset 0 0 0 1px var(--club-action);
+}
+.induction-pick[data-selected] .induction-pick-mark {
+  background: var(--club-action);
+  border-color: var(--club-action);
+}
+.induction-pick:has(input:focus-visible) {
+  outline: 2px solid var(--club-action);
+  outline-offset: 2px;
+}
+.induction-pick[data-disabled] label {
+  cursor: not-allowed;
+}
+.induction-pick[data-disabled]:not(:has(.induction-received))
+  label
+  > :not(input) {
+  opacity: 0.5;
+}
+.induction-pick:has(.induction-received) .induction-pick-mark {
+  background: #137333;
+  border-color: #137333;
+}
+.induction-pick-text > .induction-pick-badge,
+.induction-pick-text > .induction-received {
+  margin-top: 10px;
+}
+.induction-pick-text > .induction-received {
+  display: flex;
+  min-height: 0;
+  font-size: 13px;
+}
+.induction-pick-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #e8f0fe;
+  color: #174ea6;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.induction-swap {
+  margin-top: 16px;
+  font-size: 13px;
+}
+.induction-review-department {
+  display: grid;
+  gap: 20px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--club-line);
+}
+.induction-review-department .induction-review-heading h3 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.induction-receipt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+.induction-receipt-actions .club-button,
+.induction-receipt-actions .club-button-secondary {
+  margin-top: 0 !important;
+  height: auto;
+  min-height: 46px;
+  padding: 13px 20px;
+  font-size: 14px;
+}
+.induction-form-intro .club-eyebrow {
+  font-size: 12px;
+  color: var(--club-muted);
+}
+.induction-form-intro h2,
+.induction-form-receipt h2 {
+  font-size: clamp(25px, 3vw, 32px);
+  line-height: 1.15;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  margin: 10px 0 14px;
+  scroll-margin-top: 115px;
+}
+.induction-form-intro p:last-child,
+.induction-form-receipt p {
+  font-size: 15px;
+  color: var(--club-muted);
+  line-height: 1.65;
+}
+/* A neighbour's hint makes the row taller; keep label and input at the top. */
+.induction-form-fields .club-form-field {
+  align-content: start;
+}
+.induction-form-fields {
+  display: grid;
+  gap: 22px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.induction-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 22px;
+  margin-top: 30px;
+}
+.induction-form-actions .club-text-link {
+  margin-right: auto;
+}
+.induction-form-actions .club-button,
+.induction-form-receipt .club-button {
+  height: auto;
+  min-height: 46px;
+  font-size: 14px;
+  white-space: normal;
+  text-align: left;
+  max-width: 100%;
+  padding: 13px 20px;
+}
+.induction-form-actions button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+.induction-details-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 14px;
+}
+.induction-details-summary strong,
+.induction-details-summary span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.induction-details-summary strong {
+  font-weight: 500;
+}
+.induction-details-summary span {
+  font-size: 13px;
+  color: var(--club-muted);
+  margin-top: 4px;
+}
+.induction-details-summary button {
+  flex-shrink: 0;
+  font-size: 13px;
+}
+.induction-review-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.induction-review-heading h3 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+}
+.induction-review-heading button {
+  font-size: 13px;
+}
+.induction-review-details {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 24px;
+  margin: 0;
+  border-bottom: 1px solid var(--club-line);
+}
+.induction-review-details > div {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  gap: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.induction-review-details dt {
+  color: var(--club-muted);
+}
+.induction-review-details dd,
+.induction-review-answer p {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.induction-review-answer h4 {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+.induction-review-answer p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--club-muted);
+}
+.induction-context-note {
+  color: var(--club-muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.induction-form-receipt {
+  padding-block: 20px;
+}
+.induction-form-receipt > svg {
+  color: #137333;
+  margin-bottom: 20px;
+}
+.induction-form-receipt .club-button {
+  margin-top: 24px;
+}
+.induction-session-note {
+  padding: 14px 18px;
+  border: 1px solid var(--club-line);
+  border-radius: 12px;
+  background: var(--club-paper);
+}
+@media (max-width: 600px) {
+  .induction-department-grid,
+  .induction-pick-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .induction-pick-footer {
+    padding-left: 18px;
+  }
+  .induction-sheet {
+    margin: auto 0 0;
+    width: 100vw;
+    height: min(88dvh, 100%);
+  }
+  .induction-sheet-panel {
+    border-radius: 24px 24px 0 0;
+    box-shadow: 0 -12px 40px rgb(60 64 67 / 16%);
+  }
+  .induction-sheet-header {
+    padding: 20px 20px 16px;
+  }
+  .induction-sheet-body {
+    padding: 20px 20px 32px;
+  }
+  .induction-department {
+    padding: 22px;
+  }
+  .induction-application {
+    padding-block: 24px 56px;
+  }
+  .induction-application-heading {
+    margin-block: 28px;
+  }
+  .induction-form-surface {
+    padding: 24px 20px;
+    border-radius: 20px;
+  }
+  .induction-progress {
+    gap: 12px;
+    justify-content: space-between;
+  }
+  .induction-progress li {
+    gap: 5px;
+    font-size: 11px;
+  }
+  .induction-progress li > span {
+    width: 21px;
+    height: 21px;
+  }
+  .induction-form-fields .club-form-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+  .induction-review-details > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  .induction-details-summary {
+    flex-wrap: wrap;
+  }
+}
+
+/* Feedback belongs to the induction flow; long-form reading stays still. */
+@media (prefers-reduced-motion: no-preference) {
+  .induction-department {
+    transition:
+      translate 180ms var(--club-ease),
+      border-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+  .induction-department-icon {
+    transition:
+      transform 180ms var(--club-ease),
+      border-radius 180ms ease;
+  }
+  .induction-department:focus-within {
+    border-color: #a8c7fa;
+    box-shadow: 0 8px 24px rgb(60 64 67 / 7%);
+  }
+  .induction-sheet[open] .induction-sheet-panel {
+    animation: induction-sheet-in 240ms var(--club-ease);
+  }
+  .induction-sheet[open]::backdrop {
+    animation: induction-fade-in 200ms ease;
+  }
+  .induction-expectations-trigger {
+    transition: color 140ms ease;
+  }
+  .induction-pick {
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease,
+      box-shadow 160ms ease;
+  }
+  .induction-pick-mark {
+    transition:
+      background-color 160ms ease,
+      border-color 160ms ease;
+  }
+  .induction-step-content,
+  .induction-question,
+  .induction-session-note,
+  .induction-form-receipt {
+    animation: induction-content-in 200ms var(--club-ease);
+  }
+  .induction-progress li,
+  .induction-progress li > span {
+    transition:
+      color 160ms ease,
+      background-color 160ms ease,
+      border-color 160ms ease,
+      box-shadow 160ms ease;
+  }
+  .induction-progress [data-active] > span {
+    animation: induction-step-focus 300ms ease-out;
+  }
+  .induction-progress [data-done] svg,
+  .induction-received > svg {
+    animation: induction-check-in 220ms var(--club-ease);
+  }
+  .induction-form-fields .club-form-field input,
+  .induction-form-fields .club-form-field select,
+  .induction-form-fields .club-form-field textarea {
+    transition:
+      border-color 140ms ease,
+      box-shadow 140ms ease;
+  }
+  .induction-choice {
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease,
+      box-shadow 160ms ease;
+  }
+  .induction-choice:focus-within {
+    box-shadow: 0 0 0 3px rgb(25 103 210 / 12%);
+  }
+  .induction-ranking li {
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease,
+      opacity 140ms ease;
+  }
+  .induction-ranking li:focus-within {
+    border-color: #a8c7fa;
+    background: #f8faff;
+  }
+  .induction-ranking-controls button {
+    transition:
+      background-color 140ms ease,
+      color 140ms ease,
+      opacity 140ms ease;
+  }
+  .induction-application .club-form-error,
+  .induction-application .club-form-alert {
+    animation: induction-content-in 160ms ease-out;
+  }
+  .induction-form-receipt > svg {
+    animation: induction-check-in 260ms var(--club-ease);
+  }
+  .induction-application .club-button > svg,
+  .induction-department .club-button > svg,
+  .event-page[data-event-kind="induction"]
+    .event-essential-details
+    .club-button
+    > svg {
+    transition: transform 160ms var(--club-ease);
+  }
+  .induction-application
+    .club-button:not(:disabled):is(:hover, :focus-visible)
+    > svg,
+  .induction-department .club-button:is(:hover, :focus-visible) > svg,
+  .event-page[data-event-kind="induction"]
+    .event-essential-details
+    .club-button:is(:hover, :focus-visible)
+    > svg {
+    transform: translateX(3px);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .induction-department:hover {
+      translate: 0 -3px;
+      border-color: #a8c7fa;
+      box-shadow: 0 10px 28px rgb(60 64 67 / 8%);
+    }
+    .induction-department:hover .induction-department-icon {
+      transform: rotate(-3deg) scale(1.05);
+      border-radius: 18px;
+    }
+    .induction-ranking li:hover {
+      border-color: #a8c7fa;
+    }
+  }
+}
+
+@keyframes induction-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes induction-check-in {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes induction-step-focus {
+  from {
+    box-shadow: 0 0 0 0 rgb(25 103 210 / 18%);
+  }
+  to {
+    box-shadow: 0 0 0 7px rgb(25 103 210 / 0%);
+  }
+}
+@keyframes induction-sheet-in {
+  from {
+    transform: translateX(32px);
+    opacity: 0;
+  }
+}
+@keyframes induction-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@media (max-width: 600px) {
+  @keyframes induction-sheet-in {
+    from {
+      transform: translateY(40px);
+      opacity: 0;
+    }
+  }
+}
+
+/* Single application banner, leads, PDF links, and reassurance copy. */
+.induction-apply-banner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 22px;
+  padding: 22px 26px;
+  margin-bottom: 24px;
+  border: 1px solid var(--club-line);
+  border-radius: 22px;
+  background:
+    radial-gradient(120% 140% at 0% 0%, #e8f0fe 0%, transparent 55%),
+    var(--club-paper);
+}
+.induction-apply-banner h3 {
+  margin: 0 0 4px;
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.induction-apply-banner p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--club-muted);
+}
+.induction-apply-banner .club-button {
+  height: auto;
+  min-height: 46px;
+  padding: 12px 20px;
+  font-size: 14px;
+}
+.induction-apply-mark {
+  width: 56px;
+  height: auto;
+  overflow: visible;
+}
+.induction-lead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: -4px 0 18px !important;
+  font-size: 13px !important;
+  color: var(--club-muted);
+}
+.induction-lead strong {
+  color: var(--club-ink);
+  font-weight: 500;
+}
+.induction-lead-photo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--club-tone-soft, #e8f0fe);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--club-ink);
+}
+.induction-pdf-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--club-muted);
+  text-decoration: none;
+  border-radius: 4px;
+}
+.induction-pdf-link:hover {
+  color: var(--club-action);
+}
+.induction-pdf-link:focus-visible,
+.induction-pdf-button:focus-visible {
+  outline: 2px solid var(--club-action);
+  outline-offset: 4px;
+}
+.induction-pick-footer .induction-pdf-link {
+  font-size: 13px;
+}
+.induction-pick-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.induction-pick-links .induction-expectations-trigger,
+.induction-pick-links .induction-expectations-pending {
+  margin-left: 0;
+}
+.induction-intro-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 22px;
+  margin-top: 4px;
+}
+.induction-reassurance {
+  margin: 0 0 22px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #e6f4ea;
+  color: #0d652d;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.induction-pick-grid + .induction-reassurance,
+.induction-swap + .induction-reassurance {
+  margin: 18px 0 0;
+}
+.induction-swap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.induction-sheet-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 28px;
+  border-top: 1px solid var(--club-line);
+  font-size: 13px;
+  color: var(--club-muted);
+}
+.induction-pdf-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--club-action);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.induction-pdf-button:hover {
+  background: #185abc;
+}
+.induction-progress {
+  position: relative;
+}
+.induction-progress::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  width: calc(var(--progress, 0) * 100%);
+  border-radius: 2px;
+  background: var(--club-action);
+}
+.success-mark {
+  margin-bottom: 16px;
+  overflow: visible;
+}
+@media (max-width: 700px) {
+  .induction-apply-banner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    padding: 20px;
+  }
+  .induction-apply-banner .club-button {
+    justify-self: start;
+  }
+  .induction-sheet-footer {
+    padding: 14px 20px;
+  }
+  .induction-sheet-footer > span {
+    display: none;
+  }
+  .induction-sheet-footer {
+    justify-content: flex-end;
+  }
+}
+
+/* Micro-interactions. Every movement is skipped when reduced motion is requested. */
+@media (prefers-reduced-motion: no-preference) {
+  .induction-progress::after {
+    transition: width 420ms var(--club-ease);
+  }
+  .induction-step-content[data-direction="forward"] {
+    animation: induction-step-forward 260ms var(--club-ease);
+  }
+  .induction-step-content[data-direction="back"] {
+    animation: induction-step-back 260ms var(--club-ease);
+  }
+  .induction-pick[data-selected] .induction-pick-mark {
+    animation: induction-pop 260ms var(--club-ease);
+  }
+  .induction-pick[data-selected] .induction-pick-badge,
+  .induction-pick[data-selected] .induction-pdf-link {
+    animation: induction-content-in 220ms var(--club-ease);
+  }
+  .induction-pick:not([data-disabled]):hover {
+    border-color: #a8c7fa;
+  }
+  .induction-pick .induction-department-icon {
+    transition: transform 200ms var(--club-ease);
+  }
+  .induction-pick[data-selected] .induction-department-icon {
+    transform: rotate(-4deg) scale(1.06);
+  }
+  .induction-swap[data-spun="a"] svg {
+    animation: induction-spin-a 360ms var(--club-ease);
+  }
+  .induction-swap[data-spun="b"] svg {
+    animation: induction-spin-b 360ms var(--club-ease);
+  }
+  .induction-reassurance {
+    animation: induction-content-in 240ms var(--club-ease);
+  }
+  .induction-form-fields
+    .club-form-field[data-invalid]
+    :is(input, select, textarea) {
+    animation: induction-nudge 280ms ease-in-out;
+  }
+  .induction-pdf-link svg,
+  .induction-pdf-button svg {
+    transition: transform 180ms var(--club-ease);
+  }
+  .induction-pdf-link:is(:hover, :focus-visible) svg,
+  .induction-pdf-button:is(:hover, :focus-visible) svg {
+    transform: translateY(2px);
+  }
+  .induction-expectations-trigger svg {
+    transition: transform 180ms var(--club-ease);
+  }
+  .induction-expectations-trigger:is(:hover, :focus-visible) svg {
+    transform: rotate(-8deg) scale(1.08);
+  }
+  .induction-sheet[open] .induction-expectation-content li {
+    animation: induction-content-in 260ms var(--club-ease) backwards;
+    animation-delay: calc(var(--i, 0) * 22ms + 90ms);
+  }
+  .induction-lead-photo {
+    transition: transform 200ms var(--club-ease);
+  }
+  .induction-department:hover .induction-lead-photo {
+    transform: scale(1.08);
+  }
+  .success-ring {
+    stroke-dasharray: 139;
+    stroke-dashoffset: 139;
+    animation: induction-draw 520ms var(--club-ease) 80ms forwards;
+    transform: rotate(-90deg);
+    transform-origin: center;
+  }
+  .success-check {
+    stroke-dasharray: 32;
+    stroke-dashoffset: 32;
+    animation: induction-draw 320ms var(--club-ease) 520ms forwards;
+  }
+  .success-spark {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: induction-spark 520ms var(--club-ease) forwards;
+    animation-delay: calc(var(--i) * 50ms + 700ms);
+  }
+  .induction-apply-banner:hover .bracket-bar {
+    animation: induction-bracket-wiggle 420ms var(--club-ease);
+    animation-delay: calc(var(--i) * 45ms);
+  }
+  .bracket-bar {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  @supports (animation-timeline: view()) {
+    .induction-apply-mark .bracket-bar {
+      animation: induction-bracket-in linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry calc(70% + var(--i) * 6%);
+    }
+  }
+}
+
+@keyframes induction-step-forward {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+}
+@keyframes induction-step-back {
+  from {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+}
+@keyframes induction-pop {
+  0% {
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.18);
+  }
+}
+@keyframes induction-spin-a {
+  from {
+    transform: rotate(-180deg);
+  }
+}
+@keyframes induction-spin-b {
+  from {
+    transform: rotate(180deg);
+  }
+}
+@keyframes induction-nudge {
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+}
+@keyframes induction-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes induction-spark {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+}
+@keyframes induction-bracket-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) rotate(-12deg) scale(0.7);
+  }
+}
+@keyframes induction-bracket-wiggle {
+  50% {
+    transform: translateY(-2px) rotate(-6deg);
+  }
+}
+
+/* Choice tiles, link lists, and the department lead's note. */
+.induction-choices[data-tiles] {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+.induction-choices[data-tiles] .induction-choice {
+  align-items: flex-start;
+  padding: 14px 16px;
+}
+.induction-choices[data-tiles] .induction-choice input {
+  margin-top: 2px;
+}
+.induction-choice small {
+  display: block;
+  margin-top: 4px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--club-muted);
+}
+.induction-choices[data-tiles] .induction-choice > span {
+  font-weight: 500;
+}
+.induction-choices[data-tiles] .induction-choice small {
+  font-weight: 400;
+}
+.induction-links ol {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.induction-link-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1.2fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+.induction-link-icon {
+  display: inline-flex;
+  color: var(--club-muted);
+}
+.club-form-field .induction-link-row input {
+  min-width: 0;
+}
+.induction-link-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--club-muted);
+  cursor: pointer;
+}
+.induction-link-remove:hover,
+.induction-link-remove:focus-visible {
+  background: #f1f3f4;
+  color: var(--club-ink);
+}
+.induction-link-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 13px;
+}
+.induction-lead-note {
+  margin: 0 0 28px;
+  padding: 20px 22px;
+  border: 1px solid var(--club-line);
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 120% at 100% 0%, #e6f4ea 0%, transparent 50%), #fbfcfe;
+}
+.induction-lead-note-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.induction-lead-note-head .induction-lead-photo {
+  width: 44px;
+  height: 44px;
+}
+.induction-lead-note-head p {
+  margin: 0;
+}
+.induction-lead-note-head strong,
+.induction-lead-note-head span {
+  display: block;
+}
+.induction-lead-note-head strong {
+  font-size: 15px;
+  font-weight: 500;
+}
+.induction-lead-note-head span {
+  font-size: 12.5px;
+  color: var(--club-muted);
+}
+.induction-lead-note > p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.induction-lead-note > p + p {
+  margin-top: 10px;
+}
+.induction-review-links {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+}
+.induction-review-links li {
+  display: grid;
+  gap: 2px;
+}
+.induction-review-links span {
+  color: var(--club-muted);
+}
+.induction-review-links a {
+  color: var(--club-action);
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .induction-link-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .induction-link-icon {
+    display: none;
+  }
+  .induction-link-row input[type="text"] {
+    grid-column: 1;
+  }
+  .induction-link-remove {
+    grid-row: 1;
+    grid-column: 2;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .induction-link-row {
+    animation: induction-content-in 200ms var(--club-ease);
+  }
+  .induction-lead-note {
+    animation: induction-content-in 280ms var(--club-ease);
+  }
+  .induction-choices[data-tiles] .induction-choice:has(:checked) {
+    animation: induction-pop-soft 240ms var(--club-ease);
+  }
+}
+@keyframes induction-pop-soft {
+  50% {
+    transform: scale(1.02);
+  }
+}
+.induction-expectation-outro {
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #fef7e0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.induction-membership {
+  margin: auto 0 0 !important;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--club-tone-soft, #f1f3f4);
+  color: var(--club-ink) !important;
+  font-size: 14px !important;
+  line-height: 1.55;
+}
+
+/* Phones: one level of padding, compact progress, and full-width tiles. */
+@media (max-width: 600px) {
+  .induction-form-surface {
+    padding: 20px 16px;
+    border-radius: 18px;
+  }
+  .induction-progress {
+    justify-content: flex-start;
+    gap: 10px;
+    padding-bottom: 18px;
+    margin-bottom: 22px;
+  }
+  .induction-progress li {
+    font-size: 13px;
+  }
+  /* Only the current step keeps its label; the rest are numbered circles. */
+  .induction-progress li:not([data-active]) {
+    font-size: 0;
+    gap: 0;
+  }
+  .induction-progress li > span {
+    font-size: 12px;
+  }
+  .induction-form-intro {
+    margin-bottom: 20px;
+  }
+  .induction-form-intro h2 {
+    font-size: 24px;
+  }
+  .induction-question-heading {
+    gap: 12px;
+  }
+  .induction-question-heading .induction-department-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+  .induction-lead-note {
+    padding: 16px;
+    margin-bottom: 22px;
+    border-radius: 14px;
+  }
+  .induction-lead-note-head .induction-lead-photo {
+    width: 36px;
+    height: 36px;
+  }
+  .induction-lead-note > p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .induction-reassurance {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+  .induction-form-actions {
+    margin-top: 24px;
+  }
+}
+@media (max-width: 480px) {
+  .induction-choices[data-tiles] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .induction-choices[data-tiles] .induction-choice {
+    padding: 12px 14px;
+  }
+}
+.induction-lead-note a {
+  color: var(--club-action);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.induction-answer-copy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+  margin-top: 22px;
+  padding: 16px 18px;
+  border: 1px solid var(--club-line);
+  border-radius: 16px;
+  background: #f8f9fa;
+}
+.induction-answer-copy strong,
+.induction-answer-copy span {
+  display: block;
+}
+.induction-answer-copy strong {
+  font-size: 15px;
+  font-weight: 500;
+}
+.induction-answer-copy span {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--club-muted);
+}
+.induction-answer-copy button {
+  border: 0;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.induction-answer-copy button:disabled {
+  cursor: wait;
+  opacity: 0.75;
+}
+.club-form-field .induction-choice input[type="checkbox"] {
+  appearance: none;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  border: 1.5px solid #80868b;
+  border-radius: 5px;
+  background: var(--club-paper);
+  cursor: pointer;
+}
+.club-form-field .induction-choice input[type="checkbox"]:checked {
+  border-color: var(--club-action);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E")
+      center / 14px no-repeat,
+    var(--club-action);
+}
+.club-form-field .induction-choice input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--club-action);
+  outline-offset: 2px;
+}
+
+.induction-group-card {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 14px;
+  margin-top: 22px;
+  padding: 16px 18px;
+  border: 1px solid #ceead6;
+  border-radius: 16px;
+  background: #e6f4ea;
+  color: #0d652d;
+  text-decoration: none;
+}
+.induction-group-card > span:nth-child(2) {
+  flex: 1 1 220px;
+}
+.induction-group-card strong,
+.induction-group-card span span {
+  display: block;
+}
+.induction-group-card strong {
+  font-size: 15px;
+  font-weight: 500;
+}
+.induction-group-card span span {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #137333;
+}
+.induction-group-join {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #137333;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+}
+.induction-contacts {
+  margin-top: 22px;
+  text-align: left;
+}
+.induction-contacts h3 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 500;
+}
+.induction-contacts > p {
+  margin: 14px 0 8px;
+  font-size: 13px;
+  color: var(--club-muted);
+}
+.induction-contacts ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.induction-contact {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--club-line);
+  border-radius: 14px;
+  background: #fbfcfe;
+}
+.induction-contact .induction-lead-photo {
+  width: 40px;
+  height: 40px;
+}
+.induction-contact p {
+  flex: 1 1 150px;
+  min-width: 0;
+  margin: 0;
+}
+.induction-contact p strong,
+.induction-contact p span,
+.induction-contact p b {
+  display: block;
+}
+.induction-contact p strong {
+  font-size: 14.5px;
+  font-weight: 500;
+}
+.induction-contact p span {
+  font-size: 12.5px;
+  color: var(--club-muted);
+}
+.induction-contact p b {
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.induction-contact-actions {
+  display: flex;
+  gap: 8px;
+}
+.induction-contact-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--club-line);
+  border-radius: 999px;
+  background: var(--club-paper);
+  color: var(--club-action);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+}
+.induction-contact-actions a:hover {
+  background: #f1f3f4;
+}
+@media (max-width: 600px) {
+  .induction-contact-actions {
+    width: 100%;
+  }
+  .induction-contact-actions a {
+    flex: 1;
+    justify-content: center;
+  }
+}

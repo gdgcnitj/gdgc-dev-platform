@@ -8,25 +8,25 @@ an admin editor or a new database schema.
 
 ## Shared fields
 
-| Field                       | Purpose                                                                              |
-| --------------------------- | ------------------------------------------------------------------------------------ |
-| `id`                        | Permanent identity used by registrations; never rename an existing ID                |
-| `slug`                      | URL segment at `/events/<slug>`; existing URLs are preserved                         |
-| `title`, `summary`          | Confirmed event name and short description                                           |
-| `kind`                      | `hackathon`, `workshop`, `bootcamp`, `meetup`, `orientation`, `festival`, or `other` |
-| `categoryLabel`             | Optional display label, such as “Workshops & contests”                               |
-| `status`                    | `scheduled`, `live`, `completed`, `postponed`, or `cancelled`                        |
-| `visibility`                | `draft` (default) or `published`; drafts are excluded from public routes and lookups |
-| `color`                     | `blue`, `green`, `yellow`, or `red`                                                  |
-| `date`                      | Optional exact timestamps, calendar dates, or historical labels                      |
-| `location`                  | Optional `mode` (`in-person`, `online`, `hybrid`), `name`, and HTTP(S) `url`         |
-| `media`                     | Ordered carousel slides; published events require at least one                       |
-| `coverId`                   | Optional slide ID for cards; defaults to the first slide                             |
-| `registration`              | `none`, `internal`, or `external`; defaults to `none`                                |
-| `homepage`                  | Optional `featured` and `featuredUntil` placement settings                           |
-| `website`                   | Optional dedicated site, with a display `label` and HTTP(S) `url`                    |
-| `seriesId`, `parentEventId` | Optional grouping for recurring editions or constituent activities                   |
-| `sections`                  | Ordered content sections; an empty array is valid                                    |
+| Field                       | Purpose                                                                                           |
+| --------------------------- | ------------------------------------------------------------------------------------------------- |
+| `id`                        | Permanent identity used by registrations; never rename an existing ID                             |
+| `slug`                      | URL segment at `/events/<slug>`; existing URLs are preserved                                      |
+| `title`, `summary`          | Confirmed event name and short description                                                        |
+| `kind`                      | `induction`, `hackathon`, `workshop`, `bootcamp`, `meetup`, `orientation`, `festival`, or `other` |
+| `categoryLabel`             | Optional display label, such as “Workshops & contests”                                            |
+| `status`                    | `scheduled`, `live`, `completed`, `postponed`, or `cancelled`                                     |
+| `visibility`                | `draft` (default) or `published`; drafts are excluded from public routes and lookups              |
+| `color`                     | `blue`, `green`, `yellow`, or `red`                                                               |
+| `date`                      | Optional exact timestamps, calendar dates, or historical labels                                   |
+| `location`                  | Optional `mode` (`in-person`, `online`, `hybrid`), `name`, and HTTP(S) `url`                      |
+| `media`                     | Ordered carousel slides; published events require at least one                                    |
+| `coverId`                   | Optional slide ID for cards; defaults to the first slide                                          |
+| `registration`              | `none`, `internal`, or `external`; defaults to `none`                                             |
+| `homepage`                  | Optional `featured` and `featuredUntil` placement settings                                        |
+| `website`                   | Optional dedicated site, with a display `label` and HTTP(S) `url`                                 |
+| `seriesId`, `parentEventId` | Optional grouping for recurring editions or constituent activities                                |
+| `sections`                  | Ordered content sections; an empty array is valid                                                 |
 
 Keep status, featuring, and registration independent. A completed event can remain
 featured with registration closed. Status is editorial: an elapsed date does not
@@ -61,18 +61,19 @@ page order and navigation order. Set `hidden: true` to omit a section from both.
 Event kinds do not restrict which sections are allowed. The suggestions in
 `lib/events/presets.ts` are authoring starting points only.
 
-| Type         | Content                                                                                                                    |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| `story`      | `paragraphs` and optional `cards` (`title`, `description`)                                                                 |
-| `notice`     | `body` and optional short `label`                                                                                          |
-| `list`       | `items` and optional `style` (`bullets` or `numbered`); useful for learning outcomes, prerequisites, rules, or eligibility |
-| `schedule`   | `items` with `time`, `title`, optional `description` and `resources`                                                       |
-| `speakers`   | `people` with `name`, optional `role`, `bio`, `image`, and profile `url`                                                   |
-| `resources`  | `links` with `title`, `url`, and optional `description`                                                                    |
-| `faq`        | `items` with `question` and `answer`                                                                                       |
-| `prizes`     | `items` with `title`, `description`, optional `highlight`                                                                  |
-| `challenges` | `tracks`, optional `description`, and `statements`; usable before results exist                                            |
-| `results`    | `items` with `team`, optional `trackId`, `rank`, `prize`, and `description`                                                |
+| Type           | Content                                                                                                                    |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `applications` | Department interest forms configured by the event registration preset; see [induction forms](induction-content.md)         |
+| `story`        | `paragraphs` and optional `cards` (`title`, `description`)                                                                 |
+| `notice`       | `body` and optional short `label`                                                                                          |
+| `list`         | `items` and optional `style` (`bullets` or `numbered`); useful for learning outcomes, prerequisites, rules, or eligibility |
+| `schedule`     | `items` with `time`, `title`, optional `description` and `resources`                                                       |
+| `speakers`     | `people` with `name`, optional `role`, `bio`, `image`, and profile `url`                                                   |
+| `resources`    | `links` with `title`, `url`, and optional `description`                                                                    |
+| `faq`          | `items` with `question` and `answer`                                                                                       |
+| `prizes`       | `items` with `title`, `description`, optional `highlight`                                                                  |
+| `challenges`   | `tracks`, optional `description`, and `statements`; usable before results exist                                            |
+| `results`      | `items` with `team`, optional `trackId`, `rank`, `prize`, and `description`                                                |
 
 Learning outcomes, prerequisites, and rules can each be a separate `list` section
 with a different ID and heading. Bootcamps can use schedule items for individual
@@ -154,7 +155,9 @@ registration: {
 
 The `campus` preset keeps the existing NITJ email, roll number, course, branch,
 year, phone, and department-interest validation in `lib/content/registration.ts`.
-It is not a generic team registration form. Use an external provider for other
+Inductions use the separate `department-interest` preset and versioned questions,
+with their own storage and server action. See [induction forms](induction-content.md).
+The campus preset is not a generic team registration form. Use an external provider for other
 registration flows until a separately validated internal preset is implemented.
 
 External registration requires `provider` and an HTTP(S) `url`, alongside `state`.

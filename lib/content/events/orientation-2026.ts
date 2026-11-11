@@ -6,7 +6,7 @@ export const orientation = defineEvent({
   title: "Orientation 2026",
   kind: "orientation",
   summary:
-    "We welcomed the incoming batch to GDG on Campus NIT Jalandhar, introducing our eight specialized departments and sharing how to build, learn, and grow with the community.",
+    "We welcomed the incoming batch to GDG on Campus NIT Jalandhar, introducing our eight specialized domains and sharing how to build, learn, and grow with the community.",
   status: "completed",
   visibility: "published",
   color: "yellow",
@@ -23,9 +23,38 @@ export const orientation = defineEvent({
   media: [
     {
       id: "cover",
-      src: "/images/events/orientation-2026.webp",
-      alt: "Orientation 2026 event artwork",
-      kind: "illustration",
+      src: "/images/events/orientation-2026/audience.webp",
+      alt: "Students seated across the lecture theatre during Orientation 2026",
+      caption: "The audience at Orientation 2026 in LT 402.",
+      kind: "photo",
+    },
+    {
+      id: "presentation",
+      src: "/images/events/orientation-2026/presentation.webp",
+      alt: "A presenter speaks at a lectern in front of a projected slide",
+      caption: "A presentation during Orientation 2026.",
+      kind: "photo",
+    },
+    {
+      id: "on-stage",
+      src: "/images/events/orientation-2026/on-stage.webp",
+      alt: "A group stands at the front of the lecture theatre beside a presenter",
+      caption: "On stage at Orientation 2026.",
+      kind: "photo",
+    },
+    {
+      id: "lecture-theatre",
+      src: "/images/events/orientation-2026/lecture-theatre.webp",
+      alt: "A wide view of the audience and seating in the lecture theatre",
+      caption: "A view across the lecture theatre during the orientation.",
+      kind: "photo",
+    },
+    {
+      id: "group",
+      src: "/images/events/orientation-2026/group.webp",
+      alt: "A group gathers outside for a photograph after the orientation",
+      caption: "A group photo after Orientation 2026.",
+      kind: "photo",
     },
   ],
   coverId: "cover",
@@ -53,7 +82,7 @@ export const orientation = defineEvent({
             "We organize flagship national hackathons like HackMOL, internal sprint contests like MiniMol, technical workshops, and real-world project incubators.",
         },
         {
-          title: "Eight Specialized Departments",
+          title: "Eight Specialized Domains",
           description:
             "Web, Mobile, AI/ML, Cloud & DevSecOps, Competitive Programming, UI/UX Design, Women in Tech (WiT), and Creatives & Media.",
         },

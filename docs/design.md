@@ -109,6 +109,8 @@ actions; external event sites belong on the event page. Show lifecycle notices
 only when useful, such as a live, postponed, or cancelled event.
 See [the event content guide](event-content.md).
 Published events need at least one supplied poster, illustration, or photo.
+Event headers, reading areas, and application forms use solid surfaces. Keep grid
+decoration inside artwork rather than overlaying text or form fields.
 Preserve confirmed archive dates, photos, descriptions, and results.
 Hide absent descriptions.
 Do not use a draft event description as a record of what happened.
