@@ -41,3 +41,14 @@ Inductions remains in the current spotlight.
 
 - [Orientation gallery](previews/orientation-gallery-desktop.png)
 - [Updated recent-event covers](previews/event-covers-desktop.png)
+
+The expectations sheet wraps text even when opened from the application picker’s
+action links. Its body scrolls independently on narrow screens.
+
+- [Expectations sheet on desktop](previews/induction-expectations-hotfix-desktop.png)
+- [Expectations sheet on a phone](previews/induction-expectations-hotfix-mobile.png)
+
+Kartik’s supplied portrait uses a higher crop position to keep his full head visible.
+
+- [Portrait alignment on desktop](previews/kartik-portrait-alignment-desktop.png)
+- [Portrait alignment on a phone](previews/kartik-portrait-alignment-mobile.png)

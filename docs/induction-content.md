@@ -24,8 +24,8 @@ second-year sections, technical assessment/interview rounds, and selection crite
 
 Seven departments have expectations supplied by the chapter; Creatives also has a
 closing `outro` line. Women in Tech takes no applications (`applications: false`):
-members of any department are part of it, so it stays on the event page with its
-`membership` note but is left out of the department picker, and the server rejects
+eligible members who join any GDGC domain are also part of WiT, so it stays on the
+event page with its `membership` note but is left out of the department picker, and the server rejects
 it. A department that takes applications needs questions; one that does not has
 none. Do not invent requirements for departments without expectations. App
 Development has common basics and four alternative tracks: Flutter, React Native,
@@ -144,6 +144,8 @@ Induction pages add short interaction feedback: card emphasis, sheet entry,
 form-step entries, progress checks, focus/choice feedback, animated ranking moves,
 and submission confirmation. Movement respects `prefers-reduced-motion`; there is
 no automatic looping or delayed access to controls. Reading surfaces stay solid.
+Expectation sheets reset inherited non-wrapping link styles and scroll their body
+independently, keeping the guidance, header, and PDF footer accessible.
 
 Each chosen department becomes one `induction_submission` row with the complete
 common-answer snapshot, its `preference`, department answers, form version,

@@ -24,7 +24,7 @@ export default function NotFound() {
           <h1 id="not-found-title">This page took a wrong turn.</h1>
           <p className="club-hero-description">
             The link may be old, or the page may have moved. Head back home to find events,
-            departments, and people.
+            domains, and people.
           </p>
           <div className="club-actions">
             <Button asChild className="club-button">
