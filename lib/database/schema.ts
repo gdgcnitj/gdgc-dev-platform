@@ -14,6 +14,8 @@ export const inductionSubmission = pgTable("induction_submission", {
   rollNumber: text("roll_number").notNull(),
   phone: text().notNull(),
   branch: text().notNull(),
+  // Nullable only for rows saved before the question existed.
+  year: text(),
   linkedinUrl: text("linkedin_url").notNull(),
   githubUrl: text("github_url").notNull(),
   orcidUrl: text("orcid_url"),

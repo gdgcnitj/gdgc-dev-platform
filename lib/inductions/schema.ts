@@ -239,7 +239,7 @@ function webLink(message: string, optional = false) {
 }
 
 export const commonDetailsSchema = registrationSchema
-  .pick({ name: true, email: true, phone: true, branch: true })
+  .pick({ name: true, email: true, phone: true, branch: true, year: true })
   .extend({
     rollNumber: registrationSchema.shape.rollNumber.transform((value) =>
       value.toUpperCase(),
@@ -297,6 +297,7 @@ export const commonQuestionLabels = {
   rollNumber: "Roll number",
   phone: "Phone",
   branch: "Branch",
+  year: "Year of study",
   linkedinUrl: "LinkedIn profile",
   githubUrl: "GitHub profile",
   orcidUrl: "ORCID iD (optional)",
@@ -313,6 +314,7 @@ export const emptyCommonDetails: CommonDraft = {
   rollNumber: "",
   phone: "",
   branch: "",
+  year: "",
   linkedinUrl: "",
   githubUrl: "",
   orcidUrl: "",

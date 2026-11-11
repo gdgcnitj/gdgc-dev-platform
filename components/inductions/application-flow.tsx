@@ -17,7 +17,7 @@ import { submitInductionApplication } from "@/app/events/[id]/apply/actions";
 import { getDepartment } from "@/lib/content/departments";
 import { palette } from "@/lib/design/theme";
 import type { AnswerCopy } from "@/lib/inductions/answer-pdf";
-import { branches } from "@/lib/content/registration";
+import { branches, years } from "@/lib/content/registration";
 import {
   commonQuestionLabels,
   commonDetailsSchema,
@@ -354,13 +354,13 @@ export function ApplicationFlow({
         hint={hint}
         error={errors[key]}
       >
-        {key === "branch" ? (
+        {key === "branch" || key === "year" ? (
           <select {...props}>
             <option value="" disabled>
-              Select your branch
+              {key === "year" ? "Select your year" : "Select your branch"}
             </option>
-            {branches.map((branch) => (
-              <option key={branch}>{branch}</option>
+            {(key === "year" ? years : branches).map((item) => (
+              <option key={item}>{item}</option>
             ))}
           </select>
         ) : !input ? (
@@ -699,8 +699,9 @@ export function ApplicationFlow({
                   </div>
                   <div className="club-form-row">
                     {commonField("phone")}
-                    {commonField("branch")}
+                    {commonField("year")}
                   </div>
+                  {commonField("branch")}
                   <div className="club-form-row">
                     {commonField("linkedinUrl", "linkedin.com/in/your-name")}
                     {commonField("githubUrl", "github.com/your-username")}

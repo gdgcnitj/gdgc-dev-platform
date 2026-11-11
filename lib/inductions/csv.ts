@@ -23,6 +23,7 @@ export function inductionCsv(
     rollNumber: string;
     phone: string;
     branch: string;
+    year: string | null;
     linkedinUrl: string;
     githubUrl: string;
     orcidUrl: string | null;
@@ -48,6 +49,7 @@ export function inductionCsv(
     "Roll number",
     "Phone",
     "Branch",
+    "Year",
     "LinkedIn",
     "GitHub",
     "ORCID",
@@ -72,6 +74,7 @@ export function inductionCsv(
         row.rollNumber,
         row.phone,
         row.branch,
+        row.year,
         row.linkedinUrl,
         row.githubUrl,
         row.orcidUrl,
