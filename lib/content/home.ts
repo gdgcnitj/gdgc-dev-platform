@@ -27,6 +27,7 @@ export type Department = {
   lead: string;
   initials: string;
   image?: string;
+  imagePosition?: string;
   icon: LucideIcon;
   href?: string;
   links?: ProfileLinks;
@@ -149,6 +150,7 @@ const departmentProfiles: Record<
     lead: "Kartik Sirohi",
     initials: "KS",
     image: "/images/leads/kartik-sirohi.jpeg",
+    imagePosition: "center 22%",
     links: {
       linkedin: "https://www.linkedin.com/in/kartik-sirohi-b81625325/",
       instagram: "https://www.instagram.com/kartiksirohi12/",

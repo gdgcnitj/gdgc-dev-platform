@@ -54,6 +54,7 @@ export function HomeDepartments() {
                 <div data-reveal="portrait" data-reveal-order={index % 4}>
                   <MediaFrame
                     src={department.image}
+                    imagePosition={department.imagePosition}
                     alt={department.lead}
                     label="Portrait coming soon"
                     initials={department.initials}
