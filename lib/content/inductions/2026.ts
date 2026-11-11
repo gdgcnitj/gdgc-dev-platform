@@ -637,7 +637,7 @@ export const inductions2026 = defineInductionCycle({
         "Help more women find their community and participate in technology.",
       applications: false,
       membership:
-        "No separate application. Join any domain and you’re part of Women in Tech.",
+        "No separate application. If you’re eligible for Women in Tech, joining any GDGC domain also makes you part of WiT.",
     },
     {
       id: "devsecops",

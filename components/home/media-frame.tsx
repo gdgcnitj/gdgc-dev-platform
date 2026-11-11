@@ -11,6 +11,7 @@ export function MediaFrame({
   label,
   initials,
   className,
+  imagePosition,
   sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
   priority = false,
   showLabel = true,
@@ -21,6 +22,7 @@ export function MediaFrame({
   label: string;
   initials?: string;
   className?: string;
+  imagePosition?: string;
   sizes?: string;
   priority?: boolean;
   showLabel?: boolean;
@@ -37,6 +39,7 @@ export function MediaFrame({
           fill
           sizes={sizes}
           priority={priority}
+          style={{ objectPosition: imagePosition }}
           onLoad={(event) => {
             if (fadeOnLoad && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
               event.currentTarget.animate?.({ opacity: [0, 1] }, { duration: 220, easing: "ease-out" });

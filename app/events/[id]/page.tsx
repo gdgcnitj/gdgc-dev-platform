@@ -147,7 +147,7 @@ export default async function EventPage({ params }: Props) {
                     ) : applicationSection ? (
                       <Button asChild className="club-button">
                         <a href={`#section-${applicationSection.id}`}>
-                          Explore departments
+                          Explore domains
                           <ArrowRight size={17} aria-hidden="true" />
                         </a>
                       </Button>

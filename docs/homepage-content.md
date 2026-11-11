@@ -88,6 +88,8 @@ Add a lead's profiles to `links` with the `linkedin`, `instagram`, and `website`
 The card always shows LinkedIn and Instagram; an unset link shows a gray placeholder.
 The portfolio icon appears only when `website` is set.
 The current links come from the leads' form responses. Kartik's links were supplied separately.
+Kartik's current portrait is `public/images/leads/kartik-sirohi.jpeg`, supplied by the chapter.
+Use a lead's optional `imagePosition` to keep their face within the card crop.
 Use the profile URL, not a bare username, and drop tracking parameters.
 Leave a portfolio unset when the response is not a real address, such as "soon".
 Use the confirmed spelling of each name.
