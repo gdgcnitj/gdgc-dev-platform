@@ -15,8 +15,8 @@ most two departments with an institute email and no account.
 | `lib/content/inductions/index.ts`       | Register another cycle                                          |
 | `lib/inductions/schema.ts`              | Common questions, labels, validation, and the department cap    |
 
-AI, Creatives, App Development, and Web Development use the chapter-supplied
-questions. Web's resume is a Google Drive link rather than an upload, because the
+AI, Creatives, App Development, Web Development, UI/UX, and DevSecOps use the
+chapter-supplied questions (a domain may have up to 16). Web's resume is a Google Drive link rather than an upload, because the
 app has no file storage. The remaining departments
 have editable sample prompts marked `sample: true`; replace those when the leads
 supply final questions. CP's preparation syllabus is split into first- and
@@ -113,7 +113,7 @@ compares `manifest.json` with the current content and fails until you do.
 
 One application has four steps:
 
-1. **About you**: name, institute email, roll number, phone, year of study, branch, LinkedIn
+1. **About you**: name, gender, institute email, roll number, phone, year of study, branch, LinkedIn
    profile, GitHub profile, portfolio, ORCID iD, other clubs, and why GDGC.
    Everything except portfolio and ORCID is required. Students who are not in
    another club write "None".
@@ -124,7 +124,11 @@ One application has four steps:
    PDF of what was just submitted, built in the browser with jsPDF from data
    already on the page; nothing extra is fetched from the server. Its fonts and
    logo live in `public/inductions/`. Duplicate submissions get no PDF, since the
-   saved answers may differ.
+   saved answers may differ. The confirmation also links the GDGC Connect WhatsApp
+   group and shows call and WhatsApp buttons for the leads of the domains just
+   applied to, plus the chapter leads. Those numbers live in
+   `lib/content/inductions/contacts.ts`. Each saved row records `created_at`, the
+   submission time, exported as "Submitted at".
 
 Profile links are accepted with or without `https://` and `www.`, then saved in
 one canonical form: `https://www.linkedin.com/in/<name>`, `https://github.com/<user>`,

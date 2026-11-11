@@ -12,7 +12,7 @@ const question = (id: string, label: string) => ({
 export const inductions2026 = defineInductionCycle({
   id: "inductions-2026",
   eventId: "inductions-2026",
-  version: 6,
+  version: 7,
   departments: [
     {
       id: "web",
@@ -227,10 +227,77 @@ export const inductions2026 = defineInductionCycle({
         ],
       },
       questions: [
-        question(
-          "ui-interest",
-          "Pick an app you use. What is one screen you would improve, and why?",
-        ),
+        {
+          id: "ui-inspiration",
+          label: "What inspires your design style the most?",
+          hint: "For example minimalism, storytelling, problem-solving, or motion.",
+          type: "textarea",
+        },
+        {
+          id: "ui-process",
+          label:
+            "Explain your design process briefly, from idea to final prototype.",
+          type: "textarea",
+        },
+        {
+          id: "ui-project",
+          label:
+            "Pick one of your favorite design projects and tell us about it.",
+          hint: "What was the goal? What problem were you solving? How did you measure success?",
+          type: "textarea",
+        },
+        {
+          id: "ui-feedback",
+          label: "How do you handle feedback on your designs?",
+          type: "textarea",
+        },
+        {
+          id: "ui-priority",
+          label:
+            "What’s more important to you, usability or visual appeal? Why?",
+          type: "textarea",
+        },
+        {
+          id: "ui-tools",
+          label: "Which tools are you most comfortable using?",
+          type: "multi",
+          required: false,
+          options: [
+            { id: "figma", label: "Figma" },
+            { id: "adobe-xd", label: "Adobe XD" },
+            { id: "illustrator", label: "Illustrator" },
+            { id: "photoshop", label: "Photoshop" },
+            { id: "after-effects", label: "After Effects" },
+            { id: "other", label: "Other" },
+          ],
+        },
+        {
+          id: "ui-work",
+          label: "What kind of design work do you enjoy most?",
+          type: "multi",
+          options: [
+            { id: "ui-design", label: "UI design" },
+            { id: "ux-research", label: "UX research" },
+            { id: "prototyping", label: "Prototyping and interaction" },
+            { id: "branding", label: "Branding" },
+            { id: "motion", label: "Motion and micro-interactions" },
+            { id: "frontend", label: "Frontend collaboration" },
+          ],
+        },
+        {
+          id: "ui-showcase",
+          label: "A recent UI/UX project you’re proud of",
+          hint: "Add a link to a screenshot, Figma file, Behance page, or portfolio, and say what it shows. Skip this if you haven’t made one yet.",
+          type: "links",
+          required: false,
+          maxLinks: 3,
+        },
+        {
+          id: "ui-flaw",
+          label:
+            "Describe one usability flaw you often notice in modern apps and how you’d fix it.",
+          type: "textarea",
+        },
       ],
     },
     {
@@ -350,7 +417,7 @@ export const inductions2026 = defineInductionCycle({
         "This is a short form, and it isn’t a test. Nothing here decides anything on its own. We’re a really chill domain, and we’d love to build with you.",
         "Our team is small right now, but we want to grow it a lot this year. Whether you’ve shipped an app or never opened Android Studio, please apply.",
         "Filled the brownie points form after my orientation talk? That form only asked for your name and branch, so use the same name and branch here and we’ll match it.",
-        "You can message me anywhere, anytime. I’m open to anything: https://rishia.in/links",
+        "You can message me anywhere, anytime. I’m open to anything: https://rishia.in/links, or WhatsApp or call me on +91 99159 72220.",
       ],
       expectations: {
         groups: [
@@ -603,10 +670,128 @@ export const inductions2026 = defineInductionCycle({
         ],
       },
       questions: [
-        question(
-          "devsecops-interest",
-          "What would you like to learn about deploying or securing an application?",
-        ),
+        {
+          id: "devsecops-certs",
+          label:
+            "Do you have any certifications? (If you do, please lend us some money. Just kidding!)",
+          type: "textarea",
+          required: false,
+        },
+        {
+          id: "devsecops-hardware",
+          label:
+            "Anything you’ve done in IoT or hardware hacking? Even network jamming or any other cool stuff.",
+          type: "textarea",
+          required: false,
+        },
+        {
+          id: "devsecops-os",
+          label: "Which OS do you use?",
+          hint: "iykyk",
+          type: "text",
+        },
+        {
+          id: "devsecops-os-setup",
+          label: "How do you run your OS?",
+          type: "choice",
+          options: [
+            { id: "installed", label: "Installed directly on my machine" },
+            { id: "dual-boot", label: "Dual boot" },
+            { id: "vm", label: "In a virtual machine" },
+            { id: "wsl", label: "WSL" },
+            { id: "other", label: "Something else" },
+          ],
+        },
+        {
+          id: "devsecops-deployed",
+          label: "Have you ever deployed a project? Tell us about it.",
+          type: "textarea",
+          required: false,
+        },
+        {
+          id: "devsecops-terminal",
+          label: "How comfortable are you with the terminal and scripting?",
+          hint: "Pick everything that applies.",
+          type: "multi",
+          options: [
+            { id: "basic", label: "Basic navigation" },
+            {
+              id: "regular",
+              label: "Regular use, including advanced commands",
+            },
+            { id: "scripts", label: "Writing Bash or Python scripts" },
+          ],
+        },
+        {
+          id: "devsecops-stack",
+          label: "What is your tech stack?",
+          hint: "Pick everything you’ve used. Skip it if none yet.",
+          type: "multi",
+          required: false,
+          options: [
+            { id: "git", label: "Git" },
+            { id: "docker", label: "Docker" },
+            { id: "jenkins", label: "Jenkins" },
+            { id: "kubernetes", label: "Kubernetes" },
+            { id: "terraform", label: "Terraform" },
+            { id: "aws", label: "AWS" },
+            { id: "gcp", label: "GCP" },
+            { id: "azure", label: "Azure" },
+            { id: "other", label: "Other" },
+          ],
+        },
+        {
+          id: "devsecops-why-security",
+          label: "What made you choose cybersecurity as a career domain?",
+          hint: "Applying for the DevOps side? Write N/A.",
+          type: "textarea",
+        },
+        {
+          id: "devsecops-team",
+          label: "Which side of security interests you?",
+          type: "multi",
+          required: false,
+          options: [
+            { id: "red", label: "Red team" },
+            { id: "blue", label: "Blue team" },
+            { id: "other", label: "Other" },
+          ],
+        },
+        {
+          id: "devsecops-tools",
+          label: "What security tools are you familiar with?",
+          type: "textarea",
+          required: false,
+        },
+        {
+          id: "devsecops-attacks",
+          label:
+            "Describe one or two attacks or vulnerabilities you can carry out or know about.",
+          hint: "Write it in your own words. We’d rather read your bad grammar than a chatbot. No DoS or DDoS, please.",
+          type: "textarea",
+          required: false,
+        },
+        {
+          id: "devsecops-profiles",
+          label:
+            "Blog or write-up profile, TryHackMe, HTB, or any other platform you practice on",
+          hint: "Add a link and say what it is. Skip this if you don’t have one yet.",
+          type: "links",
+          required: false,
+          maxLinks: 4,
+        },
+        {
+          id: "devsecops-ctf",
+          label: "CTF experience, and any bug bounty or VDP experience",
+          hint: "If any.",
+          type: "textarea",
+          required: false,
+        },
+        {
+          id: "devsecops-why",
+          label: "Why do you want to be part of the GDGC DevSecOps team?",
+          type: "textarea",
+        },
       ],
     },
     {

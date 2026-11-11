@@ -37,6 +37,13 @@ export const years = [
   "5th year or later",
 ] as const;
 
+export const genders = [
+  "Female",
+  "Male",
+  "Non-binary",
+  "Prefer not to say",
+] as const;
+
 export const registrationSchema = z.object({
   name: z
     .string()

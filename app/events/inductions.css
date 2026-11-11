@@ -1619,3 +1619,131 @@
   outline: 2px solid var(--club-action);
   outline-offset: 2px;
 }
+
+.induction-group-card {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 14px;
+  margin-top: 22px;
+  padding: 16px 18px;
+  border: 1px solid #ceead6;
+  border-radius: 16px;
+  background: #e6f4ea;
+  color: #0d652d;
+  text-decoration: none;
+}
+.induction-group-card > span:nth-child(2) {
+  flex: 1 1 220px;
+}
+.induction-group-card strong,
+.induction-group-card span span {
+  display: block;
+}
+.induction-group-card strong {
+  font-size: 15px;
+  font-weight: 500;
+}
+.induction-group-card span span {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #137333;
+}
+.induction-group-join {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #137333;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+}
+.induction-contacts {
+  margin-top: 22px;
+  text-align: left;
+}
+.induction-contacts h3 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 500;
+}
+.induction-contacts > p {
+  margin: 14px 0 8px;
+  font-size: 13px;
+  color: var(--club-muted);
+}
+.induction-contacts ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.induction-contact {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--club-line);
+  border-radius: 14px;
+  background: #fbfcfe;
+}
+.induction-contact .induction-lead-photo {
+  width: 40px;
+  height: 40px;
+}
+.induction-contact p {
+  flex: 1 1 150px;
+  min-width: 0;
+  margin: 0;
+}
+.induction-contact p strong,
+.induction-contact p span,
+.induction-contact p b {
+  display: block;
+}
+.induction-contact p strong {
+  font-size: 14.5px;
+  font-weight: 500;
+}
+.induction-contact p span {
+  font-size: 12.5px;
+  color: var(--club-muted);
+}
+.induction-contact p b {
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.induction-contact-actions {
+  display: flex;
+  gap: 8px;
+}
+.induction-contact-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--club-line);
+  border-radius: 999px;
+  background: var(--club-paper);
+  color: var(--club-action);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+}
+.induction-contact-actions a:hover {
+  background: #f1f3f4;
+}
+@media (max-width: 600px) {
+  .induction-contact-actions {
+    width: 100%;
+  }
+  .induction-contact-actions a {
+    flex: 1;
+    justify-content: center;
+  }
+}

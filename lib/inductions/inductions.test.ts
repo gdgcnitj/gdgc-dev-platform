@@ -34,6 +34,7 @@ const common = () => ({
   phone: "+91 98765 43210",
   branch: "Computer Science and Engineering",
   year: "2nd year",
+  gender: "Prefer not to say",
   linkedinUrl: "linkedin.com/in/test-student/",
   githubUrl: "https://www.github.com/test-student",
   orcidUrl: "",
@@ -164,6 +165,8 @@ test("common answers normalize institute email and reject lookalike domains", ()
     { rollNumber: "" },
     { year: "" },
     { year: "6th year" },
+    { gender: "" },
+    { gender: "Other" },
     { rollNumber: "23/103" },
   ])
     assert.equal(
@@ -686,4 +689,17 @@ test("the portfolio link is optional and normalized", () => {
   const prepared = prepareInductionSubmission(event, inductions2026, input());
   assert.ok(prepared.ok);
   assert.equal(prepared.data.portfolioUrl, null);
+});
+
+test("every domain has a lead phone number and the new domains take their supplied questions", async () => {
+  const { leadPhones } = await import("@/lib/content/inductions/contacts");
+  for (const department of inductions2026.departments)
+    assert.match(leadPhones[department.id] ?? "", /^\+91 \d{5} \d{5}$/);
+  for (const id of ["devsecops", "ui"]) {
+    const department = inductions2026.departments.find(
+      (item) => item.id === id,
+    )!;
+    assert.ok(department.questions.length >= 9);
+    assert.ok(department.questions.every((question) => !question.sample));
+  }
 });
