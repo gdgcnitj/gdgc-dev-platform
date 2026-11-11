@@ -17,6 +17,7 @@ export const inductionSubmission = pgTable("induction_submission", {
   linkedinUrl: text("linkedin_url").notNull(),
   githubUrl: text("github_url").notNull(),
   orcidUrl: text("orcid_url"),
+  portfolioUrl: text("portfolio_url"),
   otherClubs: text("other_clubs").notNull(),
   whyGdgc: text("why_gdgc").notNull(),
   // 1 is the applicant's first choice within the cycle.

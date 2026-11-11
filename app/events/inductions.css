@@ -246,11 +246,26 @@
   background: #e8f0fe;
 }
 .club-form-field .induction-choice input[type="radio"] {
+  /* Drawn here so the control looks the same in every browser colour scheme. */
+  appearance: none;
+  flex-shrink: 0;
   width: 18px;
   height: 18px;
   min-height: 18px;
   padding: 0;
-  accent-color: var(--club-action);
+  border: 1.5px solid #80868b;
+  border-radius: 50%;
+  background: var(--club-paper);
+  cursor: pointer;
+}
+.club-form-field .induction-choice input[type="radio"]:checked {
+  border-color: var(--club-action);
+  box-shadow: inset 0 0 0 3.5px var(--club-paper);
+  background: var(--club-action);
+}
+.club-form-field .induction-choice input[type="radio"]:focus-visible {
+  outline: 2px solid var(--club-action);
+  outline-offset: 2px;
 }
 .induction-expectation-content ul {
   margin: 0;
@@ -762,7 +777,6 @@
   }
 }
 
-
 /* Feedback belongs to the induction flow; long-form reading stays still. */
 @media (prefers-reduced-motion: no-preference) {
   .induction-department {
@@ -1163,7 +1177,9 @@
   .induction-reassurance {
     animation: induction-content-in 240ms var(--club-ease);
   }
-  .induction-form-fields .club-form-field[data-invalid] :is(input, select, textarea) {
+  .induction-form-fields
+    .club-form-field[data-invalid]
+    :is(input, select, textarea) {
     animation: induction-nudge 280ms ease-in-out;
   }
   .induction-pdf-link svg,
@@ -1293,4 +1309,313 @@
   50% {
     transform: translateY(-2px) rotate(-6deg);
   }
+}
+
+/* Choice tiles, link lists, and the department lead's note. */
+.induction-choices[data-tiles] {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+.induction-choices[data-tiles] .induction-choice {
+  align-items: flex-start;
+  padding: 14px 16px;
+}
+.induction-choices[data-tiles] .induction-choice input {
+  margin-top: 2px;
+}
+.induction-choice small {
+  display: block;
+  margin-top: 4px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--club-muted);
+}
+.induction-choices[data-tiles] .induction-choice > span {
+  font-weight: 500;
+}
+.induction-choices[data-tiles] .induction-choice small {
+  font-weight: 400;
+}
+.induction-links ol {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.induction-link-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1.2fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+.induction-link-icon {
+  display: inline-flex;
+  color: var(--club-muted);
+}
+.club-form-field .induction-link-row input {
+  min-width: 0;
+}
+.induction-link-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--club-muted);
+  cursor: pointer;
+}
+.induction-link-remove:hover,
+.induction-link-remove:focus-visible {
+  background: #f1f3f4;
+  color: var(--club-ink);
+}
+.induction-link-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 13px;
+}
+.induction-lead-note {
+  margin: 0 0 28px;
+  padding: 20px 22px;
+  border: 1px solid var(--club-line);
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 120% at 100% 0%, #e6f4ea 0%, transparent 50%), #fbfcfe;
+}
+.induction-lead-note-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.induction-lead-note-head .induction-lead-photo {
+  width: 44px;
+  height: 44px;
+}
+.induction-lead-note-head p {
+  margin: 0;
+}
+.induction-lead-note-head strong,
+.induction-lead-note-head span {
+  display: block;
+}
+.induction-lead-note-head strong {
+  font-size: 15px;
+  font-weight: 500;
+}
+.induction-lead-note-head span {
+  font-size: 12.5px;
+  color: var(--club-muted);
+}
+.induction-lead-note > p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.induction-lead-note > p + p {
+  margin-top: 10px;
+}
+.induction-review-links {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+}
+.induction-review-links li {
+  display: grid;
+  gap: 2px;
+}
+.induction-review-links span {
+  color: var(--club-muted);
+}
+.induction-review-links a {
+  color: var(--club-action);
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .induction-link-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .induction-link-icon {
+    display: none;
+  }
+  .induction-link-row input[type="text"] {
+    grid-column: 1;
+  }
+  .induction-link-remove {
+    grid-row: 1;
+    grid-column: 2;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .induction-link-row {
+    animation: induction-content-in 200ms var(--club-ease);
+  }
+  .induction-lead-note {
+    animation: induction-content-in 280ms var(--club-ease);
+  }
+  .induction-choices[data-tiles] .induction-choice:has(:checked) {
+    animation: induction-pop-soft 240ms var(--club-ease);
+  }
+}
+@keyframes induction-pop-soft {
+  50% {
+    transform: scale(1.02);
+  }
+}
+.induction-expectation-outro {
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #fef7e0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.induction-membership {
+  margin: auto 0 0 !important;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--club-tone-soft, #f1f3f4);
+  color: var(--club-ink) !important;
+  font-size: 14px !important;
+  line-height: 1.55;
+}
+
+/* Phones: one level of padding, compact progress, and full-width tiles. */
+@media (max-width: 600px) {
+  .induction-form-surface {
+    padding: 20px 16px;
+    border-radius: 18px;
+  }
+  .induction-progress {
+    justify-content: flex-start;
+    gap: 10px;
+    padding-bottom: 18px;
+    margin-bottom: 22px;
+  }
+  .induction-progress li {
+    font-size: 13px;
+  }
+  /* Only the current step keeps its label; the rest are numbered circles. */
+  .induction-progress li:not([data-active]) {
+    font-size: 0;
+    gap: 0;
+  }
+  .induction-progress li > span {
+    font-size: 12px;
+  }
+  .induction-form-intro {
+    margin-bottom: 20px;
+  }
+  .induction-form-intro h2 {
+    font-size: 24px;
+  }
+  .induction-question-heading {
+    gap: 12px;
+  }
+  .induction-question-heading .induction-department-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+  .induction-lead-note {
+    padding: 16px;
+    margin-bottom: 22px;
+    border-radius: 14px;
+  }
+  .induction-lead-note-head .induction-lead-photo {
+    width: 36px;
+    height: 36px;
+  }
+  .induction-lead-note > p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .induction-reassurance {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+  .induction-form-actions {
+    margin-top: 24px;
+  }
+}
+@media (max-width: 480px) {
+  .induction-choices[data-tiles] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .induction-choices[data-tiles] .induction-choice {
+    padding: 12px 14px;
+  }
+}
+.induction-lead-note a {
+  color: var(--club-action);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.induction-answer-copy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+  margin-top: 22px;
+  padding: 16px 18px;
+  border: 1px solid var(--club-line);
+  border-radius: 16px;
+  background: #f8f9fa;
+}
+.induction-answer-copy strong,
+.induction-answer-copy span {
+  display: block;
+}
+.induction-answer-copy strong {
+  font-size: 15px;
+  font-weight: 500;
+}
+.induction-answer-copy span {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--club-muted);
+}
+.induction-answer-copy button {
+  border: 0;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.induction-answer-copy button:disabled {
+  cursor: wait;
+  opacity: 0.75;
+}
+.club-form-field .induction-choice input[type="checkbox"] {
+  appearance: none;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  border: 1.5px solid #80868b;
+  border-radius: 5px;
+  background: var(--club-paper);
+  cursor: pointer;
+}
+.club-form-field .induction-choice input[type="checkbox"]:checked {
+  border-color: var(--club-action);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E")
+      center / 14px no-repeat,
+    var(--club-action);
+}
+.club-form-field .induction-choice input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--club-action);
+  outline-offset: 2px;
 }

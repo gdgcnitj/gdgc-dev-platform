@@ -87,8 +87,8 @@ export async function storeInductionSubmission(
         code: "full",
         error:
           existing.size >= maxDepartments
-            ? `This email or roll number already has applications for ${maxDepartments} departments, the most allowed.`
-            : `This email or roll number already has an application on file. You can add ${maxDepartments - existing.size} more department${maxDepartments - existing.size === 1 ? "" : "s"}.`,
+            ? `This email or roll number already has applications for ${maxDepartments} domains, the most allowed.`
+            : `This email or roll number already has an application on file. You can add ${maxDepartments - existing.size} more domain${maxDepartments - existing.size === 1 ? "" : "s"}.`,
       };
     await tx.insert(inductionSubmission).values(
       fresh.map((item, index) => ({

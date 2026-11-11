@@ -67,6 +67,9 @@ function ExpectationContent({
           ))}
         </div>
       )}
+      {content.outro && (
+        <p className="induction-expectation-outro">{content.outro}</p>
+      )}
     </div>
   );
 }

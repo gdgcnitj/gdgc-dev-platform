@@ -25,7 +25,7 @@ export function DepartmentChoices({
   return (
     <>
       <p className="event-section-intro">
-        Different interests. One community. Read what each department expects,
+        Different interests. One community. Read what each domain expects,
         keep a PDF if you like, then apply once and choose up to {count}. These
         are expectations, not requirements: you don’t need to know all of them
         to get in.
@@ -33,7 +33,7 @@ export function DepartmentChoices({
       <div className="induction-apply-banner" data-reveal="card">
         <BracketMark className="induction-apply-mark" />
         <div>
-          <h3>One application, up to {count} departments</h3>
+          <h3>One application, up to {count} domains</h3>
           <p>
             {open
               ? "Your details first, then your choices in order of preference, then a few questions for each."
@@ -91,16 +91,17 @@ export function DepartmentChoices({
                   </span>
                 </p>
               )}
-              <div className="induction-department-action">
-                <Expectations
-                  department={department}
-                  cycleId={cycle.id}
-                />
-                <ExpectationsPdfLink
-                  cycleId={cycle.id}
-                  department={department}
-                />
-              </div>
+              {!department.applications ? (
+                <p className="induction-membership">{department.membership}</p>
+              ) : (
+                <div className="induction-department-action">
+                  <Expectations department={department} cycleId={cycle.id} />
+                  <ExpectationsPdfLink
+                    cycleId={cycle.id}
+                    department={department}
+                  />
+                </div>
+              )}
             </article>
           );
         })}

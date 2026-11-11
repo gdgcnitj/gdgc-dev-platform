@@ -19,9 +19,8 @@ test(
       "Use an explicitly named test/CI database",
     );
     process.env.DATABASE_URL = url;
-    const { db, inductionSubmission, registrationAttempt } = await import(
-      "@/lib/database"
-    );
+    const { db, inductionSubmission, registrationAttempt } =
+      await import("@/lib/database");
     const { storeInductionSubmission } = await import("./store");
     const cycleId = `test-${randomUUID()}`;
     const scope = `induction:${cycleId}`;
@@ -52,6 +51,7 @@ test(
       linkedinUrl: "https://www.linkedin.com/in/test-student",
       githubUrl: "https://github.com/test-student",
       orcidUrl: null,
+      portfolioUrl: null,
       otherClubs: "None",
       whyGdgc: "Testing an isolated submission.",
       formVersion: 1,
@@ -73,7 +73,9 @@ test(
         concurrent.map((result) => result.ok && result.status).sort(),
         ["created", "duplicate"],
       );
-      assert.ok(concurrent.every((result) => result.ok && result.remaining === 1));
+      assert.ok(
+        concurrent.every((result) => result.ok && result.remaining === 1),
+      );
 
       // Adding a department later continues the preference order.
       const second = await storeInductionSubmission(

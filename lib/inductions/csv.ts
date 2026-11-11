@@ -26,6 +26,7 @@ export function inductionCsv(
     linkedinUrl: string;
     githubUrl: string;
     orcidUrl: string | null;
+    portfolioUrl: string | null;
     otherClubs: string;
     whyGdgc: string;
     preference: number;
@@ -39,7 +40,7 @@ export function inductionCsv(
     "Submission ID",
     "Event",
     "Cycle",
-    "Department",
+    "Domain",
     "Preference",
     "Submitted at",
     "Name",
@@ -50,10 +51,11 @@ export function inductionCsv(
     "LinkedIn",
     "GitHub",
     "ORCID",
+    "Portfolio",
     "Other clubs",
     "Why GDGC",
     "Form version",
-    "Department questions and answers",
+    "Domain questions and answers",
   ];
   const lines = [
     headers.map(csvCell).join(","),
@@ -73,6 +75,7 @@ export function inductionCsv(
         row.linkedinUrl,
         row.githubUrl,
         row.orcidUrl,
+        row.portfolioUrl,
         row.otherClubs,
         row.whyGdgc,
         row.formVersion,

@@ -1,9 +1,91 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowUp, GripVertical } from "lucide-react";
+import { ArrowDown, ArrowUp, GripVertical, Link2, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { AnswerValue, InductionQuestion } from "@/lib/inductions/schema";
+import type {
+  AnswerValue,
+  InductionQuestion,
+  LinkAnswer,
+} from "@/lib/inductions/schema";
+
+function Links({
+  id,
+  question,
+  value,
+  onChange,
+}: {
+  id: string;
+  question: Extract<InductionQuestion, { type: "links" }>;
+  value: LinkAnswer[];
+  onChange: (value: LinkAnswer[]) => void;
+}) {
+  // One empty row is always shown so there is somewhere to start typing.
+  const rows = value.length ? value : [{ url: "", note: "" }];
+  const update = (index: number, change: Partial<LinkAnswer>) =>
+    onChange(rows.map((row, i) => (i === index ? { ...row, ...change } : row)));
+  return (
+    <div className="induction-links">
+      <ol>
+        {rows.map((row, index) => (
+          <li key={index} className="induction-link-row">
+            <span className="induction-link-icon" aria-hidden="true">
+              <Link2 size={16} />
+            </span>
+            <input
+              id={index ? `${id}-${index}-url` : id}
+              type="url"
+              inputMode="url"
+              autoComplete="off"
+              spellCheck={false}
+              placeholder="github.com/you/app"
+              aria-label={`Link ${index + 1}`}
+              value={row.url}
+              maxLength={500}
+              onChange={(event) => update(index, { url: event.target.value })}
+            />
+            {question.notes && (
+              <input
+                type="text"
+                placeholder="What this shows, e.g. Demo video"
+                aria-label={`What link ${index + 1} shows`}
+                value={row.note}
+                maxLength={200}
+                onChange={(event) =>
+                  update(index, { note: event.target.value })
+                }
+              />
+            )}
+            {rows.length > 1 && (
+              <button
+                type="button"
+                className="induction-link-remove"
+                aria-label={`Remove link ${index + 1}`}
+                onClick={() => onChange(rows.filter((_, i) => i !== index))}
+              >
+                <X size={16} aria-hidden="true" />
+              </button>
+            )}
+          </li>
+        ))}
+      </ol>
+      {rows.length < question.maxLinks && (
+        <button
+          type="button"
+          className="club-text-link induction-link-add"
+          onClick={() => {
+            onChange([...rows, { url: "", note: "" }]);
+            requestAnimationFrame(() =>
+              document.getElementById(`${id}-${rows.length}-url`)?.focus(),
+            );
+          }}
+        >
+          <Plus size={15} aria-hidden="true" /> Add another link
+        </button>
+      )}
+    </div>
+  );
+}
 
 function Ranking({
   id,
@@ -196,13 +278,20 @@ export function QuestionInput({
             question={question}
             value={
               Array.isArray(value)
-                ? value
+                ? (value as string[])
                 : question.options.map((option) => option.id)
             }
             onChange={onChange}
           />
         ) : (
-          <div className="induction-choices">
+          <div
+            className="induction-choices"
+            data-tiles={
+              question.options.some((option) => option.description)
+                ? ""
+                : undefined
+            }
+          >
             {question.options.map((option) => (
               <label className="induction-choice" key={option.id}>
                 <input
@@ -213,7 +302,10 @@ export function QuestionInput({
                   required={question.required}
                   onChange={() => onChange(option.id)}
                 />
-                <span>{option.label}</span>
+                <span>
+                  {option.label}
+                  {option.description && <small>{option.description}</small>}
+                </span>
               </label>
             ))}
           </div>
@@ -221,6 +313,59 @@ export function QuestionInput({
       </fieldset>
     );
   }
+  if (question.type === "multi") {
+    const chosen = Array.isArray(value) ? (value as string[]) : [];
+    return (
+      <fieldset
+        id={id}
+        tabIndex={-1}
+        className="club-form-field induction-question-group induction-question"
+        data-invalid={error ? "" : undefined}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={describedBy}
+      >
+        <legend>{label}</legend>
+        {message ?? <p className="club-form-hint">Choose all that apply.</p>}
+        <div className="induction-choices">
+          {question.options.map((option) => (
+            <label className="induction-choice" key={option.id}>
+              <input
+                type="checkbox"
+                name={id}
+                value={option.id}
+                checked={chosen.includes(option.id)}
+                onChange={(event) =>
+                  onChange(
+                    event.target.checked
+                      ? [...chosen, option.id]
+                      : chosen.filter((item) => item !== option.id),
+                  )
+                }
+              />
+              <span>{option.label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    );
+  }
+  if (question.type === "links")
+    return (
+      <fieldset
+        className="club-form-field induction-question-group induction-question"
+        data-invalid={error ? "" : undefined}
+        aria-describedby={describedBy}
+      >
+        <legend>{label}</legend>
+        {message}
+        <Links
+          id={id}
+          question={question}
+          value={Array.isArray(value) ? (value as LinkAnswer[]) : []}
+          onChange={onChange}
+        />
+      </fieldset>
+    );
   const props = {
     id,
     name: question.id,

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getEvent } from "@/lib/content/events";
 import { getEventInduction } from "@/lib/content/inductions";
+import { departments } from "@/lib/content/home";
 import { canRegister, registrationStatus } from "@/lib/events/helpers";
 import { ApplicationFlow } from "@/components/inductions/application-flow";
 
@@ -29,7 +30,15 @@ export default async function Applications({
       cycle={cycle}
       open={canRegister(event)}
       status={registrationStatus(event)}
-      initialDepartment={typeof department === "string" ? department : undefined}
+      leads={Object.fromEntries(
+        departments.map(({ id, lead, image, initials }) => [
+          id,
+          { name: lead, image, initials },
+        ]),
+      )}
+      initialDepartment={
+        typeof department === "string" ? department : undefined
+      }
     />
   );
 }

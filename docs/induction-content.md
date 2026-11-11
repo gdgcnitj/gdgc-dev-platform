@@ -15,29 +15,50 @@ most two departments with an institute email and no account.
 | `lib/content/inductions/index.ts`       | Register another cycle                                          |
 | `lib/inductions/schema.ts`              | Common questions, labels, validation, and the department cap    |
 
-AI and Creatives use the chapter-supplied questions. The remaining departments
+AI, Creatives, App Development, and Web Development use the chapter-supplied
+questions. Web's resume is a Google Drive link rather than an upload, because the
+app has no file storage. The remaining departments
 have editable sample prompts marked `sample: true`; replace those when the leads
 supply final questions. CP's preparation syllabus is split into first- and
 second-year sections, technical assessment/interview rounds, and selection criteria.
 
-Six departments have expectations supplied by the chapter. Women in Tech and
-Creatives show a pending-copy note. Do not invent their requirements. App
-Development has common basics and three alternative track groups.
+Seven departments have expectations supplied by the chapter; Creatives also has a
+closing `outro` line. Women in Tech takes no applications (`applications: false`):
+members of any department are part of it, so it stays on the event page with its
+`membership` note but is left out of the department picker, and the server rejects
+it. A department that takes applications needs questions; one that does not has
+none. Do not invent requirements for departments without expectations. App
+Development has common basics and four alternative tracks: Flutter, React Native,
+Swift, and Kotlin. Its React Native track was drafted to mirror the others; the
+department lead reviews it.
 
 Every question has a stable ID, label, optional hint, and required flag. Supported
-inputs are `text` (short answer), `textarea`, `choice`, and `ranking`. Choice and
-ranking options have stable IDs and display labels. Ranking answers contain all
+inputs are `text` (short answer), `textarea`, `choice`, `multi` (choose any),
+`ranking`, and `links`.
+Choice and ranking options have stable IDs and display labels; choice options with
+a `description` render as tiles. A `links` answer is a list of up to `maxLinks`
+web addresses, each with a short note about what it shows; `notes: false` drops
+the note for a single obvious link such as a resume. `multi` answers are stored in
+the options' order. Missing schemes become
+`https://`, blank rows are ignored, and exports print `note: url` lines. Ranking answers contain all
 option IDs exactly once, in preference order; they support drag handles and
 keyboard/touch-friendly up/down buttons. Text inputs have maximum lengths.
 
-A question may use `when: { questionId, equals }` to depend on an earlier choice.
+A question may use `when: { questionId, equals }` to depend on an earlier choice;
+`equals` may be one option ID or a list of them.
 The Creatives social-content question appears and becomes required only for Yes.
 Hidden answers are excluded from review and submission; the server rejects
 unexpected hidden values. Google Drive work links are stored as text, not fetched
 or uploaded by the app. Applicants set their link's sharing permissions themselves.
 
+A department may set `note`, a list of paragraphs shown with its lead's photo
+above that department's questions. App Development uses it for the lead's welcome
+and a reminder about the orientation brownie points form (`/forms/mobile26`).
+That form stored only name, branch, and one answer, so applicants are asked to use
+the same name and branch, and a yes/no question flags who to look up.
+
 Bump the cycle's `version` when questions, common fields, or validation change.
-The current version is 3. Old open tabs must review the current form before
+The current version is 5. Old open tabs must review the current form before
 submitting. Stored responses retain their version, original server-built question
 labels and option labels, and the exact preference order. Exports turn stored
 option IDs back into the original readable labels.
@@ -93,12 +114,17 @@ compares `manifest.json` with the current content and fails until you do.
 One application has four steps:
 
 1. **About you**: name, institute email, roll number, phone, branch, LinkedIn
-   profile, GitHub profile, ORCID iD, other clubs, and why GDGC. Everything except
-   ORCID is required. Students who are not in another club write "None".
+   profile, GitHub profile, portfolio, ORCID iD, other clubs, and why GDGC.
+   Everything except portfolio and ORCID is required. Students who are not in
+   another club write "None".
 2. **Departments**: choose up to the cycle's `maxDepartments` (default 2). The
    order of choosing is the preference; students can swap first and second.
 3. **Questions**: one page per chosen department, with its expectations a click away.
-4. **Review**: everything once, then a single submit.
+4. **Review**: everything once, then a single submit. The confirmation offers a
+   PDF of what was just submitted, built in the browser with jsPDF from data
+   already on the page; nothing extra is fetched from the server. Its fonts and
+   logo live in `public/inductions/`. Duplicate submissions get no PDF, since the
+   saved answers may differ.
 
 Profile links are accepted with or without `https://` and `www.`, then saved in
 one canonical form: `https://www.linkedin.com/in/<name>`, `https://github.com/<user>`,

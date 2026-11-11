@@ -133,7 +133,7 @@ export function RegistrationForm({ eventId, date }: { eventId: string; date?: st
         data-invalid={errors.interests ? "" : undefined}
         aria-describedby="interests-message"
       >
-        <legend>Departments you&apos;re curious about</legend>
+        <legend>Domains you&apos;re curious about</legend>
         <div className="club-form-chips">
           {departments.map((department) => {
             const Icon = department.icon;

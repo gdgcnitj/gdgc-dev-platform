@@ -6,7 +6,7 @@ export const orientation = defineEvent({
   title: "Orientation 2026",
   kind: "orientation",
   summary:
-    "We welcomed the incoming batch to GDG on Campus NIT Jalandhar, introducing our eight specialized departments and sharing how to build, learn, and grow with the community.",
+    "We welcomed the incoming batch to GDG on Campus NIT Jalandhar, introducing our eight specialized domains and sharing how to build, learn, and grow with the community.",
   status: "completed",
   visibility: "published",
   color: "yellow",
@@ -82,7 +82,7 @@ export const orientation = defineEvent({
             "We organize flagship national hackathons like HackMOL, internal sprint contests like MiniMol, technical workshops, and real-world project incubators.",
         },
         {
-          title: "Eight Specialized Departments",
+          title: "Eight Specialized Domains",
           description:
             "Web, Mobile, AI/ML, Cloud & DevSecOps, Competitive Programming, UI/UX Design, Women in Tech (WiT), and Creatives & Media.",
         },

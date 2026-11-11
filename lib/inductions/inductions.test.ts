@@ -36,10 +36,26 @@ const common = () => ({
   linkedinUrl: "linkedin.com/in/test-student/",
   githubUrl: "https://www.github.com/test-student",
   orcidUrl: "",
+  portfolioUrl: "",
   otherClubs: "None",
   whyGdgc: "I want to build things with the community.",
 });
-const webAnswers = { "web-interest": "A campus library website." };
+const webAnswers = {
+  "web-experience": "I have built a few static sites and one full-stack app.",
+  "web-areas": ["backend", "frontend"],
+  "web-stack": "Next.js, TypeScript, and PostgreSQL",
+  "web-project": "A campus library website.",
+  "web-project-tech": "Next.js, Drizzle, and Tailwind CSS",
+  "web-project-role": "I built search and the borrowing flow.",
+  "web-project-links": [
+    { url: "github.com/test-student/library", note: "Repository" },
+  ],
+  "web-why": "To build with people who ship.",
+  "web-interest": "Making things people use every day.",
+  "web-learning": "Server components and caching.",
+  "web-contribute": "The chapter website.",
+  "web-resume": [{ url: "drive.google.com/file/d/abc/view", note: "" }],
+};
 const aiAnswers = {
   "ai-interest": "Campus energy forecasting.",
   "ai-motivation": "To learn and collaborate on real projects.",
@@ -74,18 +90,31 @@ test("every department has configured questions; only supplied expectations are 
   );
   assert.ok(
     inductions2026.departments.every(
-      (department) => department.questions.length >= 1,
+      (department) =>
+        department.applications === department.questions.length >= 1,
     ),
+  );
+  assert.deepEqual(
+    inductions2026.departments
+      .filter((department) => !department.applications)
+      .map((department) => department.id),
+    ["wit"],
   );
   assert.equal(
     inductions2026.departments.filter((department) => department.expectations)
       .length,
-    6,
+    7,
   );
-  assert.equal(
-    inductions2026.departments.find((department) => department.id === "mobile")
-      ?.expectations?.tracks?.length,
-    3,
+  assert.deepEqual(
+    inductions2026.departments
+      .find((department) => department.id === "mobile")
+      ?.expectations?.tracks?.map((track) => track.title),
+    [
+      "Flutter · Dart",
+      "React Native · JavaScript",
+      "Swift · iOS",
+      "Kotlin · Android",
+    ],
   );
   const invalid = structuredClone(inductions2026);
   invalid.departments.push(invalid.departments[0]);
@@ -215,7 +244,7 @@ test("one submission carries up to two departments in preference order with sepa
   assert.deepEqual(ai.answers, aiAnswers);
   assert.equal(
     web.questionSnapshot.at(-1)?.label,
-    inductions2026.departments[0].questions[0].label,
+    inductions2026.departments[0].questions.at(-1)?.label,
   );
   assert.ok(
     web.questionSnapshot.some(
@@ -237,10 +266,10 @@ test("more than two, repeated, or unknown departments cannot submit", () => {
       { departmentId: "web", answers: webAnswers },
     ],
     [{ departmentId: "unknown", answers: {} }],
+    [{ departmentId: "wit", answers: {} }],
   ])
     assert.equal(
-      prepareInductionSubmission(event, inductions2026, input(applications))
-        .ok,
+      prepareInductionSubmission(event, inductions2026, input(applications)).ok,
       false,
     );
 });
@@ -248,7 +277,9 @@ test("more than two, repeated, or unknown departments cannot submit", () => {
 test("unexpected questions, missing required answers, and honeypots fail", () => {
   for (const change of [
     { applications: [{ departmentId: "web", answers: {} }] },
-    { applications: [{ departmentId: "web", answers: { "web-interest": "" } }] },
+    {
+      applications: [{ departmentId: "web", answers: { "web-interest": "" } }],
+    },
     {
       applications: [
         {
@@ -503,4 +534,153 @@ test("expectation PDFs exist for supplied expectations and match the current con
       `${department.id} expectations changed; run npm run inductions:pdfs`,
     );
   }
+});
+
+const mobile = inductions2026.departments.find(
+  (department) => department.id === "mobile",
+)!;
+const mobileAnswers = () => ({
+  "mobile-track": "flutter",
+  "mobile-machine": "windows",
+  "mobile-ram": "16",
+  "mobile-level": "built",
+  "mobile-project": "Bus Buddy, a campus bus tracker",
+  "mobile-project-role": "I built the map screen and the arrival alerts.",
+  "mobile-project-links": [
+    { url: "github.com/test-student/bus-buddy", note: "Code" },
+    { url: "", note: "" },
+    { url: "https://youtu.be/demo", note: "Demo video" },
+  ],
+  "mobile-other-project": "",
+  "mobile-explain": "setState tells Flutter to rebuild the widget.",
+  "mobile-favorite-app": "",
+  "mobile-brownie": "yes",
+});
+
+test("App Dev shows project questions for any experienced level and the idea prompt only for beginners", () => {
+  const schema = departmentAnswersSchema(mobile);
+  const parsed = schema.parse(mobileAnswers());
+  assert.deepEqual(parsed["mobile-project-links"], [
+    { url: "https://github.com/test-student/bus-buddy", note: "Code" },
+    { url: "https://youtu.be/demo", note: "Demo video" },
+  ]);
+  for (const level of ["practice", "published"])
+    assert.equal(
+      schema.safeParse({ ...mobileAnswers(), "mobile-level": level }).success,
+      true,
+    );
+  const {
+    "mobile-project": _project,
+    "mobile-project-role": _role,
+    "mobile-project-links": _links,
+    "mobile-other-project": _other,
+    ...rest
+  } = mobileAnswers();
+  assert.equal(
+    schema.safeParse({ ...rest, "mobile-level": "new" }).success,
+    false,
+    "beginners must describe an app idea",
+  );
+  assert.equal(
+    schema.safeParse({
+      ...rest,
+      "mobile-level": "new",
+      "mobile-idea": "A mess menu app with ratings.",
+    }).success,
+    true,
+  );
+  assert.equal(
+    schema.safeParse({ ...mobileAnswers(), "mobile-level": "new" }).success,
+    false,
+    "project answers are rejected when they do not apply",
+  );
+  const { "mobile-ram": _ram, ...noLaptop } = mobileAnswers();
+  assert.equal(
+    schema.safeParse({ ...noLaptop, "mobile-machine": "none" }).success,
+    true,
+  );
+});
+
+test("project links need a web address and a note, and blank rows are ignored", () => {
+  const schema = departmentAnswersSchema(mobile);
+  for (const links of [
+    [],
+    [{ url: "", note: "" }],
+    [{ url: "github.com/test", note: "" }],
+    [{ url: "javascript:alert(1)", note: "Code" }],
+    [{ url: "not a link", note: "Code" }],
+    Array.from({ length: 6 }, (_, index) => ({
+      url: `github.com/test/${index}`,
+      note: "Code",
+    })),
+  ])
+    assert.equal(
+      schema.safeParse({ ...mobileAnswers(), "mobile-project-links": links })
+        .success,
+      false,
+      JSON.stringify(links),
+    );
+  const prepared = prepareInductionSubmission(
+    event,
+    inductions2026,
+    input([{ departmentId: "mobile", answers: mobileAnswers() }]),
+  );
+  assert.ok(prepared.ok);
+  const csv = inductionCsv(storedRows(prepared));
+  assert.ok(csv.includes("Code: https://github.com/test-student/bus-buddy"));
+  assert.ok(csv.includes("Demo video: https://youtu.be/demo"));
+});
+
+test("Web multi-select keeps option order, rejects unknown options, and needs at least one", () => {
+  const web = inductions2026.departments.find(
+    (department) => department.id === "web",
+  )!;
+  const schema = departmentAnswersSchema(web);
+  assert.deepEqual(schema.parse(webAnswers)["web-areas"], [
+    "frontend",
+    "backend",
+  ]);
+  for (const areas of [[], ["frontend", "frontend"], ["mobile"]])
+    assert.equal(
+      schema.safeParse({ ...webAnswers, "web-areas": areas }).success,
+      false,
+      JSON.stringify(areas),
+    );
+  assert.equal(
+    formatDepartmentAnswer(
+      ["frontend", "backend"],
+      web.questions.find((question) => question.id === "web-areas")!,
+    ),
+    "Frontend development, Backend development",
+  );
+  // The resume link needs no note; project links and the resume are optional.
+  assert.deepEqual(schema.parse(webAnswers)["web-resume"], [
+    { url: "https://drive.google.com/file/d/abc/view", note: "" },
+  ]);
+  assert.equal(
+    schema.safeParse({
+      ...webAnswers,
+      "web-project-links": [],
+      "web-resume": [],
+    }).success,
+    true,
+  );
+});
+
+test("the portfolio link is optional and normalized", () => {
+  const details = common();
+  assert.equal(commonDetailsSchema.parse(details).portfolioUrl, "");
+  assert.equal(
+    commonDetailsSchema.parse({ ...details, portfolioUrl: "test.dev" })
+      .portfolioUrl,
+    "https://test.dev/",
+  );
+  assert.equal(
+    commonDetailsSchema.safeParse({ ...details, portfolioUrl: "not a link" })
+      .success,
+    false,
+  );
+  const prepared = prepareInductionSubmission(event, inductions2026, input());
+  assert.ok(prepared.ok);
+  assert.equal(prepared.data.portfolioUrl, null);
 });

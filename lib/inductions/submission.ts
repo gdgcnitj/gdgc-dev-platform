@@ -61,6 +61,7 @@ export function prepareInductionSubmission(
       ...common,
       phone: common.phone.replace(/\D/g, "").slice(-10),
       orcidUrl: common.orcidUrl || null,
+      portfolioUrl: common.portfolioUrl || null,
       formVersion: cycle.version,
       applications: applications.map(({ department, answers }) => ({
         departmentId: department.id,

@@ -12,8 +12,8 @@ export function HomeDepartments() {
     >
       <div className="club-container club-section">
         <div className="club-title-card club-team-heading" data-reveal>
-          <h2 id="departments-title">Departments & leads.</h2>
-          <p>Meet the chapter&apos;s co-leads and the leads of our {departments.length} departments.</p>
+          <h2 id="departments-title">Domains & leads.</h2>
+          <p>Meet the chapter&apos;s co-leads and the leads of our {departments.length} domains.</p>
         </div>
         <h3 className="club-subsection-title">Chapter co-leads</h3>
         <div className="club-department-grid club-alumni-grid">
@@ -41,7 +41,7 @@ export function HomeDepartments() {
             </article>
           ))}
         </div>
-        <h3 className="club-subsection-title club-past-heading">Department leads</h3>
+        <h3 className="club-subsection-title club-past-heading">Domain leads</h3>
         <div className="club-department-grid">
           {departments.map((department, index) => {
             const Icon = department.icon;
