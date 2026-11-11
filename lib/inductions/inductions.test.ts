@@ -33,6 +33,7 @@ const common = () => ({
   rollNumber: "23103045",
   phone: "+91 98765 43210",
   branch: "Computer Science and Engineering",
+  year: "2nd year",
   linkedinUrl: "linkedin.com/in/test-student/",
   githubUrl: "https://www.github.com/test-student",
   orcidUrl: "",
@@ -161,6 +162,8 @@ test("common answers normalize institute email and reject lookalike domains", ()
     { otherClubs: "  " },
     { phone: "123" },
     { rollNumber: "" },
+    { year: "" },
+    { year: "6th year" },
     { rollNumber: "23/103" },
   ])
     assert.equal(

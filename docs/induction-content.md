@@ -58,7 +58,7 @@ That form stored only name, branch, and one answer, so applicants are asked to u
 the same name and branch, and a yes/no question flags who to look up.
 
 Bump the cycle's `version` when questions, common fields, or validation change.
-The current version is 5. Old open tabs must review the current form before
+The current version is 6. Old open tabs must review the current form before
 submitting. Stored responses retain their version, original server-built question
 labels and option labels, and the exact preference order. Exports turn stored
 option IDs back into the original readable labels.
@@ -113,7 +113,7 @@ compares `manifest.json` with the current content and fails until you do.
 
 One application has four steps:
 
-1. **About you**: name, institute email, roll number, phone, branch, LinkedIn
+1. **About you**: name, institute email, roll number, phone, year of study, branch, LinkedIn
    profile, GitHub profile, portfolio, ORCID iD, other clubs, and why GDGC.
    Everything except portfolio and ORCID is required. Students who are not in
    another club write "None".
