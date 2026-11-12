@@ -102,6 +102,12 @@ preselects a department, and older `/events/<slug>/apply/<department>` links
 redirect there. In the application, a chosen department's tile and question page
 also offer its expectations and PDF.
 
+DevSecOps expectations progress through shared basics, infrastructure and cloud,
+offensive security, and defensive security. Topic subheadings keep each area
+readable in both the expectations sheet and its PDF. The introduction distinguishes
+foundational preparation for newer students from practical implementation for
+second-year students. Expectation-only edits do not change the application version.
+
 ## Expectation PDFs
 
 `npm run inductions:pdfs` builds one A4 PDF per department with expectations into

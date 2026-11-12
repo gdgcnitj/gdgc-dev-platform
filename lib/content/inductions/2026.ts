@@ -643,31 +643,163 @@ export const inductions2026 = defineInductionCycle({
       id: "devsecops",
       preview: "Understand what keeps software running, connected, and secure.",
       expectations: {
+        intro:
+          "Topics progress from foundational concepts to advanced orchestration and exploitation. Newer students should focus on building a strong conceptual foundation. Second-year students are expected to focus on practical implementation and understanding how systems work under the hood.",
         groups: [
           {
-            title: "Linux",
+            title: "Shared basics",
             items: [
-              "Commands, the filesystem, permissions, and package management",
-              "Shell scripting, process management, environment variables, and system logs",
+              "What exactly happens when two devices communicate across a network?",
+            ],
+            sections: [
+              {
+                title: "Linux",
+                items: [
+                  "Commands, the filesystem, permissions, and package management",
+                  "Shell scripting, process management, environment variables, and system logs",
+                ],
+              },
+              {
+                title: "Networking",
+                items: [
+                  "OSI and TCP/IP models, IP addressing, DNS, and DHCP",
+                  "HTTP, ports, protocols, firewalls, and NAT",
+                  "Network tools, VPNs, and proxies",
+                ],
+              },
+              {
+                title: "Git and GitHub",
+                items: [
+                  "Commits, branching, merging, pull requests, and .gitignore",
+                ],
+              },
+              {
+                title: "Basic scripting",
+                items: ["Automating tasks using Bash or Python"],
+              },
             ],
           },
           {
-            title: "Networking",
+            title: "DevOps — Infrastructure & Cloud",
             items: [
-              "OSI and TCP/IP models, IP addressing, DNS, and DHCP",
-              "HTTP, ports, protocols, firewalls, and NAT",
-              "Network tools, VPNs, and proxies",
+              "Build practical experience with infrastructure and cloud deployments.",
+            ],
+            sections: [
+              {
+                title: "Systems and remote access",
+                items: [
+                  "Background services via systemd and daemon management",
+                  "SSH and key-based authentication",
+                ],
+              },
+              {
+                title: "Web servers and traffic",
+                items: [
+                  "Reverse proxies versus load balancers",
+                  "Nginx or Apache basics and SSL/TLS certificates",
+                ],
+              },
+              {
+                title: "Containers and deployment",
+                items: [
+                  "Virtualization versus containerization",
+                  "Docker fundamentals: images, writing a Dockerfile, port mapping, volumes, and Docker Compose",
+                  "Deploying applications to a PaaS such as Vercel or Render, or to a Linux cloud VM",
+                ],
+              },
+              {
+                title: "Cloud IAM and policies",
+                items: [
+                  "Managing role-based access control (RBAC)",
+                  "Configuring AWS/Azure identity and resource policies, including S3 bucket policies, EC2 roles, and permissions boundaries",
+                ],
+              },
+              {
+                title: "CI/CD and automation",
+                items: [
+                  "Automating builds, tests, and deployments using GitHub Actions or GitLab CI",
+                ],
+              },
             ],
           },
           {
-            title: "Collaboration",
+            title: "Cybersecurity — Offensive / Red Team",
             items: [
-              "Version control basics and Git setup",
-              "Branching, merging, merge conflicts, and .gitignore",
-              "GitHub/GitLab collaboration, pull requests, and code reviews",
+              "We care more about your approach to understanding systems and the process you follow to exploit them.",
+            ],
+            sections: [
+              {
+                title: "Security fundamentals",
+                items: [
+                  "The CIA triad and authentication versus authorization",
+                  "Understanding cookies, sessions, and JWTs",
+                ],
+              },
+              {
+                title: "Cryptography basics",
+                items: [
+                  "Encoding (Base64) versus hashing (MD5, SHA-256, bcrypt) versus encryption (symmetric and asymmetric)",
+                ],
+              },
+              {
+                title: "Reconnaissance and scanning",
+                items: [
+                  "Information gathering, footprinting, and port scanning with Nmap",
+                  "Directory fuzzing with ffuf or Gobuster",
+                  "Packet inspection with Wireshark or tcpdump",
+                ],
+              },
+              {
+                title: "Web exploitation",
+                items: [
+                  "Intercepting and modifying HTTP requests with Burp Suite or Caido",
+                  "Vulnerabilities including SQLi, XSS, CSRF, IDOR, SSRF, and more",
+                  "The OWASP Top 10 is key",
+                ],
+              },
+              {
+                title: "System exploitation",
+                items: [
+                  "Linux privilege escalation basics: SUID binaries, sudo misconfigurations, and cron jobs",
+                  "Understanding reverse and bind shells",
+                ],
+              },
+            ],
+          },
+          {
+            title: "Cybersecurity — Defensive / Blue Team",
+            items: [
+              "Secure, monitor, and investigate systems once they are running.",
+            ],
+            sections: [
+              {
+                title: "Security Operations (SOC) & monitoring",
+                items: [
+                  "Centralized log management and configuring SIEM/SOAR",
+                  "Identifying brute-force attempts and detecting anomalous traffic",
+                  "Hunting for indicators of compromise (IoCs) in server and network logs",
+                ],
+              },
+              {
+                title: "Incident Response (IR)",
+                items: [
+                  "The IR lifecycle: Preparation, Identification, Containment, Eradication, and Recovery",
+                  "Triaging security alerts to distinguish false positives from actual breaches",
+                ],
+              },
+              {
+                title: "Digital Forensics (DFIR)",
+                items: [
+                  "Disk and memory imaging concepts and timeline analysis",
+                  "Preserving the chain of custody",
+                  "Basic malware static analysis: extracting strings and inspecting file signatures and magic bytes",
+                ],
+              },
             ],
           },
         ],
+        outro:
+          "Don’t let the heavy terminology panic you. We’ll secure the system once it’s turned on.",
       },
       questions: [
         {

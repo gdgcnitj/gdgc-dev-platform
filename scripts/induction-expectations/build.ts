@@ -58,8 +58,9 @@ function document(department: InductionDepartment) {
     items
       .map(
         (group) =>
-          // Short groups stay on one page; long ones may still break between subgroups.
-          `\\group{${Math.min(group.items.length + 3, 14)}}{${tex(group.title)}}\n${list(group.items)}\n${(
+          // Keep the group heading, introduction, and first topic together.
+          // Longer groups may still break between subsequent topics.
+          `\\group{${Math.min(group.items.length + 3 + (group.sections?.[0] ? group.sections[0].items.length + 4 : 0), 14)}}{${tex(group.title)}}\n${list(group.items)}\n${(
             group.sections ?? []
           )
             .map(
