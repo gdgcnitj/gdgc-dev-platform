@@ -52,3 +52,8 @@ Kartik’s supplied portrait uses a higher crop position to keep his full head v
 
 - [Portrait alignment on desktop](previews/kartik-portrait-alignment-desktop.png)
 - [Portrait alignment on a phone](previews/kartik-portrait-alignment-mobile.png)
+
+Prachi’s updated co-lead photo uses the shared portrait-position setting, checked
+on desktop and a narrow phone viewport.
+
+- [Updated Prachi portrait](previews/prachi-portrait-desktop.png)
