@@ -50,6 +50,7 @@ export type ChapterLead = {
   name: string;
   initials: string;
   image?: string;
+  imagePosition?: string;
   links?: ProfileLinks;
   color: BrandColor;
 };
@@ -121,7 +122,8 @@ export const chapterLeads: ChapterLead[] = [
     id: "prachi",
     name: "Prachi Goyal",
     initials: "PG",
-    image: "/images/leads/prachi.jpg",
+    image: "/images/leads/prachi-goyal.jpeg",
+    imagePosition: "center 25%",
     links: {
       linkedin: "https://www.linkedin.com/in/prachi-goyal-226313325/",
       instagram: "https://www.instagram.com/prachigoyal_.26/",
