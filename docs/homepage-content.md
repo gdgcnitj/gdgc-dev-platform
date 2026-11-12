@@ -90,6 +90,8 @@ The portfolio icon appears only when `website` is set.
 The current links come from the leads' form responses. Kartik's links were supplied separately.
 Kartik's current portrait is `public/images/leads/kartik-sirohi.jpeg`, supplied by the chapter.
 Use a lead's optional `imagePosition` to keep their face within the card crop.
+Prachi's supplied portrait is `public/images/leads/prachi-goyal.jpeg`; chapter
+co-lead cards also support `imagePosition` for responsive face framing.
 Use the profile URL, not a bare username, and drop tracking parameters.
 Leave a portfolio unset when the response is not a real address, such as "soon".
 Use the confirmed spelling of each name.
