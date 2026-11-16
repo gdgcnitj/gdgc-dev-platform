@@ -1,47 +1,79 @@
 /* Department choices and the shared induction application flow. */
 .induction-deadline {
-  margin-top: 24px;
-  padding: 22px 24px;
-  border: 1px solid var(--club-line);
-  border-left: 4px solid var(--club-action);
-  border-radius: 16px;
-  background: var(--club-paper);
+  margin-top: 30px;
+  padding: 0;
   color: var(--club-ink);
   min-width: 0;
+  max-width: 560px;
 }
 .induction-deadline-label {
-  margin: 0 0 6px;
-  font-size: 13px;
+  margin: 0 0 8px;
+  font-size: 11px;
   font-weight: 500;
-  color: var(--club-action);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--club-muted);
 }
 .induction-deadline-date {
   margin: 0;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   line-height: 1.5;
 }
 .induction-countdown {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  max-width: 420px;
-  margin-top: 18px;
+  gap: 20px;
+  max-width: 480px;
+  margin-top: 22px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--club-line);
 }
 .induction-countdown > span {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  gap: 10px;
+  --countdown-color: var(--club-blue);
+}
+.induction-countdown > span:nth-child(2) {
+  --countdown-color: var(--club-red);
+}
+.induction-countdown > span:nth-child(3) {
+  --countdown-color: var(--club-yellow);
+}
+.induction-countdown > span:nth-child(4) {
+  --countdown-color: var(--club-green);
+}
+.induction-countdown > span:not(:last-child)::after {
+  content: ":";
+  position: absolute;
+  right: -14px;
+  top: 8px;
+  color: var(--club-line);
+  font-size: 32px;
+  line-height: 1;
 }
 .induction-countdown strong {
-  font-size: clamp(24px, 3vw, 36px);
-  line-height: 1.1;
+  font-size: clamp(38px, 4.5vw, 60px);
+  line-height: 1;
   font-weight: 500;
+  letter-spacing: -0.045em;
   font-variant-numeric: tabular-nums;
 }
 .induction-countdown > span > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12px;
   color: var(--club-muted);
+}
+.induction-countdown > span > span::before {
+  content: "";
+  width: 12px;
+  height: 3px;
+  background: var(--countdown-color);
 }
 .induction-deadline-note {
   margin: 12px 0 0;
@@ -50,7 +82,8 @@
   color: var(--club-muted);
 }
 .induction-deadline[data-closed] {
-  border-left-color: var(--club-muted);
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--club-line);
 }
 .induction-deadline[data-closed] .induction-deadline-label {
   color: var(--club-ink);
@@ -59,11 +92,19 @@
   margin: 0 0 24px;
 }
 @media (max-width: 480px) {
-  .induction-deadline {
-    padding: 18px;
-  }
   .induction-countdown {
     gap: 8px;
+  }
+  .induction-countdown > span:not(:last-child)::after {
+    right: -7px;
+    top: 5px;
+    font-size: 24px;
+  }
+  .induction-countdown > span > span {
+    gap: 4px;
+  }
+  .induction-countdown > span > span::before {
+    width: 8px;
   }
 }
 
