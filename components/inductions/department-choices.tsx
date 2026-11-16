@@ -1,11 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 import { getDepartment } from "@/lib/content/departments";
 import { departments } from "@/lib/content/home";
 import type { InductionCycle } from "@/lib/inductions/schema";
-import { BracketMark } from "./bracket-mark";
+import { ApplicationInvitation } from "./application-invitation";
 import { DepartmentIcon } from "./department-icon";
 import { Expectations } from "./expectations";
 import { ExpectationsPdfLink } from "./pdf-link";
@@ -15,11 +12,13 @@ export function DepartmentChoices({
   eventSlug,
   open,
   status,
+  closesAt,
 }: {
   cycle: InductionCycle;
   eventSlug: string;
   open: boolean;
   status?: string;
+  closesAt?: string;
 }) {
   const count = cycle.maxDepartments === 2 ? "two" : cycle.maxDepartments;
   return (
@@ -30,28 +29,13 @@ export function DepartmentChoices({
         are expectations, not requirements: you don’t need to know all of them
         to get in.
       </p>
-      <div className="induction-apply-banner" data-reveal="card">
-        <BracketMark className="induction-apply-mark" />
-        <div>
-          <h3>One application, up to {count} domains</h3>
-          <p>
-            {open
-              ? "Your details first, then your choices in order of preference, then a few questions for each."
-              : status === "upcoming"
-                ? "Applications open soon."
-                : status === "waitlist"
-                  ? "Applications are on a waitlist."
-                  : "Applications are closed."}
-          </p>
-        </div>
-        {open && (
-          <Button asChild className="club-button">
-            <Link href={`/events/${eventSlug}/apply`}>
-              Start your application <ArrowRight size={16} aria-hidden="true" />
-            </Link>
-          </Button>
-        )}
-      </div>
+      <ApplicationInvitation
+        eventSlug={eventSlug}
+        maxDepartments={cycle.maxDepartments}
+        open={open}
+        status={status}
+        closesAt={closesAt}
+      />
       <div className="induction-department-grid">
         {cycle.departments.map((department, index) => {
           const identity = getDepartment(department.id)!;
