@@ -20,13 +20,16 @@ import {
   formatDepartmentAnswer,
 } from "./schema";
 import { prepareInductionSubmission } from "./submission";
+import { inductionTimeLeft, inductionDeadlineLabel } from "./deadline";
 import { csvCell, inductionCsv } from "./csv";
 import {
   expectationsManifestPath,
   expectationsPdfHref,
 } from "./expectations-pdf";
 
-const event = getEvent("inductions-2026")!;
+// General validation fixtures remain usable after the production deadline.
+const event = structuredClone(getEvent("inductions-2026")!);
+if (event.registration.mode !== "none") delete event.registration.closesAt;
 const common = () => ({
   name: " Test Student ",
   email: " STUDENT@NITJ.AC.IN ",
@@ -83,6 +86,35 @@ test("the undated induction is first in discovery without fabricated details", (
   assert.equal(event.location?.name, undefined);
   assert.ok(compareEventListing(event, getEvent("minimol")!) < 0);
   assert.equal(isCampusRegistration(event), false);
+});
+
+test("the production deadline is Thursday EOD IST and rejects exact-cutoff and later submissions", () => {
+  const published = getEvent("inductions-2026")!;
+  assert.ok(published.registration.mode === "internal");
+  assert.equal(published.registration.closesAt, "2026-11-20T00:00:00+05:30");
+  const deadline = Date.parse(published.registration.closesAt);
+  assert.equal(deadline, Date.parse("2026-11-19T18:30:00Z"));
+  const accepted = prepareInductionSubmission(published, inductions2026, input(), deadline - 1);
+  assert.ok(accepted.ok);
+  assert.equal(accepted.data.closesAt, published.registration.closesAt);
+  const tampered = prepareInductionSubmission(published, inductions2026, {
+    ...input(), closesAt: "2099-01-01T00:00:00Z",
+  }, deadline - 1);
+  assert.ok(!tampered.ok && tampered.code === "invalid");
+  for (const now of [deadline, deadline + 1, deadline + 86400000]) {
+    const result = prepareInductionSubmission(published, inductions2026, input(), now);
+    assert.ok(!result.ok && result.code === "closed");
+  }
+  assert.equal(inductionTimeLeft(published.registration.closesAt, deadline - 1).totalSeconds, 1);
+  assert.equal(inductionTimeLeft(published.registration.closesAt, deadline).totalSeconds, 0);
+  assert.deepEqual(inductionTimeLeft(published.registration.closesAt, deadline + 1000), {
+    totalSeconds: 0, days: 0, hours: 0, minutes: 0, seconds: 0,
+  });
+  assert.deepEqual(inductionTimeLeft(published.registration.closesAt, deadline - 90061000), {
+    totalSeconds: 90061, days: 1, hours: 1, minutes: 1, seconds: 1,
+  });
+  assert.match(inductionDeadlineLabel(published.registration.closesAt), /Thursday, 19 November 2026/);
+  assert.match(inductionDeadlineLabel(published.registration.closesAt), /End of day \(IST\)/);
 });
 
 test("every department has configured questions; only supplied expectations are shown", () => {

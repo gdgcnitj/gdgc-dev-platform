@@ -14,6 +14,7 @@ import { EventSections } from "@/components/events/event-sections";
 import { EventRegistration } from "@/components/events/event-registration";
 import { HomeFooter } from "@/components/home/footer";
 import { HomeMotion } from "@/components/home/home-motion";
+import { InductionDeadline } from "@/components/inductions/deadline";
 import { Button } from "@/components/ui/button";
 import { allEvents, getEvent, getRelatedEvents } from "@/lib/content/events";
 import {
@@ -116,6 +117,11 @@ export default async function EventPage({ params }: Props) {
                 </div>
                 <h1 id="event-title">{event.title}</h1>
                 <p className="club-hero-description">{event.summary}</p>
+                {applicationSection &&
+                  registration.mode === "internal" &&
+                  registration.closesAt && (
+                    <InductionDeadline closesAt={registration.closesAt} />
+                  )}
               </div>
               {hasDetails && (
                 <div className="event-essential-details">

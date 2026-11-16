@@ -41,6 +41,8 @@ import { ReceiptContacts } from "./receipt-contacts";
 import { leadPhones } from "@/lib/content/inductions/contacts";
 import { DepartmentIcon } from "./department-icon";
 import { useInductionFlow } from "./flow-provider";
+import { InductionDeadline, useInductionDeadline } from "./deadline";
+import { inductionTimeLeft } from "@/lib/inductions/deadline";
 
 const labels = commonQuestionLabels;
 const ordinal = ["First", "Second", "Third", "Fourth"];
@@ -116,6 +118,7 @@ export function ApplicationFlow({
   cycle,
   open,
   status,
+  closesAt,
   leads = {},
   initialDepartment,
 }: {
@@ -125,6 +128,7 @@ export function ApplicationFlow({
   cycle: InductionCycle;
   open: boolean;
   status: string;
+  closesAt?: string;
   leads?: Record<string, { name: string; image?: string; initials: string }>;
   initialDepartment?: string;
 }) {
@@ -133,6 +137,9 @@ export function ApplicationFlow({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [alert, setAlert] = useState("");
   const [busy, setBusy] = useState(false);
+  const [closedByServer, setClosedByServer] = useState(false);
+  const remaining = useInductionDeadline(closesAt);
+  const expired = closedByServer || remaining?.totalSeconds === 0;
   // The applicant's own copy, kept only in this page's memory for the download.
   const [copy, setCopy] = useState<AnswerCopy>();
   const [downloading, setDownloading] = useState(false);
@@ -261,6 +268,13 @@ export function ApplicationFlow({
 
   async function submit() {
     if (busy) return;
+    if (
+      closedByServer ||
+      (closesAt && inductionTimeLeft(closesAt, Date.now()).totalSeconds === 0)
+    ) {
+      setAlert("Applications are closed. The deadline has passed.");
+      return;
+    }
     // Recheck every stage in case a saved draft is out of date.
     const common = commonDetailsSchema.safeParse(flow.common);
     if (!common.success) {
@@ -288,6 +302,7 @@ export function ApplicationFlow({
     }));
     setBusy(false);
     if (!result.ok) {
+      if ("code" in result && result.code === "closed") setClosedByServer(true);
       setAlert(result.error);
       return;
     }
@@ -578,6 +593,7 @@ export function ApplicationFlow({
           to contribute?
         </h1>
       </div>
+      {closesAt && <InductionDeadline closesAt={closesAt} />}
       <div className="induction-form-surface">
         <ol
           className="induction-progress"
@@ -971,7 +987,11 @@ export function ApplicationFlow({
                 <ArrowLeft size={16} aria-hidden="true" /> Back
               </button>
             )}
-            <Button className="club-button" type="submit" disabled={busy}>
+            <Button
+              className="club-button"
+              type="submit"
+              disabled={busy || (step.kind === "review" && expired)}
+            >
               {busy ? (
                 <>
                   <LoaderCircle

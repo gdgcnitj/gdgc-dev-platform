@@ -58,6 +58,8 @@ export function prepareInductionSubmission(
       eventId: event.id,
       cycleId: cycle.id,
       maxDepartments: cycle.maxDepartments,
+      // Only server-owned event content can supply the storage deadline.
+      ...(registration.closesAt ? { closesAt: registration.closesAt } : {}),
       ...common,
       phone: common.phone.replace(/\D/g, "").slice(-10),
       orcidUrl: common.orcidUrl || null,
