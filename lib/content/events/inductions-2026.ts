@@ -26,6 +26,8 @@ export const inductions = defineEvent({
     form: "department-interest",
     cycleId: "inductions-2026",
     state: "open",
+    // Thursday EOD in India: the cutoff is exclusive at Friday midnight.
+    closesAt: "2026-11-20T00:00:00+05:30",
   },
   sections: [
     {
@@ -53,6 +55,11 @@ export const inductions = defineEvent({
       title: "A few things to know",
       navLabel: "FAQs",
       items: [
+        {
+          question: "When do applications close?",
+          answer:
+            "Thursday, 19 November 2026, end of day (IST). Submissions close at midnight as Friday, 20 November begins. Submit before the countdown reaches zero; leaving the form open does not extend the deadline.",
+        },
         {
           question: "Can I apply to more than one domain?",
           answer:

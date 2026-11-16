@@ -24,6 +24,11 @@ function SectionContent({
           eventSlug={event.slug}
           open={canRegister(event)}
           status={registrationStatus(event)}
+          closesAt={
+            event.registration.mode === "internal"
+              ? event.registration.closesAt
+              : undefined
+          }
         />
       ) : null;
     }

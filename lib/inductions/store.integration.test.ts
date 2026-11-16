@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { test } from "node:test";
 import type { PreparedSubmission } from "./submission";
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 
 test(
-  "PostgreSQL saves preference-ordered snapshots, caps departments per email or roll number, and enforces attempt budgets",
+  "PostgreSQL enforces snapshots, domain caps, attempt budgets, and transaction-time deadlines",
   {
     skip:
       !process.env.INDUCTION_TEST_DATABASE_URL &&
@@ -159,6 +159,97 @@ test(
         limitedHashes,
       );
       assert.ok(!limited.ok && limited.code === "limited");
+
+      const deadlineIn = async (milliseconds: number) => {
+        const result = await db.$client.query(
+          "select clock_timestamp() + ($1 * interval '1 millisecond') as deadline",
+          [milliseconds],
+        );
+        return (result.rows[0].deadline as Date).toISOString();
+      };
+      const timely = await storeInductionSubmission(
+        { ...data, email: "timely@nitj.ac.in", rollNumber: "23103051", closesAt: await deadlineIn(60000) },
+        hashes(),
+      );
+      assert.ok(timely.ok && timely.status === "created");
+
+      // A stale application-server timestamp cannot override the DB clock.
+      const expired = await storeInductionSubmission(
+        { ...data, email: "expired@nitj.ac.in", rollNumber: "23103052", closesAt: await deadlineIn(-1000) },
+        hashes(),
+        new Date(Date.now() - 86400000),
+      );
+      assert.ok(!expired.ok && expired.code === "closed");
+      assert.equal((await rows()).filter(row => row.email === "expired@nitj.ac.in").length, 0);
+
+      // The transaction starts in time but crosses the deadline while queued.
+      const queuedHashes = hashes();
+      const blocker = await db.$client.connect();
+      let queued: Promise<Awaited<ReturnType<typeof storeInductionSubmission>>>;
+      let queuedBeforeCutoff = false;
+      try {
+        await blocker.query("begin");
+        await blocker.query("select pg_advisory_xact_lock(hashtextextended($1, 0))", [
+          `${scope}:address:${queuedHashes.address}`,
+        ]);
+        const closesAt = await deadlineIn(2000);
+        queued = storeInductionSubmission(
+          { ...data, email: "queued@nitj.ac.in", rollNumber: "23103053", closesAt },
+          queuedHashes,
+        );
+        await blocker.query("select pg_sleep(2.1)");
+        const waiting = await blocker.query(
+          "select exists(select 1 from pg_locks l join pg_stat_activity a on a.pid=l.pid where l.locktype='advisory' and not l.granted and a.xact_start < $1::timestamptz) as waiting",
+          [closesAt],
+        );
+        queuedBeforeCutoff = waiting.rows[0].waiting;
+      } finally {
+        await blocker.query("rollback");
+        blocker.release();
+      }
+      const queuedResult = await queued!;
+      assert.equal(queuedBeforeCutoff, true, "The request must actually wait across the cutoff");
+      assert.ok(!queuedResult.ok && queuedResult.code === "closed");
+      assert.equal((await rows()).filter(row => row.email === "queued@nitj.ac.in").length, 0);
+
+      // A test-only trigger makes both inserts finish after the deadline.
+      // A sequence is non-transactional, proving the inserts were attempted even
+      // though the application rows and attempt records must all roll back.
+      const marker = `deadline_${randomUUID().replaceAll("-", "")}`;
+      const trigger = `${marker}_trigger`;
+      const crossingHashes = hashes();
+      try {
+        const closesAt = await deadlineIn(3000);
+        await db.$client.query(`create sequence ${marker}`);
+        await db.$client.query(`create function ${marker}() returns trigger language plpgsql as $$
+          begin
+            if NEW.cycle_id = '${cycleId}' and NEW.email = 'crossing@nitj.ac.in' then
+              perform nextval('${marker}');
+              perform pg_sleep(greatest(0, extract(epoch from ('${closesAt}'::timestamptz - clock_timestamp()))) + 0.05);
+            end if;
+            return NEW;
+          end $$`);
+        await db.$client.query(`create trigger ${trigger} after insert on induction_submission for each row execute function ${marker}()`);
+        const crossing = await storeInductionSubmission(
+          { ...data, email: "crossing@nitj.ac.in", rollNumber: "23103054", closesAt,
+            applications: [application("web"), application("ai")] },
+          crossingHashes,
+        );
+        assert.ok(!crossing.ok && crossing.code === "closed");
+        const attempted = await db.$client.query(`select last_value, is_called from ${marker}`);
+        assert.equal(attempted.rows[0].is_called, true);
+        assert.equal(Number(attempted.rows[0].last_value), 2);
+        assert.equal((await rows()).filter(row => row.email === "crossing@nitj.ac.in").length, 0);
+        const attempts = await db.select().from(registrationAttempt).where(and(
+          eq(registrationAttempt.eventId, scope),
+          eq(registrationAttempt.clientHash, crossingHashes.address),
+        ));
+        assert.equal(attempts.length, 0);
+      } finally {
+        await db.$client.query(`drop trigger if exists ${trigger} on induction_submission`);
+        await db.$client.query(`drop function if exists ${marker}()`);
+        await db.$client.query(`drop sequence if exists ${marker}`);
+      }
     } finally {
       await db
         .delete(inductionSubmission)

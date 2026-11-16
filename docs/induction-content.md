@@ -81,7 +81,20 @@ The cycle's `eventId` must match the event's stable ID. Add exactly one visible
 grid's position. The hero links to that section. The ordinary campus registration
 action cannot submit an induction form.
 
-Unknown interview date, time, venue, and application deadline stay unset. The
+The 2026 application deadline is **Thursday, 19 November, end of day (IST)**.
+`registration.closesAt` is `2026-11-20T00:00:00+05:30`: the exclusive cutoff at
+midnight as Friday begins. The event page and application show a live countdown
+and a fixed India-time deadline. The application link and final submit button
+close when the countdown reaches zero, including tabs left open beforehand.
+
+The server action checks the current registration window for every submission.
+Storage also checks PostgreSQL `clock_timestamp()` after advisory locks and after
+insertion. If the deadline passes while waiting or saving, the whole transaction
+rolls back, including both domain rows and attempt records. The database clock
+check does not trust the browser clock or a client-supplied deadline. No scheduled
+job or deployment at the cutoff is needed.
+
+Unknown interview date, time, and venue stay unset. The
 scheduled event shows unconfirmed arrangements as "To be announced". Interest
 collection can open before the interview arrangements are known. Use the existing
 registration state, optional `opensAt`/`closesAt`, and event lifecycle to open or

@@ -30,6 +30,11 @@ export default async function Applications({
       cycle={cycle}
       open={canRegister(event)}
       status={registrationStatus(event)}
+      closesAt={
+        event.registration.mode === "internal"
+          ? event.registration.closesAt
+          : undefined
+      }
       leads={Object.fromEntries(
         departments.map(({ id, lead, image, initials }) => [
           id,
