@@ -78,14 +78,15 @@ registration: {
 
 The cycle's `eventId` must match the event's stable ID. Add exactly one visible
 `applications` section; its position in the sections array controls the department
-grid's position. The hero links to that section. The ordinary campus registration
-action cannot submit an induction form.
+grid's position. The hero links to that section before the event is completed.
+The ordinary campus registration action cannot submit an induction form.
 
-The 2026 application deadline is **Thursday, 19 November, end of day (IST)**.
+The 2026 application deadline was **Thursday, 19 November, end of day (IST)**.
 `registration.closesAt` is `2026-11-20T00:00:00+05:30`: the exclusive cutoff at
-midnight as Friday begins. The event page and application show a live countdown
-and a fixed India-time deadline. The application link and final submit button
-close when the countdown reaches zero, including tabs left open beforehand.
+midnight as Friday begins. Before completion, the event page and application
+show a live countdown and a fixed India-time deadline. The application link and
+final submit button close when the countdown reaches zero, including tabs left
+open beforehand.
 
 The server action checks the current registration window for every submission.
 Storage also checks PostgreSQL `clock_timestamp()` after advisory locks and after
@@ -101,16 +102,19 @@ registration state, optional `opensAt`/`closesAt`, and event lifecycle to open o
 close applications. Every server submission checks these again. Application routes
 render dynamically; public event pages refresh within their 60-second cache period.
 
-Set `homepage.featured: true` for the homepage spotlight. Active events sort above
-completed recaps, even without a date. A published event needs a carousel slide;
-the supplied flat SVG is original department-themed artwork, not an event photo.
+Set `homepage.featured: true` for the homepage spotlight during the active cycle.
+Once the event is over, mark it completed, close registration, and move it out of
+the spotlight. The 2026 recap uses the first photo in its carousel as the event
+card cover. Use the confirmed month for the recap when exact round dates vary.
+Completed inductions keep the domain expectations and PDF downloads available.
 
 ## Application behavior
 
-The event page has one "Start your application" button. Department cards are for
-reading: each shows its lead, a "See what's expected" button that opens a side
-sheet (a bottom sheet on phones), and a PDF download. The site tells applicants
-that these are expectations, not requirements. `/events/<slug>/apply?department=<id>`
+While applications are open, the event page has one "Start your application"
+button. Each department card shows its lead, a "See what's expected" button
+that opens a side sheet (a bottom sheet on phones), and a PDF download. The
+site tells applicants that these are expectations, not requirements.
+`/events/<slug>/apply?department=<id>`
 preselects a department, and older `/events/<slug>/apply/<department>` links
 redirect there. In the application, a chosen department's tile and question page
 also offer its expectations and PDF.

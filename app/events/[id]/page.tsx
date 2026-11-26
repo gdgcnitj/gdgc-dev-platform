@@ -47,6 +47,7 @@ export default async function EventPage({ params }: Props) {
   const sections = visibleSections(event);
   const registrationOpen = canRegister(event);
   const registration = event.registration;
+  const completed = event.status === "completed";
   const applicationSection = sections.find(
     (section) => section.type === "applications",
   );
@@ -65,7 +66,7 @@ export default async function EventPage({ params }: Props) {
         ? "Browse resources"
         : primarySection?.type === "challenges"
           ? "Explore challenges"
-          : event.status === "completed"
+          : completed
             ? "Read the recap"
             : "About the event";
   const facts = [
@@ -117,7 +118,8 @@ export default async function EventPage({ params }: Props) {
                 </div>
                 <h1 id="event-title">{event.title}</h1>
                 <p className="club-hero-description">{event.summary}</p>
-                {applicationSection &&
+                {!completed &&
+                  applicationSection &&
                   registration.mode === "internal" &&
                   registration.closesAt && (
                     <InductionDeadline closesAt={registration.closesAt} />
@@ -150,7 +152,7 @@ export default async function EventPage({ params }: Props) {
                           <ArrowUpRight size={17} aria-hidden="true" />
                         </a>
                       </Button>
-                    ) : applicationSection ? (
+                    ) : applicationSection && (!completed || !primarySection) ? (
                       <Button asChild className="club-button">
                         <a href={`#section-${applicationSection.id}`}>
                           Explore domains

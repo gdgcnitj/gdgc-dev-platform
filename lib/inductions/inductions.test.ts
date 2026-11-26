@@ -6,9 +6,10 @@ import { expectationsDigest } from "@/scripts/induction-expectations/digest";
 import { departmentIds } from "@/lib/content/departments";
 import { allEvents, getEvent, getFeaturedEvents } from "@/lib/content/events";
 import { inductions2026 } from "@/lib/content/inductions/2026";
-import { eventSchema } from "@/lib/events/schema";
+import { eventSchema, type ClubEvent } from "@/lib/events/schema";
 import {
-  compareEventListing,
+  canRegister,
+  eventCover,
   eventDate,
   isCampusRegistration,
 } from "@/lib/events/helpers";
@@ -27,9 +28,17 @@ import {
   expectationsPdfHref,
 } from "./expectations-pdf";
 
-// General validation fixtures remain usable after the production deadline.
-const event = structuredClone(getEvent("inductions-2026")!);
-if (event.registration.mode !== "none") delete event.registration.closesAt;
+const published = getEvent("inductions-2026")!;
+const registration = published.registration;
+assert.ok(registration.mode === "internal");
+
+// Form tests model an open cycle independently of the archived event.
+const event: ClubEvent = {
+  ...structuredClone(published),
+  status: "scheduled",
+  date: undefined,
+  registration: { ...registration, state: "open", closesAt: undefined },
+};
 const common = () => ({
   name: " Test Student ",
   email: " STUDENT@NITJ.AC.IN ",
@@ -76,45 +85,47 @@ const input = (
   leaveBlank: "",
 });
 
-test("the undated induction is first in discovery without fabricated details", () => {
-  assert.equal(allEvents[0].id, event.id);
-  assert.deepEqual(
-    getFeaturedEvents().map((item) => item.id),
-    [event.id],
-  );
-  assert.equal(eventDate(event), undefined);
-  assert.equal(event.location?.name, undefined);
-  assert.ok(compareEventListing(event, getEvent("minimol")!) < 0);
-  assert.equal(isCampusRegistration(event), false);
+test("the induction recap is recent, with a photo cover and closed applications", () => {
+  assert.equal(allEvents.find((item) => item.status === "completed")?.id, published.id);
+  assert.equal(getFeaturedEvents().some((item) => item.id === published.id), false);
+  assert.equal(eventDate(published), "November 2026");
+  assert.equal(published.media.length, 3);
+  assert.ok(published.media.every((slide) => slide.kind === "photo"));
+  assert.equal(eventCover(published), published.media[0]);
+  assert.equal(isCampusRegistration(published), false);
+  assert.equal(canRegister(published, Date.parse("2026-11-19T17:00:00Z")), false);
 });
 
 test("the production deadline is Thursday EOD IST and rejects exact-cutoff and later submissions", () => {
-  const published = getEvent("inductions-2026")!;
-  assert.ok(published.registration.mode === "internal");
-  assert.equal(published.registration.closesAt, "2026-11-20T00:00:00+05:30");
-  const deadline = Date.parse(published.registration.closesAt);
+  const { closesAt } = registration;
+  assert.equal(closesAt, "2026-11-20T00:00:00+05:30");
+  const withDeadline: ClubEvent = {
+    ...event,
+    registration: { ...registration, state: "open", closesAt },
+  };
+  const deadline = Date.parse(closesAt);
   assert.equal(deadline, Date.parse("2026-11-19T18:30:00Z"));
-  const accepted = prepareInductionSubmission(published, inductions2026, input(), deadline - 1);
+  const accepted = prepareInductionSubmission(withDeadline, inductions2026, input(), deadline - 1);
   assert.ok(accepted.ok);
-  assert.equal(accepted.data.closesAt, published.registration.closesAt);
-  const tampered = prepareInductionSubmission(published, inductions2026, {
+  assert.equal(accepted.data.closesAt, closesAt);
+  const tampered = prepareInductionSubmission(withDeadline, inductions2026, {
     ...input(), closesAt: "2099-01-01T00:00:00Z",
   }, deadline - 1);
   assert.ok(!tampered.ok && tampered.code === "invalid");
   for (const now of [deadline, deadline + 1, deadline + 86400000]) {
-    const result = prepareInductionSubmission(published, inductions2026, input(), now);
+    const result = prepareInductionSubmission(withDeadline, inductions2026, input(), now);
     assert.ok(!result.ok && result.code === "closed");
   }
-  assert.equal(inductionTimeLeft(published.registration.closesAt, deadline - 1).totalSeconds, 1);
-  assert.equal(inductionTimeLeft(published.registration.closesAt, deadline).totalSeconds, 0);
-  assert.deepEqual(inductionTimeLeft(published.registration.closesAt, deadline + 1000), {
+  assert.equal(inductionTimeLeft(closesAt, deadline - 1).totalSeconds, 1);
+  assert.equal(inductionTimeLeft(closesAt, deadline).totalSeconds, 0);
+  assert.deepEqual(inductionTimeLeft(closesAt, deadline + 1000), {
     totalSeconds: 0, days: 0, hours: 0, minutes: 0, seconds: 0,
   });
-  assert.deepEqual(inductionTimeLeft(published.registration.closesAt, deadline - 90061000), {
+  assert.deepEqual(inductionTimeLeft(closesAt, deadline - 90061000), {
     totalSeconds: 90061, days: 1, hours: 1, minutes: 1, seconds: 1,
   });
-  assert.match(inductionDeadlineLabel(published.registration.closesAt), /Thursday, 19 November 2026/);
-  assert.match(inductionDeadlineLabel(published.registration.closesAt), /End of day \(IST\)/);
+  assert.match(inductionDeadlineLabel(closesAt), /Thursday, 19 November 2026/);
+  assert.match(inductionDeadlineLabel(closesAt), /End of day \(IST\)/);
 });
 
 test("every department has configured questions; only supplied expectations are shown", () => {

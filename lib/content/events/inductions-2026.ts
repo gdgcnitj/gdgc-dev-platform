@@ -6,81 +6,60 @@ export const inductions = defineEvent({
   title: "Inductions 2026",
   kind: "induction",
   summary:
-    "Find your people. Build your next idea. Explore our eight domains and tell us where you’d like to contribute to GDGC NITJ.",
-  status: "scheduled",
+    "Students across NIT Jalandhar applied to join GDGC and met the team in person for assessments and interviews.",
+  status: "completed",
   visibility: "published",
   color: "blue",
-  location: { mode: "in-person" },
-  homepage: { featured: true },
+  date: { label: "November 2026", startsOn: "2026-11-20" },
+  location: { mode: "in-person", name: "NIT Jalandhar" },
   media: [
     {
-      id: "invitation",
-      src: "/images/events/inductions-2026.svg",
-      alt: "Eight colorful creative workspaces representing the GDGC domains, connected by a shared idea",
-      kind: "illustration",
-      caption: "Eight domains. Plenty of ways to contribute.",
+      id: "assessment-room",
+      src: "/images/events/inductions-2026/assessment-room.webp",
+      alt: "Students working on paper and laptops at long desks in a lecture hall",
+      kind: "photo",
+      caption: "Students working through the in-person induction round.",
+    },
+    {
+      id: "lecture-hall",
+      src: "/images/events/inductions-2026/lecture-hall.webp",
+      alt: "A view from the back of the lecture hall as students work at their desks",
+      kind: "photo",
+      caption: "A view from the back of the lecture hall during Inductions 2026.",
+    },
+    {
+      id: "offline-round",
+      src: "/images/events/inductions-2026/offline-round.webp",
+      alt: "Rows of students working quietly during the in-person round",
+      kind: "photo",
+      caption: "Candidates working on their assessments at NIT Jalandhar.",
     },
   ],
+  coverId: "assessment-room",
   registration: {
     mode: "internal",
     form: "department-interest",
     cycleId: "inductions-2026",
-    state: "open",
+    state: "closed",
     // Thursday EOD in India: the cutoff is exclusive at Friday midnight.
     closesAt: "2026-11-20T00:00:00+05:30",
   },
   sections: [
     {
+      id: "recap",
+      type: "story",
+      title: "Inductions recap",
+      navLabel: "Recap",
+      paragraphs: [
+        "Inductions began with an interest form. Students shared what they wanted to learn or build and chose up to two domains.",
+        "Shortlisted students joined us on campus for assessments and interviews. Thank you to everyone who applied, took part, or helped run the rounds.",
+      ],
+    },
+    {
       id: "departments",
       type: "applications",
-      title: "Find your place",
+      title: "Domain expectations",
       navLabel: "Domains",
-    },
-    {
-      id: "next",
-      type: "list",
-      style: "numbered",
-      title: "What happens next",
-      navLabel: "Next steps",
-      items: [
-        "Express your interest. Apply once and choose up to two domains, in order of preference.",
-        "Shortlisting. The team reviews your responses before the next round.",
-        "Meet us in person. Shortlisted applicants move to an offline round or interview. Date, time, and venue will be announced.",
-        "Meet the new team. We announce the induction results after the selection process.",
-      ],
-    },
-    {
-      id: "questions",
-      type: "faq",
-      title: "A few things to know",
-      navLabel: "FAQs",
-      items: [
-        {
-          question: "When do applications close?",
-          answer:
-            "Thursday, 19 November 2026, end of day (IST). Submissions close at midnight as Friday, 20 November begins. Submit before the countdown reaches zero; leaving the form open does not extend the deadline.",
-        },
-        {
-          question: "Can I apply to more than one domain?",
-          answer:
-            "Yes, up to two. You fill in your details once, choose one or two domains in order of preference, and answer a few questions for each. If you apply to one now, you can add a second later with the same email and roll number.",
-        },
-        {
-          question: "Does submitting a form confirm my place?",
-          answer:
-            "This is an expression of interest. Shortlisting and an offline round or interview follow before the team is announced.",
-        },
-        {
-          question: "When and where will the offline round happen?",
-          answer:
-            "The date, time, and venue are still being decided. We’ll share the arrangements when they are confirmed.",
-        },
-        {
-          question: "Do I need to create an account?",
-          answer:
-            "No. Use your @nitj.ac.in email address on the interest form. You can review your answers before submitting.",
-        },
-      ],
     },
   ],
 });
