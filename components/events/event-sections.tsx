@@ -22,6 +22,7 @@ function SectionContent({
         <DepartmentChoices
           cycle={cycle}
           eventSlug={event.slug}
+          archived={event.status === "completed"}
           open={canRegister(event)}
           status={registrationStatus(event)}
           closesAt={
