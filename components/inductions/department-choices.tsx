@@ -10,12 +10,14 @@ import { ExpectationsPdfLink } from "./pdf-link";
 export function DepartmentChoices({
   cycle,
   eventSlug,
+  archived,
   open,
   status,
   closesAt,
 }: {
   cycle: InductionCycle;
   eventSlug: string;
+  archived?: boolean;
   open: boolean;
   status?: string;
   closesAt?: string;
@@ -24,18 +26,19 @@ export function DepartmentChoices({
   return (
     <>
       <p className="event-section-intro">
-        Different interests. One community. Read what each domain expects,
-        keep a PDF if you like, then apply once and choose up to {count}. These
-        are expectations, not requirements: you don’t need to know all of them
-        to get in.
+        {archived
+          ? "Explore the topics each domain shared with candidates and download the preparation guides."
+          : `Different interests. One community. Read what each domain expects, keep a PDF if you like, then apply once and choose up to ${count}. These are expectations, not requirements: you don’t need to know all of them to get in.`}
       </p>
-      <ApplicationInvitation
-        eventSlug={eventSlug}
-        maxDepartments={cycle.maxDepartments}
-        open={open}
-        status={status}
-        closesAt={closesAt}
-      />
+      {!archived && (
+        <ApplicationInvitation
+          eventSlug={eventSlug}
+          maxDepartments={cycle.maxDepartments}
+          open={open}
+          status={status}
+          closesAt={closesAt}
+        />
+      )}
       <div className="induction-department-grid">
         {cycle.departments.map((department, index) => {
           const identity = getDepartment(department.id)!;
